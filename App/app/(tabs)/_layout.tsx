@@ -34,7 +34,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <Entypo name="home" color={color} size={25}/>,
           headerRight: () => (
             <View style={{flex:1, flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
-            <Link href="/modal" asChild>
+            <Link href="/Home/Profile" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome5
@@ -63,19 +63,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="Stocks"
         options={{
           title: 'Stocks',
-          tabBarIcon: ({ color }) => <Entypo name="box" color={color} size={25}/>,
-        }}
-      />
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Report',
           tabBarIcon: ({ color }) => <Entypo name="text-document" color={color} size={25}/>,
         }}
       />
+      
     </Tabs>
   );
 }

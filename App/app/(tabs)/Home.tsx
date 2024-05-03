@@ -11,7 +11,7 @@ import StockCard from "@/components/StockCard";
 const _width  = Dimensions.get('screen').width
 const _height  = Dimensions.get('screen').height
 
-const orderHistory = [{},
+export const orderHistory = [{},
 {
     id : 403,
     nominal : 45789,
@@ -44,6 +44,18 @@ const orderHistory = [{},
 },
 {
     id : 405,
+    nominal : 48897,
+    number : 3,
+    status : 'Completed'
+},
+{
+    id : 390,
+    nominal : 45789,
+    number : 8,
+    status : 'In Progress'
+},
+{
+    id : 500,
     nominal : 48897,
     number : 3,
     status : 'Completed'
