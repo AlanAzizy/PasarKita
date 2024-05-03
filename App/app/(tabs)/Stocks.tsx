@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
 import { orderHistory } from './Home';
-import StockCardEdit from '@/components/StockCard';
+import StockCardEdit from '@/components/StockCardEdit';
 import SearchBar from '@/components/SearchBar';
 
 export default function Stocks() {
@@ -18,6 +18,14 @@ export default function Stocks() {
     navigation.setOptions({headerTitleAlign : 'left' ,headerTitleStyle : {color:'#53845D', fontWeight:'bold', fontFamily:'Poppins-Regular', fontSize:24} });  }, 
     [navigation]);
 
+    useEffect(() => {
+      const unsubscribe = navigation.addListener("blur", () => {
+        
+        setPhrase("");
+      });
+  
+      return unsubscribe;
+    }, [navigation]);
 
   return (
     <View style={{flex : 1, justifyContent:'center', alignItems:'center'}}>
