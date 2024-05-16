@@ -1,6 +1,6 @@
 import { View, StyleSheet, Dimensions, Text, Pressable } from "react-native";
 import { useEffect } from "react";
-import { useNavigation } from "expo-router";
+import { router, useNavigation } from "expo-router";
 import useFonts from "@/components/useFonts";
 import { AntDesign, Feather, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 
@@ -67,7 +67,7 @@ export default function Setting(){
                         <  Feather name="flag" size={20}/>
                         <Text style={styles.menuText}>Report a Problem</Text>
                     </Pressable>
-                    <Pressable style={styles.menu}>
+                    <Pressable style={styles.menu} onPress={()=>router.navigate('../Login/_Welcome')}>
                         <FontAwesome6 name="arrow-right-to-bracket" size={20}/>
                         <Text style={styles.menuText}>Logout</Text>
                     </Pressable>

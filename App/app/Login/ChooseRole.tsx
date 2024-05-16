@@ -1,6 +1,6 @@
 import { View, StyleSheet, Text, TextInput, Dimensions } from "react-native"
 import { useEffect, useState } from "react";
-import { Link, useNavigation } from "expo-router";
+import { Link, router, useNavigation } from "expo-router";
 import useFonts from "@/components/useFonts";
 import Button from "@/components/Button";
 
@@ -38,7 +38,7 @@ export default function ChooseRole(){
             </View>
             <View style={{flex:3, borderWidth:0, borderColor:"#ff1111", width:"100%", justifyContent:"center", alignItems:"center"}}>
                 <Button
-                    onPress={()=>{}}
+                    onPress={()=>{router.navigate('../Home')}}
                     title="Save"
                     styles={styles.buttonLogin}
                     isLight={true}

@@ -4,10 +4,15 @@ import { StyleSheet, View, Dimensions, Text, Pressable } from "react-native";
 const _width  = Dimensions.get('screen').width
 const _height  = Dimensions.get('screen').height
 
-export default function addHistory(){
+type addHistoryProp = {
+    add : ()=> void
+}
+
+export default function addHistory({add} : addHistoryProp){
+
 
     return (
-        <Pressable style={styles.container}>
+        <Pressable style={styles.container} onPress={()=>add()}>
             <Text style={{flex : 2,fontFamily:'Poppins-Regular', fontSize:16, fontWeight:'bold', textAlign:'center'}}>Create New Order</Text>
             <View style={{width:'80%', height:'28%', backgroundColor:'#FFC008', flex:1, justifyContent:'center', alignItems:'center', borderRadius:8}}>
                 <Feather name="plus-square" color={'#ffffff'} size={18} />

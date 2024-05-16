@@ -69,6 +69,13 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <Entypo name="text-document" color={color} size={25}/>,
         }}
       />
+      <Tabs.Screen
+        name="Report"
+        options={{
+          title: 'Report',
+          tabBarIcon: ({ color }) => <Entypo name="text-document" color={color} size={25}/>,
+        }}
+      />
       
     </Tabs>
   );

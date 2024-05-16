@@ -53,27 +53,31 @@ export default SearchBar;
 // styles
 const styles = StyleSheet.create({
   container: {
-    margin: 15,
+    margin: 0,
     justifyContent: "flex-start",
     alignItems: "center",
     flexDirection: "row",
-    width: "90%",
-
+    width: "100%",
+    
   },
   searchBar__unclicked: {
     padding: 10,
     flexDirection: "row",
     width: "100%",
-    backgroundColor: "#d9dbda",
-    borderRadius: 15,
+    backgroundColor: "#F7F8F9",
+    borderColor:"#E8ECF4",
+    borderWidth : 2,
+    borderRadius: 10,
     alignItems: "center",
   },
   searchBar__clicked: {
     padding: 10,
     flexDirection: "row",
     width: "100%",
-    backgroundColor: "#d9dbda",
-    borderRadius: 15,
+    backgroundColor: "#F7F8F9",
+    borderColor:"#E8ECF4",
+    borderWidth : 2,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "space-evenly",
   },

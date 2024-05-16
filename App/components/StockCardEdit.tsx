@@ -1,17 +1,13 @@
 import { Feather, FontAwesome5, FontAwesome6 } from "@expo/vector-icons"
 import { StyleSheet, View, Dimensions, Text, Image } from "react-native"
+import { stocks } from "@/app/(tabs)/Home";
+import { Stocks } from "./StockCard";
+
 
 const _width  = Dimensions.get('screen').width
 const _height  = Dimensions.get('screen').height
 
-export type history = {
-    id : number,
-    nominal : number,
-    number : number,
-    status : string
-}
-
-export default function StockCardEdit({id,nominal, number, status} : history){
+export default function StockCardEdit({id,prev_number, current_number, name, price} : Stocks){
 
     return(
         <View style={styles.container}>
@@ -20,7 +16,7 @@ export default function StockCardEdit({id,nominal, number, status} : history){
             </View>
             <View style={{flex : 4, flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
                 <View style={{flexDirection:'column',borderWidth:0,borderColor:'#ffff00', backgroundColor:'#FFFFFF', height:'100%',flex:3, padding:2, paddingHorizontal:8,alignItems:'flex-start', borderRadius:5, }}>
-                    <Text style={{fontSize:16, fontFamily:'Poppins-Regular', color:'#8C8C8C'}}>{status}</Text>
+                    <Text style={{fontSize:16, fontFamily:'Poppins-Regular', color:'#8C8C8C'}}>{name}</Text>
                     <Text>Stok</Text>
                     <Text>Price</Text>
                 </View>
@@ -30,8 +26,8 @@ export default function StockCardEdit({id,nominal, number, status} : history){
                 </View>
                 <View style={{flexDirection:'column',borderWidth:0,borderColor:'#ffff00', backgroundColor:'#FFFFFF', height:'100%',flex:2, padding:2, paddingHorizontal:8,alignItems:'flex-end', borderRadius:5, }}>
                     <Text style={{fontSize:16, fontFamily:'Poppins-Regular', color:'#8C8C8C'}}>{id}</Text>
-                    <Text>{number}</Text>
-                    <Text>{nominal}</Text>                
+                    <Text>{current_number}</Text>
+                    <Text>{price}</Text>                
                 </View>
             </View>
         </View>

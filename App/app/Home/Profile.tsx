@@ -1,4 +1,4 @@
-import { View, StyleSheet, Dimensions, Text, Pressable, TextInput, Image } from "react-native";
+import { View, StyleSheet, Dimensions, Text, Pressable, TextInput, Image, KeyboardAvoidingView } from "react-native";
 import { useEffect } from "react";
 import { useNavigation, router } from "expo-router";
 import useFonts from "@/components/useFonts";
@@ -7,7 +7,7 @@ import Button from "@/components/Button";
 
 const _width  = Dimensions.get('screen').width
 const _height  = Dimensions.get('screen').height
-
+const fix_height = _height;
 export default function Profile(){
 
     const navigation = useNavigation();
@@ -23,34 +23,36 @@ export default function Profile(){
 
     return (
         <View style={styles.container}>
-            <View style={{flex:4, borderWidth:0, borderColor:"#ff1111", width:"90%", justifyContent:'center', alignItems:'center',}}>
-                <Pressable onPress={()=>{console.log('kontol')}} style={{height:'auto', borderWidth:0, borderColor:"#ff1111", width:"auto", justifyContent:'center', alignItems:'center',}}>
-                    <Image source={require('../../assets/images/pasar.jpg')} style={styles.image}></Image>
-                </Pressable>            
-            </View>
-            <View style={{flex:8, borderWidth:0, borderColor:"#ff1111", width:"90%", justifyContent:'center'}}>
-                <Text style={styles.label}>Name</Text>
-                <TextInput style={{width:"100%", borderColor:"#000ff0", borderWidth:0, flex:3, backgroundColor:"#F7F8F9", borderRadius:8, color:"#8391A1", padding:10, marginVertical:10}}
-                
-                placeholder="Enter Your Email Address"
-                keyboardType="numeric"/>
-                <Text style={styles.label}>Email</Text>
-                <TextInput style={{width:"100%", borderColor:"#E8ECF4", borderWidth:0, flex:3, backgroundColor:"#F7F8F9", borderRadius:8, color:"#8391A1", padding:10, marginVertical:10}}
-                
-                placeholder="Enter Your Password"
-                keyboardType="numeric"/>
-                <Text style={styles.label}>Number</Text>
-                <TextInput style={{width:"100%", borderColor:"#E8ECF4", borderWidth:0, flex:3, backgroundColor:"#F7F8F9", borderRadius:8, color:"#8391A1", padding:10, marginVertical:10}}
-                
-                placeholder="Enter Your Email Address"
-                keyboardType="numeric"/>
-                <Text style={styles.label}>Password</Text>
-                <TextInput style={{width:"100%", borderColor:"#E8ECF4", borderWidth:0, flex:3, backgroundColor:"#F7F8F9", borderRadius:8, color:"#8391A1", padding:10, marginVertical:10}}
-                
-                placeholder="Enter Your Password"
-                keyboardType="numeric"/>
-            </View>
-            <View style={{flex:4, justifyContent:'center', alignItems:'center', width:'70%'}}>
+            <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100} style={{flex:13, width:'100%', justifyContent:'center', alignItems:'center', borderWidth : 0, borderColor:'#00ffff'}}>
+                <View  style={{flex:5, borderWidth:0, borderColor:"#ff1111", width:"90%", justifyContent:'center', alignItems:'center',}}>
+                    <Pressable onPress={()=>{console.log('kontol')}} style={{flex: 1,height:'auto', borderWidth:0, borderColor:"#ff1111", width:"auto", justifyContent:'center', alignItems:'center',}}>
+                        <Image source={require('../../assets/images/pasar.jpg')} style={styles.image}></Image>
+                    </Pressable>
+                </View>
+                <View  style={{flex:7, borderWidth:0, borderColor:"#ff1111", width:"90%", justifyContent:'center', zIndex:2, backgroundColor:'#ffffff',minHeight:fix_height*0.22,}}>
+                    <Text style={styles.label}>Name</Text>
+                    <TextInput style={{width:"100%", borderColor:"#000ff0", borderWidth:0, height:fix_height*0.06, backgroundColor:"#F7F8F9", borderRadius:8, color:"#8391A1", padding:10, marginVertical:10}}
+                    
+                    placeholder="Enter Your Email Address"
+                    keyboardType="numeric"/>
+                    <Text style={styles.label}>Email</Text>
+                    <TextInput style={{width:"100%", borderColor:"#E8ECF4", borderWidth:0, height:fix_height*0.06, backgroundColor:"#F7F8F9", borderRadius:8, color:"#8391A1", padding:10, marginVertical:10}}
+                    
+                    placeholder="Enter Your Password"
+                    keyboardType="numeric"/>
+                    <Text style={styles.label}>Number</Text>
+                    <TextInput style={{width:"100%", borderColor:"#E8ECF4", borderWidth:0, height:fix_height*0.06, backgroundColor:"#F7F8F9", borderRadius:8, color:"#8391A1", padding:10, marginVertical:10}}
+                    
+                    placeholder="Enter Your Email Address"
+                    keyboardType="numeric"/>
+                    <Text style={styles.label}>Password</Text>
+                    <TextInput style={{width:"100%", borderColor:"#E8ECF4", borderWidth:0, height:fix_height*0.06, backgroundColor:"#F7F8F9", borderRadius:8, color:"#8391A1", padding:10, marginVertical:10}}
+                    
+                    placeholder="Enter Your Password"
+                    keyboardType="numeric"/>
+                </View>
+            </KeyboardAvoidingView>
+            <View style={{flex:3, justifyContent:'center', alignItems:'center', width:'70%'}}>
                 <Button
                     onPress={()=>{console.log("jaran")}}
                     title="Save Changes"
@@ -72,7 +74,8 @@ const styles = StyleSheet.create({
         borderWidth : 0,
         borderColor : '#0ff000',
         backgroundColor : '#ffffff',
-        alignItems : 'center'
+        alignItems : 'center',
+        minHeight : 0.8*fix_height
     },
     account : {
         width : '90%',
@@ -105,7 +108,7 @@ const styles = StyleSheet.create({
         marginLeft : 5,
         marginTop : 1,
         fontWeight : 'bold',
-        flex : 2
+        height: fix_height*0.03
     },
     account_2 : {
         backgroundColor : 'rgba(39,39,96,0.05)',

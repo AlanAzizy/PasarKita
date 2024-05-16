@@ -4,14 +4,15 @@ import { StyleSheet, View, Dimensions, Text, Image } from "react-native"
 const _width  = Dimensions.get('screen').width
 const _height  = Dimensions.get('screen').height
 
-export type history = {
+export type Stocks = {
     id : number,
-    nominal : number,
-    number : number,
-    status : string
+    name : string,
+    prev_number : number,
+    current_number : number,
+    price : number
 }
 
-export default function StockCard({id,nominal, number, status} : history){
+export default function StockCard({id,name, prev_number, current_number} : Stocks){
 
     return(
         <View style={styles.container}>
@@ -19,12 +20,12 @@ export default function StockCard({id,nominal, number, status} : history){
                 <Image style={{resizeMode:'contain', width:'100%'}} source={require('../assets/images/splash-icon.png')}/>
             </View>
             <View style={{flexDirection:'column',borderWidth:0,borderColor:'#ffffff', backgroundColor:'#FFFFFF', height:_width*0.12, width:_width*0.4, padding:2, paddingHorizontal:8,alignItems:'flex-start', borderRadius:5, }}>
-                <Text style={{fontSize:16, fontFamily:'Poppins-Regular', color:'#8C8C8C'}}>{status}</Text>
+                <Text style={{fontSize:16, fontFamily:'Poppins-Regular', color:'#8C8C8C'}}>{name}</Text>
                 <Text>{id}</Text>
             </View>
             <View style={{flexDirection:'row',borderWidth:0,borderColor:'#ffffff', backgroundColor:'#FFFFFF', height:_width*0.12, width:_width*0.2, padding:2, alignItems:'center', justifyContent:'center', borderRadius:5}}>
-                <Text style={{fontSize:16, fontFamily:'Poppins-Regular', color:(status=="Completed")?'#8BC34A':'#EA5C2F', textAlign:'center', marginHorizontal:4, textAlignVertical:'center'}}>{number}</Text>
-                <Feather name="arrow-up" size={18} color={(status=="Completed")?'#8BC34A':'#EA5C2F'}/>
+                <Text style={{fontSize:16, fontFamily:'Poppins-Regular', color:(prev_number<current_number)?'#8BC34A':'#EA5C2F', textAlign:'center', marginHorizontal:4, textAlignVertical:'center'}}>{Math.abs(prev_number-current_number)}</Text>
+                {(prev_number<current_number) ? <Feather name="arrow-up" size={18} color={'#8BC34A'}/> : <Feather name="arrow-down" size={18} color={'#EA5C2F'}/>}
             </View>
         </View>
     )

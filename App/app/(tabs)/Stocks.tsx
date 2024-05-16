@@ -3,9 +3,12 @@ import { useNavigation } from 'expo-router';
 import { useEffect, useState } from 'react';
 import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
-import { orderHistory } from './Home';
+import { stocks } from './Home';
 import StockCardEdit from '@/components/StockCardEdit';
 import SearchBar from '@/components/SearchBar';
+
+
+
 
 export default function Stocks() {
 
@@ -29,10 +32,12 @@ export default function Stocks() {
 
   return (
     <View style={{flex : 1, justifyContent:'center', alignItems:'center'}}>
-        <SearchBar clicked={clicked} searchPhrase={phrase} setClicked={setClicked} setSearchPhrase={setPhrase}/>
+        <View style={{width:'90%', margin : 15}}>
+          <SearchBar clicked={clicked} searchPhrase={phrase} setClicked={setClicked} setSearchPhrase={setPhrase}/>
+        </View>
         <ScrollView style={styles.container}>
           <View style={{width:'95%', marginHorizontal:'2.5%'}}>
-          {orderHistory.map((item)=>item.id ? <StockCardEdit id={item.id} nominal={item.nominal} number={item.number} status={item.status}/> : "")}
+          {stocks.map((item)=>item.id ? <StockCardEdit key={item.id} id={item.id} current_number={item.current_number} prev_number={item.prev_number} name={item.name} price={item.price}/> : "")}
           </View>
         </ScrollView>
     </View>

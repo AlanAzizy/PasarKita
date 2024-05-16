@@ -1,0 +1,23 @@
+import { useContext, createContext, ReactNode, Children, useState } from "react"
+import Product from "../Interface/Product"
+import { orderItem } from "../Modals/Tenant/CreateOrder";
+
+type orderContextType = {
+    orders : orderItem[]|null,
+    setOrders : (orders : orderItem[])=>void
+}
+
+
+export const OrderContext = createContext<orderContextType|undefined>(undefined);
+
+
+export default function OrderProvider({children} : {children : ReactNode}){
+
+    const [orders, setOrders] = useState<orderItem[]>([]);
+
+    return (
+            <OrderContext.Provider value={{orders, setOrders}}>
+                {children}
+            </OrderContext.Provider>
+    )
+} 
