@@ -45,7 +45,7 @@ export default function RegisterScreen(){
             </View>
             <View style={{flex:3, borderWidth:0, borderColor:"#ff1111", width:"100%", justifyContent:"center", alignItems:"center"}}>
                 <Button
-                    onPress={()=>{}}
+                    onPress={()=>{router.navigate('../(tabs)/Home')}}
                     title="Register"
                     styles={styles.buttonLogin}
                     isLight={true}

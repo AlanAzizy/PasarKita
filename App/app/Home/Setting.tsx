@@ -25,7 +25,7 @@ export default function Setting(){
             <View style={styles.account}>
                 <Text style={styles.subTitle}>Account</Text>
                 <View style={styles.account_2}>
-                    <Pressable onPress={()=>console.log('kontol')} style={styles.menu}>
+                    <Pressable onPress={()=>router.push('/Home/Profile')} style={styles.menu}>
                         <Feather name="user" size={20}/>
                         <Text style={styles.menuText}>Edit Profile</Text>
                     </Pressable>

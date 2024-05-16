@@ -43,7 +43,7 @@ export default function Welcome(){
                     size={18}
                     />
                     <Button
-                    onPress={()=>{router.push('/Login/RegisterScreen')}}
+                    onPress={()=>{router.push('/Login/ChooseRole')}}
                     title="Register"
                     styles={styles.registerLogin}
                     isLight={false}

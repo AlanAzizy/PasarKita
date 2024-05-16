@@ -184,7 +184,7 @@ export default function Home(){
                 </View>
                 
             </LinearGradient>
-            <Pressable style={styles.print} onPress={()=>console.log('kontol')}>
+            <Pressable style={styles.print} onPress={()=>console.log('awkowkwowkok')}>
                 <View style={{flex: 1,backgroundColor:'#4BAEE6', height : _height*0.06, width: _height*0.06, marginRight:'3%',alignItems:'center', justifyContent:'center', borderRadius:5}}>
                     <Feather name="printer" color={'#ffffff'} size={_height*0.045} style={{borderWidth:0, borderColor:'#ff0000'}}></Feather>
                 </View>
@@ -202,7 +202,7 @@ export default function Home(){
                     <AntDesign name="right" style={{marginLeft:4}} size={_height*0.022}></AntDesign>
                 </Pressable>
                 <FlatList
-                style={{marginVertical:10}}
+                style={{marginVertical:0, borderWidth:0, borderColor : '#11111', height:_height*0.08}}
                 horizontal={true}
                 data={orderHistory}
                 renderItem={({item}) => {
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
         marginHorizontal : 'auto',
         borderRadius : 10,
         padding : '5%',
-        marginTop : 15
+        marginTop : 10
     },
     banner_1 : {
         flex : 2,
@@ -286,10 +286,11 @@ const styles = StyleSheet.create({
         marginTop : '3%',
     },
     history : {
-        height : _height*0.22,
+        height : _height*0.2,
         width:'90%',
         borderWidth:0,
-        borderColor : '#fff000'
+        borderColor : '#fff000',
+        justifyContent : 'flex-end'
     },
     stocks : {
         flex:1,

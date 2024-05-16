@@ -38,7 +38,7 @@ export default function ChooseRole(){
             </View>
             <View style={{flex:3, borderWidth:0, borderColor:"#ff1111", width:"100%", justifyContent:"center", alignItems:"center"}}>
                 <Button
-                    onPress={()=>{router.navigate('../Home')}}
+                    onPress={()=>{router.push('../Login/RegisterScreen')}}
                     title="Save"
                     styles={styles.buttonLogin}
                     isLight={true}

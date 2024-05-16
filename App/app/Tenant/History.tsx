@@ -35,7 +35,7 @@ export default function Histroy(){
                         {orderHistory.map((item, index)=>
                         <Row key={item.id}
                             data={[item.id,item.date,item.cashier_id,item.nominal]}
-                            style={index%2==1?{backgroundColor : '#F3F9ED', height:_height*0.03,}:{}}
+                            style={index%2==1?{backgroundColor : '#F3F9ED', height:_height*0.04,}:{}}
                             textStyle={styles.rowStyle}
                         />)
                         }

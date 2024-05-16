@@ -1,5 +1,5 @@
 import { View, StyleSheet, Dimensions, Text, Pressable, TextInput, Image, KeyboardAvoidingView } from "react-native";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigation, router } from "expo-router";
 import useFonts from "@/components/useFonts";
 import { AntDesign, Feather, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
@@ -11,6 +11,12 @@ const fix_height = _height;
 export default function Profile(){
 
     const navigation = useNavigation();
+
+
+    const [name, setName] = useState('******')
+    const [email, setEmail] = useState('******')
+    const [password, setPassword] = useState('******')
+    const [number, setNumber] = useState('******')
 
     useEffect(()=> {
         useFonts();
@@ -25,36 +31,36 @@ export default function Profile(){
         <View style={styles.container}>
             <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={100} style={{flex:13, width:'100%', justifyContent:'center', alignItems:'center', borderWidth : 0, borderColor:'#00ffff'}}>
                 <View  style={{flex:5, borderWidth:0, borderColor:"#ff1111", width:"90%", justifyContent:'center', alignItems:'center',}}>
-                    <Pressable onPress={()=>{console.log('kontol')}} style={{flex: 1,height:'auto', borderWidth:0, borderColor:"#ff1111", width:"auto", justifyContent:'center', alignItems:'center',}}>
+                    <Pressable onPress={()=>{console.log('awkowkwowkok')}} style={{flex: 1,height:'auto', borderWidth:0, borderColor:"#ff1111", width:"auto", justifyContent:'center', alignItems:'center',}}>
                         <Image source={require('../../assets/images/pasar.jpg')} style={styles.image}></Image>
                     </Pressable>
                 </View>
                 <View  style={{flex:7, borderWidth:0, borderColor:"#ff1111", width:"90%", justifyContent:'center', zIndex:2, backgroundColor:'#ffffff',minHeight:fix_height*0.22,}}>
                     <Text style={styles.label}>Name</Text>
                     <TextInput style={{width:"100%", borderColor:"#000ff0", borderWidth:0, height:fix_height*0.06, backgroundColor:"#F7F8F9", borderRadius:8, color:"#8391A1", padding:10, marginVertical:10}}
-                    
+                    value={name} onChangeText={(value)=>{setName(value)}}
                     placeholder="Enter Your Email Address"
-                    keyboardType="numeric"/>
+                    keyboardType="default"/>
                     <Text style={styles.label}>Email</Text>
                     <TextInput style={{width:"100%", borderColor:"#E8ECF4", borderWidth:0, height:fix_height*0.06, backgroundColor:"#F7F8F9", borderRadius:8, color:"#8391A1", padding:10, marginVertical:10}}
-                    
+                    value={email} onChangeText={(value)=>{setEmail(value)}}
                     placeholder="Enter Your Password"
-                    keyboardType="numeric"/>
+                    keyboardType="default"/>
                     <Text style={styles.label}>Number</Text>
                     <TextInput style={{width:"100%", borderColor:"#E8ECF4", borderWidth:0, height:fix_height*0.06, backgroundColor:"#F7F8F9", borderRadius:8, color:"#8391A1", padding:10, marginVertical:10}}
-                    
+                    value={number} onChangeText={(value)=>{setNumber(value)}}
                     placeholder="Enter Your Email Address"
                     keyboardType="numeric"/>
                     <Text style={styles.label}>Password</Text>
                     <TextInput style={{width:"100%", borderColor:"#E8ECF4", borderWidth:0, height:fix_height*0.06, backgroundColor:"#F7F8F9", borderRadius:8, color:"#8391A1", padding:10, marginVertical:10}}
-                    
+                    value={password} onChangeText={(value)=>{setPassword(value)}}
                     placeholder="Enter Your Password"
-                    keyboardType="numeric"/>
+                    keyboardType="default"/>
                 </View>
             </KeyboardAvoidingView>
             <View style={{flex:3, justifyContent:'center', alignItems:'center', width:'70%'}}>
                 <Button
-                    onPress={()=>{console.log("jaran")}}
+                    onPress={()=>{console.log("jaran");console.log(password)}}
                     title="Save Changes"
                     styles={styles.save}
                     isLight={true}

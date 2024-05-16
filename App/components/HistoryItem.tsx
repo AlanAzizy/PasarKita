@@ -1,5 +1,7 @@
 import { Feather, FontAwesome5 } from "@expo/vector-icons"
 import { StyleSheet, View, Dimensions, Text } from "react-native"
+import useFonts from "./useFonts"
+
 
 const _width  = Dimensions.get('screen').width
 const _height  = Dimensions.get('screen').height
@@ -31,7 +33,7 @@ export default function HistoryItem({id,nominal, number, status} : history){
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        borderWidth:2,
+        borderWidth:0,
         borderColor:'#111111',
         width : _width*0.32,
         height : _height*0.12,

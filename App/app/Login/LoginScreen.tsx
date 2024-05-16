@@ -38,7 +38,7 @@ export default function LoginScreen(){
             </View>
             <View style={{flex:3, borderWidth:0, borderColor:"#ff1111", width:"100%", justifyContent:"center", alignItems:"center"}}>
                 <Button
-                    onPress={()=>{router.push('/Login/ChooseRole')}}
+                    onPress={()=>{router.navigate('../(tabs)/Home')}}
                     title="Login"
                     styles={styles.buttonLogin}
                     isLight={true}

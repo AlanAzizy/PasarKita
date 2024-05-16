@@ -59,13 +59,13 @@ export default function CreateOrder({visible, close} : modalProp){
                         <Text style={{fontSize:18, color:'#767676', fontFamily:'Poppins-Regular', fontWeight:'bold'}}>Cashier ID</Text>
                         <TextInput style={{width:"100%", borderColor:"#E8ECF4", borderWidth:2, height:_height*0.06, backgroundColor:"#F7F8F9",padding:10, borderRadius:8, color:"#8391A1", marginVertical:1}}
                 
-                        placeholder="Enter Your Email Address"
-                        keyboardType="numeric"
+                        placeholder="insert your ID"
+                        keyboardType="default"
                         />
                         <Text style={{fontSize:18, color:'#767676', fontFamily:'Poppins-Regular', fontWeight:'bold'}}>Search Product</Text>
                         <SearchBar clicked={clicked} searchPhrase={phrase} setClicked={setClicked} setSearchPhrase={setPhrase}/>
                         <FlatList
-                            style={phrase!=="" ? ({marginVertical:2, zIndex : 100, height : _height*0.1,position :'absolute' , backgroundColor : '#ffffff', width : '100%', top : 160 ,borderWidth : 0, borderColor:'#0000ff'}):{marginVertical:2, zIndex : 5, flex : 1, borderWidth : 0, borderColor:'#00000f'}}
+                            style={phrase!=="" ? ({paddingVertical:5,marginVertical:2, zIndex : 100, height : 'auto',position :'absolute' , backgroundColor : '#ffffff', width : '100%', top : 160 ,borderWidth : 2, borderColor:'#e0e0e0'}):{marginVertical:2, zIndex : 5, flex : 1, borderWidth : 0, borderColor:'#00000f'}}
                             horizontal={false}
                             data={products as Product[]}
                             renderItem={({item}) => {

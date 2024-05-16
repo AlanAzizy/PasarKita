@@ -33,7 +33,7 @@ export default function Stocks() {
 
   return (
     <View style={styles.container}>
-      <View style={{flex : 2.5, width:'90%', alignItems:'center', borderWidth:0, borderColor:'#f000ff'}}>
+      <View style={{flex : 2.5, width:'90%', alignItems:'center', borderWidth:0, borderColor:'#f000ff', marginTop :20}}>
         <Text style={{alignSelf:'flex-start', fontSize:20, fontFamily:'Poppins-Regular', color : '#767676', fontWeight : 'bold'}}>Statistic</Text>
         <Image source={require('../../assets/images/Stat.png')} resizeMode='contain' style={{width:'100%', height:'90%' ,borderColor:'#000ff0', borderWidth:0}}></Image>
       </View>
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     borderWidth : 0,
     backgroundColor : '#FAFAFA',
     alignItems : 'center',
-    gap : 20
+    gap : 20,
   },
   title: {
     fontSize: 20,

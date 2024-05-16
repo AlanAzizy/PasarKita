@@ -13,7 +13,7 @@ export default function addHistory({add} : addHistoryProp){
 
     return (
         <Pressable style={styles.container} onPress={()=>add()}>
-            <Text style={{flex : 2,fontFamily:'Poppins-Regular', fontSize:16, fontWeight:'bold', textAlign:'center'}}>Create New Order</Text>
+            <Text style={{flex : 2,fontFamily:'Poppins-Regular', fontSize:16, fontWeight:'bold', textAlign:'center', color : '#8C8C8C'}}>Create New Order</Text>
             <View style={{width:'80%', height:'28%', backgroundColor:'#FFC008', flex:1, justifyContent:'center', alignItems:'center', borderRadius:8}}>
                 <Feather name="plus-square" color={'#ffffff'} size={18} />
             </View>
@@ -25,7 +25,7 @@ export default function addHistory({add} : addHistoryProp){
 const styles = StyleSheet.create({
     container : {
         flex:1,
-        borderWidth:2,
+        borderWidth:0,
         borderColor:'#111111',
         width : _width*0.32,
         height : _height*0.12,
