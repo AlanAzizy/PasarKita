@@ -63,7 +63,7 @@ export default function LoginScreen() {
       >
         <Button
           onPress={() => {
-            router.navigate("../(tabs)/Home");
+            router.navigate("../Stall/(tabs)/Home");
           }}
           title="Login"
           styles={styles.buttonLogin}

@@ -47,7 +47,9 @@ export default function ChooseRole() {
       <View style={styles.button_container}>
         <Button
           onPress={() => {
-            router.push("../Login/RegisterScreen");
+            role == "Market Owner"
+              ? router.push("../Tenant/(tabs)/Home")
+              : router.push("../Stall/(tabs)/Home");
           }}
           title="Save"
           styles={styles.buttonLogin}

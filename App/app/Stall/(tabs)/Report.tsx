@@ -48,7 +48,7 @@ export default function Stocks() {
       <View style={styles.stat_container}>
         <Text style={styles.sub_title}>Statistic</Text>
         <Image
-          source={require("../../assets/images/Stat.png")}
+          source={require("../../../assets/images/Stat.png")}
           resizeMode="contain"
           style={styles.image}
         ></Image>

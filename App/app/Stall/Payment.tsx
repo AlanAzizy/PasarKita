@@ -24,10 +24,10 @@ import { orderHistory } from "./(tabs)/Home";
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
 
-export default function Histroy() {
+export default function Payment() {
   const navigation = useNavigation();
 
-  const tableHead = ["Order ID", "Date", "Cashier ID", "Total"];
+  const tableHead = ["Stalls", "Date", "Total", "Status"];
 
   useEffect(() => {
     useFonts();
@@ -42,7 +42,7 @@ export default function Histroy() {
         fontFamily: "Poppins-Regular",
         fontSize: 24,
       },
-      title: "Order Histroy",
+      title: "Payment Report",
     });
   }, [navigation]);
 
