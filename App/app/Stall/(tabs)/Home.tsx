@@ -209,7 +209,7 @@ export default function Home() {
         </View>
         <View style={styles.history}>
           <Pressable
-            onPress={() => router.push("/Tenant/History")}
+            onPress={() => router.push("../Schedule")}
             style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
           >
             <Text style={styles.text_orderHistory}>Market Maintenance</Text>

@@ -84,7 +84,7 @@ export default function Setting() {
           </Pressable>
           <Pressable
             style={styles.menu}
-            onPress={() => router.navigate("../Login/_Welcome")}
+            onPress={() => router.navigate("../Login/Welcome")}
           >
             <FontAwesome6 name="arrow-right-to-bracket" size={20} />
             <Text style={styles.menuText}>Logout</Text>

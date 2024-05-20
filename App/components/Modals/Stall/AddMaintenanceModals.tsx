@@ -95,7 +95,10 @@ export default function AddBooking({ visible, close }: modalProp) {
               onPress={() => {
                 setOpen(true);
               }}
-              style={[styles.input]}
+              style={[
+                styles.input,
+                { paddingVertical: 1, justifyContent: "center" },
+              ]}
             >
               <Text style={styles.placeholder}>{date.toDateString()}</Text>
               {open && (
@@ -202,7 +205,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   sub_title: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#767676",
     fontFamily: "Poppins-Regular",
     fontWeight: "bold",

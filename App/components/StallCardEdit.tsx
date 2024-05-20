@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
   },
   number: {
     fontFamily: "Poppins-Regular",
-    fontSize: 35,
+    fontSize: 30,
     textAlign: "center",
     textAlignVertical: "center",
     color: "#53845D",

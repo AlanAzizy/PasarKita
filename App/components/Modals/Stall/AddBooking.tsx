@@ -37,7 +37,7 @@ export default function AddBooking({ visible, close }: modalProp) {
   const [clicked, setClicked] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const orderContext = useContext(OrderContext);
-  const [stall, setStall] = useState("Choose Stalls");
+  const [stall, setStall] = useState(0);
   const [custName, setCustName] = useState("");
   const [duration, setDuration] = useState("");
 
@@ -45,6 +45,7 @@ export default function AddBooking({ visible, close }: modalProp) {
     setCustName("");
     setDuration("");
     setStall("Choose Stalls");
+    close();
   };
 
   return (
@@ -52,7 +53,7 @@ export default function AddBooking({ visible, close }: modalProp) {
       <View style={styles.container}>
         <View style={styles.modal}>
           <View style={styles.title}>
-            <Text style={styles.text_title}>Create New Order</Text>
+            <Text style={styles.text_title}>Add Booking</Text>
             <AntDesign.Button
               name="close"
               iconStyle={{ width: 16 }}
@@ -60,7 +61,7 @@ export default function AddBooking({ visible, close }: modalProp) {
               color={"#B0B0B0"}
               backgroundColor={"#ffffff"}
               onPress={() => {
-                close();
+                removeAll();
               }}
             />
           </View>
@@ -78,7 +79,9 @@ export default function AddBooking({ visible, close }: modalProp) {
               onPress={() => setShowList(!showList)}
               style={styles.show_down}
             >
-              <Text style={styles.placeholder}>{stall}</Text>
+              <Text style={styles.placeholder}>
+                {stall > 0 ? `Stall ${stall}` : "Choose Stall"}
+              </Text>
               <SimpleLineIcons
                 name={showList ? "arrow-up" : "arrow-down"}
                 size={18}
@@ -104,7 +107,7 @@ export default function AddBooking({ visible, close }: modalProp) {
                     <Pressable
                       style={styles.list_elemen}
                       onPress={() => {
-                        setStall(String(`Stall ${item}`));
+                        setStall(item);
                         setShowList(false);
                       }}
                     >
@@ -130,7 +133,8 @@ export default function AddBooking({ visible, close }: modalProp) {
               styles={
                 custName !== "" &&
                 !isNaN(Number(duration)) &&
-                stall !== "Choose Stalls"
+                stall > 0 &&
+                duration > 0
                   ? styles.buttonEnable
                   : styles.buttonDisabled
               }
@@ -215,7 +219,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   sub_title: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#767676",
     fontFamily: "Poppins-Regular",
     fontWeight: "bold",
@@ -262,7 +266,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: "#ffffff",
     width: "100%",
-    top: 140,
+    top: "66%",
     borderWidth: 1,
     borderColor: "#53845D",
     borderRadius: 10,

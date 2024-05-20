@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   sub_title: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#767676",
     fontFamily: "Poppins-Regular",
     fontWeight: "bold",

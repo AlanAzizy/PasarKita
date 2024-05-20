@@ -37,6 +37,9 @@ export default function CreateOrder({ visible, close }: modalProp) {
   const orderContext = useContext(OrderContext);
 
   const addItem = (item: Product) => {
+    if (orderContext?.orders?.find((e) => e.product == item)) {
+      return;
+    }
     if (orderContext !== null) {
       if (orderContext.orders?.length == 0) {
         orderContext?.setOrders([{ product: item, num: 1 }]);
@@ -88,7 +91,13 @@ export default function CreateOrder({ visible, close }: modalProp) {
             />
             <FlatList
               style={
-                phrase !== "" ? styles.show_flatlist : styles.not_show_flatlist
+                phrase !== ""
+                  ? orderContext?.orders?.length >= 2
+                    ? styles.show_flatlist_2
+                    : orderContext?.orders?.length == 1
+                    ? styles.show_flatlist_1
+                    : styles.show_flatlist_0
+                  : styles.not_show_flatlist
               }
               horizontal={false}
               data={products as Product[]}
@@ -251,7 +260,7 @@ const styles = StyleSheet.create({
     borderColor: "#fff000",
     borderWidth: 0,
   },
-  show_flatlist: {
+  show_flatlist_0: {
     paddingVertical: 5,
     marginVertical: 2,
     zIndex: 100,
@@ -259,7 +268,31 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: "#ffffff",
     width: "100%",
-    top: 160,
+    top: "90%",
+    borderWidth: 2,
+    borderColor: "#e0e0e0",
+  },
+  show_flatlist_1: {
+    paddingVertical: 5,
+    marginVertical: 2,
+    zIndex: 100,
+    height: "auto",
+    position: "absolute",
+    backgroundColor: "#ffffff",
+    width: "100%",
+    top: "74%",
+    borderWidth: 2,
+    borderColor: "#e0e0e0",
+  },
+  show_flatlist_2: {
+    paddingVertical: 5,
+    marginVertical: 2,
+    zIndex: 100,
+    height: "auto",
+    position: "absolute",
+    backgroundColor: "#ffffff",
+    width: "100%",
+    top: "58%",
     borderWidth: 2,
     borderColor: "#e0e0e0",
   },

@@ -38,7 +38,7 @@ export default function EditStall({ visible, close }: modalProp) {
   const [price, setPrice] = useState(0);
   const [showListStatus, setShowListStatus] = useState(false);
   const [showListStall, setShowListStall] = useState(false);
-  const [stall, setStall] = useState("Choose Stalls");
+  const [stall, setStall] = useState(0);
   const [status, setStatus] = useState<"Available" | "Booked">("Available");
 
   const addItem = (item: Product) => {};
@@ -66,7 +66,7 @@ export default function EditStall({ visible, close }: modalProp) {
               onPress={() => setShowListStall(!showListStall)}
               style={styles.show_down}
             >
-              <Text style={styles.placeholder}>{stall}</Text>
+              <Text style={styles.placeholder}>{`Stall ${stall}`}</Text>
               <SimpleLineIcons
                 name={showListStall ? "arrow-up" : "arrow-down"}
                 size={18}
@@ -88,7 +88,7 @@ export default function EditStall({ visible, close }: modalProp) {
                     <Pressable
                       style={styles.list_elemen}
                       onPress={() => {
-                        setStall(String(`Stall ${item}`));
+                        setStall(item);
                         setShowListStall(false);
                       }}
                     >
@@ -154,7 +154,7 @@ export default function EditStall({ visible, close }: modalProp) {
             <Text style={styles.sub_title}>Price</Text>
             <TextInput
               style={styles.input}
-              onChangeText={(value) => setName(value)}
+              onChangeText={(value) => setPrice(value)}
               placeholder="Price"
               keyboardType="numeric"
             />
@@ -162,18 +162,18 @@ export default function EditStall({ visible, close }: modalProp) {
           <View style={styles.button_container}>
             <Button
               onPress={() => {
-                setName("");
                 setPrice(0);
                 setStock(0);
+                setStall(0);
                 close();
               }}
               styles={
-                name !== "" && price > 0
+                stall > 0 && price > 0
                   ? styles.buttonEnable
                   : styles.buttonDisabled
               }
-              title="Edit Product"
-              isLight={name !== "" && price > 0}
+              title="Edit Stall"
+              isLight={stall > 0 && price > 0}
               size={16}
             />
           </View>
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   sub_title: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#767676",
     fontFamily: "Poppins-Regular",
     fontWeight: "bold",

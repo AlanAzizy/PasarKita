@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     padding: 2,
     backgroundColor: "#8BC34A",
-    width: "70%",
+    width: "auto",
     alignSelf: "center",
     borderRadius: 5,
     textAlign: "center",

@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   text_style: {
     flex: 2,
     fontFamily: "Poppins-Regular",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
     textAlign: "center",
     color: "#8C8C8C",

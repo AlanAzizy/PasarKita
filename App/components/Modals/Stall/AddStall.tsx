@@ -45,7 +45,10 @@ export default function AddStall({ visible, close }: modalProp) {
               size={20}
               color={"#B0B0B0"}
               backgroundColor={"#ffffff"}
-              onPress={close}
+              onPress={() => {
+                close();
+                setPrice(0);
+              }}
             />
           </View>
           <View style={styles.input_container}>
@@ -64,7 +67,7 @@ export default function AddStall({ visible, close }: modalProp) {
                 close();
               }}
               styles={price > 0 ? styles.buttonEnable : styles.buttonDisabled}
-              title="Add Product"
+              title="Add Stall"
               isLight={price > 0}
               size={16}
             />
@@ -141,7 +144,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   sub_title: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#767676",
     fontFamily: "Poppins-Regular",
     fontWeight: "bold",

@@ -115,7 +115,9 @@ export default function Stocks() {
                 style={{ borderWidth: 0, borderColor: "#ff0000" }}
               ></Feather>
             </View>
-            <Text style={styles.text_menu}>Print</Text>
+            <Text style={[styles.text_menu, { textAlign: "center" }]}>
+              Print
+            </Text>
           </Pressable>
           <Pressable style={styles.menu_press_2}>
             <View
@@ -128,7 +130,9 @@ export default function Stocks() {
                 style={{ borderWidth: 0, borderColor: "#ff0000" }}
               />
             </View>
-            <Text style={styles.text_menu}>Excel</Text>
+            <Text style={[styles.text_menu, { textAlign: "center" }]}>
+              Excel
+            </Text>
           </Pressable>
           <Pressable style={styles.menu_press_2}>
             <View
@@ -141,7 +145,7 @@ export default function Stocks() {
                 style={{ borderWidth: 0, borderColor: "#ff0000" }}
               ></FontAwesome6>
             </View>
-            <Text style={styles.text_menu}>Pdf</Text>
+            <Text style={[styles.text_menu, { textAlign: "center" }]}>Pdf</Text>
           </Pressable>
         </View>
       </View>
@@ -206,19 +210,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#FAFAFA",
     flexWrap: "wrap",
     flexDirection: "row",
-    justifyContent: "center",
-    gap: 15,
+    justifyContent: "space-between",
+    gap: 10,
   },
   menu_press_1: {
     borderRadius: 10,
-    width: "45%",
+    width: _height * 0.18,
     height: "35%",
     backgroundColor: "#ffffff",
     borderWidth: 0,
     borderColor: "#aa00ff",
     alignItems: "center",
-    padding: 10,
+    paddingLeft: 4,
     flexDirection: "row",
+    justifyContent: "flex-start",
   },
   icon_container: {
     height: _height * 0.05,
@@ -262,8 +267,11 @@ const styles = StyleSheet.create({
   },
   text_menu: {
     fontFamily: "Poppins-Regular",
-    fontSize: 14,
+    fontSize: 12,
     color: "#767676",
-    fontWeight: "700",
+    fontWeight: "900",
+    borderWidth: 0,
+    borderColor: "#ff00ff",
+    width: _height * 0.1,
   },
 });

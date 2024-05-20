@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesome, FontAwesome5, Feather, Entypo } from "@expo/vector-icons";
 import { Link, Tabs } from "expo-router";
 import { Pressable, View } from "react-native";
-
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+import SearchBar from "@/components/SearchBar";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -17,6 +17,8 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const [phrase, setPhrase] = useState("");
+  const [clicked, setClicked] = useState(false);
 
   return (
     <Tabs
@@ -49,6 +51,12 @@ export default function TabLayout() {
                 alignItems: "center",
               }}
             >
+              {/* <SearchBar
+                clicked={clicked}
+                searchPhrase={phrase}
+                setClicked={setClicked}
+                setSearchPhrase={setPhrase}
+              /> */}
               <Link href="/Home/Profile" asChild>
                 <Pressable>
                   {({ pressed }) => (
@@ -61,7 +69,7 @@ export default function TabLayout() {
                   )}
                 </Pressable>
               </Link>
-              <Link href="../Home/Setting" asChild>
+              <Link href="/Home/Setting" asChild>
                 <Pressable>
                   {({ pressed }) => (
                     <Feather

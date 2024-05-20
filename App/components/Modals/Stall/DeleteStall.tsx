@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   sub_title: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#767676",
     fontFamily: "Poppins-Regular",
     fontWeight: "bold",
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   },
   normal_text: {
     textAlign: "center",
-    fontSize: 14,
+    fontSize: 13,
     color: "#767676",
     fontFamily: "Poppins-Regular",
     marginVertical: 10,

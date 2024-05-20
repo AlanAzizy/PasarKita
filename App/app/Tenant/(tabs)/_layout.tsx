@@ -61,7 +61,7 @@ export default function TabLayout() {
                   )}
                 </Pressable>
               </Link>
-              <Link href="../Home/Setting" asChild>
+              <Link href="/Home/Setting" asChild>
                 <Pressable>
                   {({ pressed }) => (
                     <Feather
