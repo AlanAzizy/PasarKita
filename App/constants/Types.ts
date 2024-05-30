@@ -11,8 +11,9 @@ export interface User{
 
 export interface OrderItem{
     id : string,
-    items : DocumentReference
+    item : DocumentReference
     number : number
+    product : Item
 }
 
 export interface Order{
@@ -43,6 +44,4 @@ export interface Stan{
     size : number,
     type : string,
     until : Date
-    items : DocumentReference[]
-    orders : DocumentReference[]
 }

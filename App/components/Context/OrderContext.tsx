@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 import Product from "../Interface/Product";
-import { orderItem } from "../Modals/Tenant/CreateOrder";
+import { orderItem } from "../../constants/Types";
 
 type orderContextType = {
   orders: orderItem[] | null;

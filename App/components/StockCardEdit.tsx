@@ -12,8 +12,8 @@ import { defaultPhoto } from "@/app/Login/RegisterScreen";
 
 type addModalType = {
   stock: Item;
-  openEdit: () => void;
-  openDelete: () => void;
+  openEdit: (stok: Item) => void;
+  openDelete: (id: string) => void;
 };
 
 const _width = Dimensions.get("screen").width;
@@ -44,13 +44,15 @@ export default function StockCardEdit({
         <View style={styles.button_container}>
           <Pressable
             style={{ width: "auto", height: "auto" }}
-            onPress={openEdit}
+            onPress={() => openEdit(stock)}
           >
             <FontAwesome6 name="pen-to-square" size={18} color={"#469ED0"} />
           </Pressable>
           <Pressable
             style={{ width: "auto", height: "auto" }}
-            onPress={openDelete}
+            onPress={() => {
+              openDelete(id);
+            }}
           >
             <Feather name="trash-2" size={18} color={"#ff1111"} />
           </Pressable>

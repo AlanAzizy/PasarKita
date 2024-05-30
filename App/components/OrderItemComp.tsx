@@ -1,5 +1,5 @@
 import { Pressable, Text, View, Dimensions, StyleSheet } from "react-native";
-import { orderItem } from "./Modals/Tenant/CreateOrder";
+import { OrderItem } from "@/constants/Types";
 import { AntDesign } from "@expo/vector-icons";
 import useFonts from "./useFonts";
 import { useContext } from "react";
@@ -9,13 +9,18 @@ import { Item } from "@/constants/Types";
 
 const _height = Dimensions.get("screen").height;
 
-export default function OrderItem({ product, num }: orderItem) {
+export default function OrderItemComp({
+  id,
+  item,
+  product,
+  number,
+}: OrderItem) {
   const orderContext = useContext(OrderContext);
 
   const addNumber = (product: Item) => {
     const newOrder = orderContext?.orders?.map((e) => {
       if (e.product == product) {
-        e.num += 1;
+        e.number += 1;
       }
       return e;
     });
@@ -25,9 +30,9 @@ export default function OrderItem({ product, num }: orderItem) {
   const minNumber = (product: Item) => {
     const newOrder = orderContext?.orders?.filter((e) => {
       if (e.product == product) {
-        e.num -= 1;
+        e.number -= 1;
       }
-      if (e.num > 0) {
+      if (e.number > 0) {
         return e;
       }
     });
@@ -38,10 +43,10 @@ export default function OrderItem({ product, num }: orderItem) {
       orderContext?.setOrders([]);
     }
   };
-
+  console.log(number);
   return (
     <View style={styles.container}>
-      <Text style={styles.name}>{product.name}</Text>
+      <Text style={styles.name}>{product.name.slice(0, 12)}</Text>
       <View style={{ flexDirection: "row", gap: 4 }}>
         <Pressable
           onPress={() => {
@@ -51,7 +56,7 @@ export default function OrderItem({ product, num }: orderItem) {
         >
           <AntDesign name="minus" size={14} color="#759D7D" />
         </Pressable>
-        <Text style={styles.number}>{num}</Text>
+        <Text style={styles.number}>{number}</Text>
         <Pressable
           onPress={() => {
             addNumber(product);

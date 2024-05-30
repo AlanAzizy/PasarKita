@@ -3,10 +3,11 @@ import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { Item } from "@/constants/Types";
-import { getAllItem } from "@/services/OrderService";
+import { getAllItem } from "@/services/ItemService";
 import { UserContext } from "./Context/UserContext";
 import { auth } from "firebase-admin";
 import { OrderContext } from "./Context/OrderContext";
+import { StanContext } from "./Context/StanContext";
 
 const DropdownComponent = () => {
   const [data, setData] = useState<Item[]>([]);
@@ -14,9 +15,9 @@ const DropdownComponent = () => {
   const [isFocus, setIsFocus] = useState(false);
 
   const orderContext = useContext(OrderContext);
-  const userContext = useContext(UserContext);
+  const stanContext = useContext(StanContext);
   const getData = async () => {
-    const result = await getAllItem(userContext?.user);
+    const result = await getAllItem(stanContext?.stan);
     setData(result);
   };
   useEffect(() => {
@@ -35,12 +36,12 @@ const DropdownComponent = () => {
         // Assuming each order has an id
         // Create a new object with the updated attribute
         isNew = false;
-        return { product: order.product, num: order.num + 1 };
+        return { product: order.product, number: order.number + 1 };
       }
       return order; // Return unchanged objects
     });
     if (isNew) {
-      updatedOrders?.push({ product: value, num: 1 });
+      updatedOrders?.push({ product: value, number: 1 });
     }
     orderContext?.setOrders(updatedOrders);
   };
@@ -69,7 +70,7 @@ const DropdownComponent = () => {
           return { label: item.name, value: item };
         })}
         search
-        maxHeight={300}
+        maxHeight={250}
         labelField="label"
         valueField="value"
         placeholder={!isFocus ? "Select item" : "..."}

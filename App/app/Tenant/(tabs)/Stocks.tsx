@@ -26,6 +26,7 @@ export default function Stocks() {
   const [modalDeleteProduct, setModalDeleteProduct] = useState(false);
   const [stok, setStok] = useState<Item[] | null>(null);
   const [localStok, setLokalStok] = useState<Item[] | null>(null);
+  const [itemSelected, setItemSelected] = useState<Item | null>(null);
   const stanContext = useContext(StanContext);
 
   const fetchItems = async () => {
@@ -35,7 +36,7 @@ export default function Stocks() {
   };
   useEffect(() => {
     fetchItems();
-  }, []);
+  }, [modalAddProduct, modalDeleteProduct, modalEditProduct]);
 
   useEffect(() => {
     if (phrase !== "") {
@@ -83,11 +84,19 @@ export default function Stocks() {
       />
       <EditProduct
         visible={modalEditProduct}
-        close={() => setModalEditProduct(false)}
+        close={() => {
+          setModalEditProduct(false);
+          setItemSelected(null);
+        }}
+        item={itemSelected}
       />
       <DeleteProduct
         visible={modalDeleteProduct}
-        close={() => setModalDeleteProduct(false)}
+        close={() => {
+          setModalDeleteProduct(false);
+          setItemSelected(null);
+        }}
+        id={itemSelected?.id}
       />
       <View style={{ width: "90%", margin: 15 }}>
         <SearchBar
@@ -104,9 +113,15 @@ export default function Stocks() {
               <StockCardEdit
                 key={item.id}
                 stock={item}
-                openEdit={() => setModalEditProduct(true)}
-                openDelete={() => {
+                openEdit={(stock) => {
+                  setModalEditProduct(true);
+                  console.log("---------");
+                  console.log(stock);
+                  setItemSelected(stock);
+                }}
+                openDelete={(id) => {
                   setModalDeleteProduct(true);
+                  setItemSelected({ id } as Item);
                 }}
               />
             ))}

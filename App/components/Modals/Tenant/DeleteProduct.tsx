@@ -13,18 +13,22 @@ import {
 } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import Product, { products } from "@/components/Interface/Product";
-import OrderItem from "@/components/OrderItem";
+import OrderItem from "@/components/OrderItemComp";
 import { OrderContext } from "@/components/Context/OrderContext";
+import { deleteItem } from "@/services/ItemService";
+import { StanContext } from "@/components/Context/StanContext";
 
 type modalProp = {
   visible: boolean;
+  id: string | undefined;
   close: () => void;
 };
 
 const _height = Dimensions.get("screen").height;
 const fix_height = _height;
 
-export default function DeleteProduct({ visible, close }: modalProp) {
+export default function DeleteProduct({ visible, close, id }: modalProp) {
+  const stanContext = useContext(StanContext);
   return (
     <Modal visible={visible} transparent={true}>
       <View style={styles.container}>
@@ -70,6 +74,7 @@ export default function DeleteProduct({ visible, close }: modalProp) {
             </Pressable>
             <Pressable
               onPress={() => {
+                deleteItem(stanContext?.stan, id);
                 close();
               }}
               style={styles.buttonEnable}

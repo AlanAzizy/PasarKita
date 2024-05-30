@@ -13,13 +13,9 @@ import {
 } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import Product, { products } from "@/components/Interface/Product";
-import OrderItem from "@/components/OrderItem";
+import OrderItem from "@/components/OrderItemComp";
 import { OrderContext } from "@/components/Context/OrderContext";
-
-export type orderItem = {
-  product: Product;
-  num: number;
-};
+import { Item } from "@/constants/Types";
 
 type modalProp = {
   visible: boolean;

@@ -1,5 +1,5 @@
 import { auth, firebaseStorage, firestore } from "@/config/firebase";
-import { Order, User, Stan, Item } from "@/constants/Types";
+import { Order, User, Stan, Item, OrderItem } from "@/constants/Types";
 import { signInWithEmailAndPassword, signOut } from "@firebase/auth"
 import { doc, getDocs, where } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
@@ -21,15 +21,49 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 
 
-export const createOrder = async (order : Order) =>{
+export const createOrder = async (stan : Stan,orders : OrderItem[], order : Order) =>{
 
     try {
-        await setDoc(doc(firestore, `order/`), {
-            order
+        const orderItemId = await createOrderItem(stan, orders);
+        const stanPath = 'stans/'+stan.id
+        const orderDoc = await addDoc(collection(firestore, stanPath+'/orders'), {
+          name : order.name,
+          date : order.date,
+          orderItem : orderItemId?.map((id)=>stanPath+`/orderItem/${id}`),
+          total : order.total,
+          status : order.status,
+          cashierId : order.cashierId,
           });
+          console.log(orderDoc)
+          return orderDoc
     }catch(err){
         console.log(err)
     }
+}
+
+
+export const createOrderItem = async (stan : Stan, orders : OrderItem[]) =>{
+
+  try {
+      const stanPath = 'stans/'+stan.id
+      const orderItemPromises = orders.map(async (order) => {
+        const orderItemDoc = await addDoc(collection(firestore, `${stanPath}/orderItem`), {
+          item: stanPath+'/items/'+order.product.id,
+          number: order.number
+        });
+        return orderItemDoc.id;
+      });
+    
+      // Wait for all promises to resolve
+      const orderItemIds = await Promise.all(orderItemPromises);
+    
+      console.log('----------');
+      console.log(orderItemIds);
+    
+      return orderItemIds;
+  }catch(err){
+      console.log(err)
+  }
 }
 
   export const getOrder = async (stan: Stan): Promise<Order[]> => {
@@ -38,20 +72,18 @@ export const createOrder = async (order : Order) =>{
     }
   
     try {        
-          const orderPromises = stan.orders.map(async (order) => {
-            console.log(order.path)
-            const itemDocRef = doc(firestore, order.path);
-            const itemDoc = await getDoc(itemDocRef);
-            const date = (itemDoc.data().date.toDate())
-            const name = itemDoc.data().name
-            const orderItem = itemDoc.data().orderItem
-            const total = itemDoc.data().total
-            const status = itemDoc.data().status
-            const cashierId = itemDoc.data().cashierId
-            return { id: itemDoc.id, name, date, orderItem, total, status, cashierId} as Order;
+      const orderDocRef = collection(firestore, 'stans/'+stan.id+'/orders');
+      const orderDoc = await getDocs(orderDocRef);
+      const orders = orderDoc.docs.map((order)=>{
+            const date = (order.data().date.toDate())
+            const name = order.data().name
+            const orderItem = order.data().orderItem
+            const total = order.data().total
+            const status = order.data().status
+            const cashierId = order.data().cashierId
+            return { id: order.id, name, date, orderItem, total, status, cashierId} as Order;
           });
           
-          const orders = await Promise.all(orderPromises);
           return orders;
         }
   

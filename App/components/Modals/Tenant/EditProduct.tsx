@@ -14,26 +14,27 @@ import {
 import { useContext, useEffect, useState } from "react";
 import Button from "@/components/Button";
 import Product, { products } from "@/components/Interface/Product";
-import OrderItem from "@/components/OrderItem";
+import OrderItem from "@/components/OrderItemComp";
 import { OrderContext } from "@/components/Context/OrderContext";
+import { Item } from "@/constants/Types";
+import { editItem } from "@/services/ItemService";
+import { StanContext } from "@/components/Context/StanContext";
 
 type modalProp = {
   visible: boolean;
   close: () => void;
+  item: Item | null;
 };
 
 const _height = Dimensions.get("screen").height;
 const fix_height = _height;
 
-export default function EditProduct({ visible, close }: modalProp) {
-  const [name, setName] = useState("");
-  const [stock, setStock] = useState(0);
-  const [price, setPrice] = useState(0);
+export default function EditProduct({ visible, close, item }: modalProp) {
+  const [name, setName] = useState(item ? item.name : "");
+  const [stock, setStock] = useState(item ? item.stok : 0);
+  const [price, setPrice] = useState(item ? item.price : 0);
 
-  const addItem = (item: Product) => {};
-
-  const isValid = name !== "" && price > 0;
-
+  const stanContext = useContext(StanContext);
   return (
     <Modal visible={visible} transparent={true}>
       <View style={styles.container}>
@@ -53,6 +54,7 @@ export default function EditProduct({ visible, close }: modalProp) {
             <Text style={styles.sub_title}>Product Name</Text>
             <TextInput
               style={styles.input}
+              defaultValue={item?.name}
               onChangeText={(value) => setName(value)}
               placeholder="Product Name"
               keyboardType="default"
@@ -60,6 +62,7 @@ export default function EditProduct({ visible, close }: modalProp) {
             <Text style={styles.sub_title}>Stock</Text>
             <TextInput
               style={styles.input}
+              defaultValue={item?.stok.toString()}
               onChangeText={(value) => setStock(Number(value))}
               placeholder="Product Stock"
               keyboardType="numeric"
@@ -67,6 +70,7 @@ export default function EditProduct({ visible, close }: modalProp) {
             <Text style={styles.sub_title}>Price</Text>
             <TextInput
               style={styles.input}
+              defaultValue={item?.price.toString()}
               onChangeText={(value) => setPrice(Number(value))}
               placeholder="Product Price"
               keyboardType="numeric"
@@ -75,13 +79,25 @@ export default function EditProduct({ visible, close }: modalProp) {
           <View style={styles.button_container}>
             <Button
               onPress={() => {
+                editItem(stanContext?.stan, {
+                  id: item?.id,
+                  name: name,
+                  price: price,
+                  stok: stock,
+                  additional: stock - item?.stok,
+                  image: item?.image,
+                } as Item);
                 setName("");
                 setPrice(0);
                 setStock(0);
                 close();
               }}
               styles={
-                name !== "" && price > 0
+                name !== "" &&
+                price > 0 &&
+                (name !== item?.name ||
+                  price !== item.price ||
+                  stock !== item.stok)
                   ? styles.buttonEnable
                   : styles.buttonDisabled
               }

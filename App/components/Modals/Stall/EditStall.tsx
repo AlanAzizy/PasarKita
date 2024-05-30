@@ -14,15 +14,11 @@ import {
 import { useContext, useEffect, useState } from "react";
 import Button from "@/components/Button";
 import Product, { products } from "@/components/Interface/Product";
-import OrderItem from "@/components/OrderItem";
+import OrderItem from "@/components/OrderItemComp";
 import { OrderContext } from "@/components/Context/OrderContext";
+import { Item } from "@/constants/Types";
 
 const stalls = [1, 2, 3, 4, 5, 6, 7, 8];
-
-export type orderItem = {
-  product: Product;
-  num: number;
-};
 
 type modalProp = {
   visible: boolean;
@@ -40,8 +36,6 @@ export default function EditStall({ visible, close }: modalProp) {
   const [showListStall, setShowListStall] = useState(false);
   const [stall, setStall] = useState(0);
   const [status, setStatus] = useState<"Available" | "Booked">("Available");
-
-  const addItem = (item: Product) => {};
 
   const isValid = name !== "" && price > 0;
 

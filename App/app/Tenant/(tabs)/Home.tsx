@@ -184,10 +184,22 @@ export default function Home() {
     console.log(stokk);
     setStok(stokk);
   };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      // The screen is focused
+      // Call any action
+      fetchOrder();
+      fetchItems();
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
+
   useEffect(() => {
     fetchOrder();
-    fetchItems();
-  }, []);
+  }, [isCreateOrderModal]);
 
   useEffect(() => {
     useFonts();

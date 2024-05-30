@@ -11,12 +11,19 @@ import {
   Pressable,
   ScrollView,
 } from "react-native";
+import { auth } from "@/config/firebase";
 import { useContext, useEffect, useState } from "react";
 import Button from "@/components/Button";
 import Product, { products } from "@/components/Interface/Product";
-import OrderItem from "@/components/OrderItem";
+import OrderItem from "@/components/OrderItemComp";
 import { OrderContext } from "@/components/Context/OrderContext";
 import Dropdown from "@/components/DropDown";
+import { createOrder, createOrderItem } from "@/services/OrderService";
+import { StanContext } from "@/components/Context/StanContext";
+import { UserContext } from "@/components/Context/UserContext";
+import OrderItemComp from "@/components/OrderItemComp";
+import { Order } from "@/constants/Types";
+import { DocumentReference } from "firebase/firestore";
 
 type modalProp = {
   visible: boolean;
@@ -31,11 +38,14 @@ export default function CreateOrder({ visible, close }: modalProp) {
   const [clicked, setClicked] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const orderContext = useContext(OrderContext);
+  const stanContext = useContext(StanContext);
+  const userContext = useContext(UserContext);
+  const [name, setName] = useState("");
 
   const calculate = () => {
     let num = 0;
     orderContext?.orders?.forEach((e) => {
-      num += e.product.price * e.num;
+      num += e.product.price * e.number;
     });
     return num;
   };
@@ -59,7 +69,16 @@ export default function CreateOrder({ visible, close }: modalProp) {
             <Text style={styles.sub_title}>Cashier ID</Text>
             <TextInput
               style={styles.input}
+              defaultValue={auth.currentUser?.uid}
+              onChangeText={(value) => {}}
               placeholder="insert your ID"
+              keyboardType="default"
+            />
+            <Text style={styles.sub_title}>Customer Name</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(value) => setName(value)}
+              placeholder="insert your customer name"
               keyboardType="default"
             />
             <Text style={styles.sub_title}>Search Product</Text>
@@ -71,10 +90,12 @@ export default function CreateOrder({ visible, close }: modalProp) {
                 data={orderContext?.orders}
                 renderItem={({ item }) => {
                   return (
-                    <OrderItem
+                    <OrderItemComp
                       key={item.id}
                       product={item.product}
-                      num={item.num}
+                      number={item.number}
+                      id={item.id}
+                      item={item.item}
                     />
                   );
                 }}
@@ -90,13 +111,28 @@ export default function CreateOrder({ visible, close }: modalProp) {
             )}
             <Button
               onPress={() => {
-                if (orderContext?.orders && orderContext?.orders.length > 0) {
+                if (
+                  orderContext?.orders &&
+                  orderContext?.orders.length > 0 &&
+                  name !== ""
+                ) {
+                  createOrder(stanContext?.stan, orderContext.orders, {
+                    name: name,
+                    date: new Date(),
+                    total: calculate(),
+                    status: true,
+                    cashierId: {
+                      path: `users/${auth.currentUser?.uid}`,
+                    } as DocumentReference,
+                  } as Order);
                   orderContext.setOrders([]);
                   close();
                 }
               }}
               styles={
-                orderContext?.orders && orderContext?.orders.length > 0
+                orderContext?.orders &&
+                orderContext?.orders.length > 0 &&
+                name !== ""
                   ? styles.buttonEnable
                   : styles.buttonDisabled
               }

@@ -14,14 +14,10 @@ import {
 import { useContext, useEffect, useState } from "react";
 import Button from "@/components/Button";
 import Product, { products } from "@/components/Interface/Product";
-import OrderItem from "@/components/OrderItem";
+import OrderItem from "@/components/OrderItemComp";
 import { OrderContext } from "@/components/Context/OrderContext";
 import DatePicker from "@react-native-community/datetimepicker";
-
-export type orderItem = {
-  product: Product;
-  num: number;
-};
+import { Item } from "@/constants/Types";
 
 type modalProp = {
   visible: boolean;

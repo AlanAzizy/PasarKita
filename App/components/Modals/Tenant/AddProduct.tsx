@@ -14,13 +14,10 @@ import {
 import { useContext, useEffect, useState } from "react";
 import Button from "@/components/Button";
 import Product, { products } from "@/components/Interface/Product";
-import OrderItem from "@/components/OrderItem";
-import { OrderContext } from "@/components/Context/OrderContext";
-
-export type orderItem = {
-  product: Product;
-  num: number;
-};
+import OrderItem from "@/components/OrderItemComp";
+import { Item } from "@/constants/Types";
+import { addItem } from "@/services/ItemService";
+import { StanContext } from "@/components/Context/StanContext";
 
 type modalProp = {
   visible: boolean;
@@ -35,9 +32,8 @@ export default function AddProduct({ visible, close }: modalProp) {
   const [stock, setStock] = useState(0);
   const [price, setPrice] = useState(0);
 
-  const addItem = (item: Product) => {};
-
   const isValid = name !== "" && price > 0;
+  const stanContext = useContext(StanContext);
 
   return (
     <Modal visible={visible} transparent={true}>
@@ -80,6 +76,12 @@ export default function AddProduct({ visible, close }: modalProp) {
           <View style={styles.button_container}>
             <Button
               onPress={() => {
+                addItem(stanContext?.stan, {
+                  name,
+                  stok: stock,
+                  price,
+                  additional: stock,
+                } as Item);
                 setName("");
                 setPrice(0);
                 setStock(0);
