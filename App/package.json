@@ -8,8 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "dev": "APP_VARIANT=development npx expo start",
-    "eas-build-pre-install": "npm config set legacy-peer-deps true"
+    "dev": "APP_VARIANT=development npx expo start"
   },
   "jest": {
     "preset": "jest-expo"
