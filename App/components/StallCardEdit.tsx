@@ -25,7 +25,7 @@ export default function StallCardEdit({
   openDelete,
 }: addModalType) {
   const { id, price, paymentStatus, until, availibility } = stock;
-  const date = new Date(until.seconds * 1000 + 43200000);
+  const date = new Date(until.seconds * 1000 + 36000000);
   return (
     <View style={styles.container}>
       <View
@@ -56,7 +56,7 @@ export default function StallCardEdit({
           <Text style={[styles.text_key, { fontSize: 14 }]}>
             {availibility
               ? ""
-              : `${date.getMonth() - new Date().getMonth() + 1} Months left `}
+              : `${date.getMonth() - new Date().getMonth()} Months left `}
           </Text>
         </View>
         <View style={styles.val}>

@@ -21,13 +21,13 @@ export default function StallBooking({
   price,
   until,
 }: Stan) {
-  const date = new Date(until.seconds * 1000 + 43200000);
+  const date = new Date(until.seconds * 1000 + 3600000);
 
   return (
     <View style={styles.container}>
       <Text style={styles.nominal}>{price}</Text>
       <Text style={styles.number}>{`${
-        date.getMonth() - new Date().getMonth() + 1
+        date.getMonth() - new Date().getMonth()
       } months left`}</Text>
       <View
         style={[

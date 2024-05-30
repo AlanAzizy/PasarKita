@@ -76,15 +76,15 @@ export default function Histroy() {
                 <Row
                   key={item.id}
                   data={[
-                    item.id.slice(0, 7),
+                    item.id.slice(0, 6),
                     item.date.toDateString(),
-                    item.cashierId.id.slice(0, 7),
+                    item.cashierId.path.toString().slice(6, 12),
                     item.total,
                   ]}
                   style={
                     index % 2 == 1
-                      ? { backgroundColor: "#F3F9ED", height: _height * 0.04 }
-                      : {}
+                      ? { backgroundColor: "#F3F9ED", height: _height * 0.05 }
+                      : { height: _height * 0.05 }
                   }
                   textStyle={styles.rowStyle}
                 />

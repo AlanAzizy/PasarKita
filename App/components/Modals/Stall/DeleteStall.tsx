@@ -15,17 +15,20 @@ import { useContext, useEffect, useState } from "react";
 import Product, { products } from "@/components/Interface/Product";
 import OrderItem from "@/components/OrderItemComp";
 import { OrderContext } from "@/components/Context/OrderContext";
-import { Item } from "@/constants/Types";
+import { Item, Stan } from "@/constants/Types";
+import { deleteStan } from "@/services/StanService";
+import Toast from "react-native-toast-message";
 
 type modalProp = {
   visible: boolean;
   close: () => void;
+  stan: Stan | null;
 };
 
 const _height = Dimensions.get("screen").height;
 const fix_height = _height;
 
-export default function DeleteStall({ visible, close }: modalProp) {
+export default function DeleteStall({ visible, close, stan }: modalProp) {
   return (
     <Modal visible={visible} transparent={true}>
       <View style={styles.container}>
@@ -71,6 +74,11 @@ export default function DeleteStall({ visible, close }: modalProp) {
             </Pressable>
             <Pressable
               onPress={() => {
+                deleteStan(stan);
+                Toast.show({
+                  type: "success",
+                  text1: "Success to delete stall",
+                });
                 close();
               }}
               style={styles.buttonEnable}

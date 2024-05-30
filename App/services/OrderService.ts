@@ -1,7 +1,7 @@
 import { auth, firebaseStorage, firestore } from "@/config/firebase";
 import { Order, User, Stan, Item, OrderItem } from "@/constants/Types";
 import { signInWithEmailAndPassword, signOut } from "@firebase/auth"
-import { doc, getDocs, where } from "firebase/firestore";
+import { doc, getDocs, } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
 import {
   addDoc,
@@ -19,6 +19,7 @@ import {
 } from "firebase/storage";
 import { useEffect, useState } from "react";
 import { z } from "zod";
+import { editItem } from "./ItemService";
 
 
 export const createOrder = async (stan : Stan,orders : OrderItem[], order : Order) =>{
@@ -47,6 +48,10 @@ export const createOrderItem = async (stan : Stan, orders : OrderItem[]) =>{
   try {
       const stanPath = 'stans/'+stan.id
       const orderItemPromises = orders.map(async (order) => {
+        const newStok = order.product.stok - order.number
+        const prevItem = order.product
+        const item = {name :prevItem.name ,stok : newStok, additional : order.number*-1, id : prevItem.id, image : prevItem.image, price : prevItem.price} as Item
+        await editItem(stan, item);
         const orderItemDoc = await addDoc(collection(firestore, `${stanPath}/orderItem`), {
           item: stanPath+'/items/'+order.product.id,
           number: order.number
@@ -56,9 +61,7 @@ export const createOrderItem = async (stan : Stan, orders : OrderItem[]) =>{
     
       // Wait for all promises to resolve
       const orderItemIds = await Promise.all(orderItemPromises);
-    
-      console.log('----------');
-      console.log(orderItemIds);
+  
     
       return orderItemIds;
   }catch(err){

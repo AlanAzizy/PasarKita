@@ -132,7 +132,11 @@ export default function Home() {
       fetchItems();
     });
     return unsubscribe;
-  }, [navigation, isAddBookingModal]);
+  }, [navigation]);
+
+  useEffect(() => {
+    fetchItems();
+  }, [isAddBookingModal, isAddMaintenanceModal]);
 
   useEffect(() => {
     useFonts();
@@ -170,7 +174,7 @@ export default function Home() {
             </Text>
             <Text style={[styles.banner_text, styles.banner_text_1]}>2.5%</Text>
             <Text style={[styles.banner_text, styles.banner_text_2]}>
-              Rp575.25
+              Rp57.500.000
             </Text>
             <Text style={[styles.banner_text, styles.banner_text_1]}>
               Details

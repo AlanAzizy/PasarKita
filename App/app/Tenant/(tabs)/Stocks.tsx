@@ -36,7 +36,7 @@ export default function Stocks() {
   };
   useEffect(() => {
     fetchItems();
-  }, [modalAddProduct, modalDeleteProduct, modalEditProduct]);
+  }, [navigation, modalEditProduct, modalAddProduct, modalDeleteProduct]);
 
   useEffect(() => {
     if (phrase !== "") {

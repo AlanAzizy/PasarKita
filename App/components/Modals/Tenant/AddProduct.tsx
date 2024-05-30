@@ -18,6 +18,7 @@ import OrderItem from "@/components/OrderItemComp";
 import { Item } from "@/constants/Types";
 import { addItem } from "@/services/ItemService";
 import { StanContext } from "@/components/Context/StanContext";
+import Toast from "react-native-toast-message";
 
 type modalProp = {
   visible: boolean;
@@ -82,6 +83,10 @@ export default function AddProduct({ visible, close }: modalProp) {
                   price,
                   additional: stock,
                 } as Item);
+                Toast.show({
+                  type: "success",
+                  text1: "Success to add Item",
+                });
                 setName("");
                 setPrice(0);
                 setStock(0);

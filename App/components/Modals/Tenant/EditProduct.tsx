@@ -19,6 +19,7 @@ import { OrderContext } from "@/components/Context/OrderContext";
 import { Item } from "@/constants/Types";
 import { editItem } from "@/services/ItemService";
 import { StanContext } from "@/components/Context/StanContext";
+import Toast from "react-native-toast-message";
 
 type modalProp = {
   visible: boolean;
@@ -87,6 +88,10 @@ export default function EditProduct({ visible, close, item }: modalProp) {
                   additional: stock - item?.stok,
                   image: item?.image,
                 } as Item);
+                Toast.show({
+                  type: "success",
+                  text1: "Success to edit Item",
+                });
                 setName("");
                 setPrice(0);
                 setStock(0);

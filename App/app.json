@@ -11,13 +11,14 @@
       "image": "./assets/images/splash-icon-test.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff",
-      "width" : "100%"
+      "width": "100%"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourcompany.yourappname"
     },
     "android": {
       "adaptiveIcon": {

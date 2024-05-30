@@ -20,6 +20,7 @@ import { Item, Stan } from "@/constants/Types";
 import { bookStan, getUnBookedStan } from "@/services/StanService";
 import { useNavigation } from "expo-router";
 import DropdownComponent from "@/components/DropDownStall";
+import Toast from "react-native-toast-message";
 
 type modalProp = {
   visible: boolean;
@@ -45,7 +46,7 @@ export default function AddBooking({ visible, close }: modalProp) {
 
   useEffect(() => {
     fetchItems();
-  }, []);
+  }, [visible]);
 
   const removeAll = () => {
     setCustName("");
@@ -124,8 +125,12 @@ export default function AddBooking({ visible, close }: modalProp) {
           <View style={styles.button_container}>
             <Button
               onPress={() => {
-                if (selectedStall !== null) {
-                  bookStan(selectedStall);
+                if (selectedStall !== null && duration > 0) {
+                  bookStan(selectedStall, duration);
+                  Toast.show({
+                    type: "success",
+                    text1: "Success to add booking",
+                  });
                 }
                 removeAll();
                 close();

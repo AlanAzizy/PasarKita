@@ -24,6 +24,7 @@ import { UserContext } from "@/components/Context/UserContext";
 import OrderItemComp from "@/components/OrderItemComp";
 import { Order } from "@/constants/Types";
 import { DocumentReference } from "firebase/firestore";
+import Toast from "react-native-toast-message";
 
 type modalProp = {
   visible: boolean;
@@ -125,6 +126,10 @@ export default function CreateOrder({ visible, close }: modalProp) {
                       path: `users/${auth.currentUser?.uid}`,
                     } as DocumentReference,
                   } as Order);
+                  Toast.show({
+                    type: "success",
+                    text1: "Success to create order",
+                  });
                   orderContext.setOrders([]);
                   close();
                 }

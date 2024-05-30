@@ -29,10 +29,14 @@ export default function Stocks() {
   const [modalDeleteStall, setModalDeleteStall] = useState(false);
   const [filterModal, setFilterModal] = useState(false);
   const [stalls, setStalls] = useState<Stan[] | null>(null);
+  const [selectedStall, setSelectedStall] = useState<Stan | null>(null);
+  const [stok, setStok] = useState<Stan[] | null>(null);
+  const [localStok, setLokalStok] = useState<Stan[] | null>(null);
 
   const fetchItems = async () => {
-    const stall = await getAllStan();
-    setStalls(stall);
+    const stokk = await getAllStan();
+    setStalls(stokk);
+    setLokalStok(stokk);
   };
 
   useEffect(() => {
@@ -42,6 +46,30 @@ export default function Stocks() {
 
     return unsubscribe;
   }, [navigation]);
+
+  useEffect(() => {
+    if (phrase !== "") {
+      const newStok = stok?.filter((item) => {
+        if (item.id.toLocaleLowerCase().includes(phrase.toLocaleLowerCase())) {
+          return item;
+        }
+      });
+      console.log(newStok);
+      setStalls(newStok);
+    } else {
+      setStalls(localStok);
+    }
+  }, [phrase]);
+
+  useEffect(() => {
+    fetchItems();
+  }, [
+    modalAddStall,
+    modalDeleteStall,
+    modalEditStall,
+    filterModal,
+    selectedStall,
+  ]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -70,10 +98,12 @@ export default function Stocks() {
       <EditStall
         visible={modalEditStall}
         close={() => setModalEditStall(false)}
+        stan={selectedStall}
       />
       <DeleteStall
         visible={modalDeleteStall}
         close={() => setModalDeleteStall(false)}
+        stan={selectedStall}
       />
       <View
         style={{
@@ -103,9 +133,13 @@ export default function Stocks() {
                 <StallCardEdit
                   key={item.id}
                   stock={item}
-                  openEdit={() => setModalEditStall(true)}
+                  openEdit={() => {
+                    setModalEditStall(true);
+                    setSelectedStall(item);
+                  }}
                   openDelete={() => {
                     setModalDeleteStall(true);
+                    setSelectedStall(item);
                   }}
                 />
               ) : (

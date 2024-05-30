@@ -204,8 +204,11 @@ export default function Home() {
   }, [navigation]);
 
   useEffect(() => {
+    // The screen is focused
+    // Call any action
     fetchOrder();
-  }, [isCreateOrderModal]);
+    fetchItems();
+  }, [isCreateOrderModal, navigation]);
 
   useEffect(() => {
     useFonts();

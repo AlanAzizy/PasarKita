@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
     padding: 2,
     alignItems: "center",
     borderRadius: 5,
+    alignSelf: "center",
   },
   status_text: {
     fontFamily: "Poppins-Regular",

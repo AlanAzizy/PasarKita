@@ -2,52 +2,27 @@ import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { Item } from "@/constants/Types";
+import { Item, Stan } from "@/constants/Types";
 import { getAllItem } from "@/services/ItemService";
 import { UserContext } from "./Context/UserContext";
 import { auth } from "firebase-admin";
 import { OrderContext } from "./Context/OrderContext";
 import { StanContext } from "./Context/StanContext";
+import { useNavigation } from "expo-router";
+import { getUnBookedStan } from "@/services/StanService";
+import { string } from "zod";
 
-const DropdownComponent = () => {
-  const [data, setData] = useState<Item[]>([]);
+type aState = {
+  status: string[];
+  setStatus: (status: string) => void;
+};
+
+const DropdownBinary = ({ status, setStatus }: aState) => {
   const [value, setValue] = useState("");
   const [isFocus, setIsFocus] = useState(false);
 
-  const orderContext = useContext(OrderContext);
-  const stanContext = useContext(StanContext);
-  const getData = async () => {
-    const result = await getAllItem(stanContext?.stan);
-    setData(result.filter((item) => item.stok > 0));
-  };
-  useEffect(() => {
-    try {
-      getData();
-    } catch (err) {
-      console.log("cant get data");
-    }
-  }, []);
-
-  const setOrder = (value: Item) => {
-    let isNew = true;
-    const order = [...orderContext?.orders];
-    const updatedOrders = orderContext.orders.map((order) => {
-      if (order.product.id == value.id) {
-        // Assuming each order has an id
-        // Create a new object with the updated attribute
-        isNew = false;
-        return { product: order.product, number: order.number + 1 };
-      }
-      return order; // Return unchanged objects
-    });
-    if (isNew) {
-      updatedOrders?.push({ product: value, number: 1 });
-    }
-    orderContext?.setOrders(updatedOrders);
-  };
-
   const renderLabel = () => {
-    if (value || isFocus) {
+    if (!(value !== "") || isFocus) {
       return (
         <Text style={[styles.label, isFocus && { color: "blue" }]}>
           Dropdown label
@@ -59,28 +34,29 @@ const DropdownComponent = () => {
 
   return (
     <View style={styles.container}>
-      {renderLabel()}
       <Dropdown
         style={[styles.dropdown, isFocus && { borderColor: "blue" }]}
         placeholderStyle={styles.placeholderStyle}
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
-        data={data.map((item) => {
-          return { label: item.name, value: item };
+        data={status.map((item) => {
+          return { label: item, value: item };
         })}
         search
         maxHeight={250}
         labelField="label"
         valueField="value"
-        placeholder={!isFocus ? "Select item" : "..."}
+        placeholder={
+          value == "" ? (!isFocus ? "Select Stall" : "") : `Stall ${value}`
+        }
         searchPlaceholder="Search..."
         value={value}
         onFocus={() => setIsFocus(true)}
         onBlur={() => setIsFocus(false)}
         onChange={(item) => {
-          setValue("");
-          setOrder(item.value);
+          setValue(item.value);
+          setStatus(item.value);
         }}
         renderLeftIcon={() => (
           <AntDesign
@@ -95,7 +71,7 @@ const DropdownComponent = () => {
   );
 };
 
-export default DropdownComponent;
+export default DropdownBinary;
 
 const styles = StyleSheet.create({
   container: {

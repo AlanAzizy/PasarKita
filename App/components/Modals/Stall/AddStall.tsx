@@ -1,5 +1,6 @@
 import SearchBar from "@/components/SearchBar";
 import { AntDesign } from "@expo/vector-icons";
+import Toast from "react-native-toast-message";
 import {
   Modal,
   View,
@@ -69,6 +70,10 @@ export default function AddStall({ visible, close }: modalProp) {
             <Button
               onPress={() => {
                 addStan({ price, blockNumber } as Stan);
+                Toast.show({
+                  type: "success",
+                  text1: "Success to add a stall",
+                });
                 setPrice(0);
                 close();
               }}

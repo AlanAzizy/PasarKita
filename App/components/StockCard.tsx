@@ -7,7 +7,6 @@ const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
 
 export default function StockCard({ id, name, stok, additional, image }: Item) {
-  console.log(image);
   return (
     <View style={styles.container}>
       <View style={styles.image_container}>
@@ -21,19 +20,9 @@ export default function StockCard({ id, name, stok, additional, image }: Item) {
         <Text>{id}</Text>
       </View>
       <View style={styles.number}>
-        <Text
-          style={[
-            styles.number_text,
-            { color: additional > 0 ? "#8BC34A" : "#EA5C2F" },
-          ]}
-        >
-          {additional}
+        <Text style={[styles.number_text, { color: "#8BC34A" }]}>
+          {Math.abs(additional)}
         </Text>
-        {additional > 0 ? (
-          <Feather name="arrow-up" size={18} color={"#8BC34A"} />
-        ) : (
-          <Feather name="arrow-down" size={18} color={"#EA5C2F"} />
-        )}
       </View>
     </View>
   );

@@ -55,7 +55,11 @@ export default function TabLayout() {
                     <FontAwesome5
                       name="user-circle"
                       size={30}
-                      color={Colors[colorScheme ?? "light"].text}
+                      color={
+                        Colors[colorScheme ?? "light"].text
+                          ? Colors[colorScheme ?? "light"].text
+                          : "black"
+                      }
                       style={{ marginRight: "6%", opacity: pressed ? 0.5 : 1 }}
                     />
                   )}
@@ -67,7 +71,11 @@ export default function TabLayout() {
                     <Feather
                       name="settings"
                       size={30}
-                      color={Colors[colorScheme ?? "light"].text}
+                      color={
+                        Colors[colorScheme ?? "light"].text
+                          ? Colors[colorScheme ?? "light"].text
+                          : "black"
+                      }
                       style={{ marginRight: "8%", opacity: pressed ? 0.5 : 1 }}
                     />
                   )}

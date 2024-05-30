@@ -17,6 +17,7 @@ import OrderItem from "@/components/OrderItemComp";
 import { OrderContext } from "@/components/Context/OrderContext";
 import { deleteItem } from "@/services/ItemService";
 import { StanContext } from "@/components/Context/StanContext";
+import Toast from "react-native-toast-message";
 
 type modalProp = {
   visible: boolean;
@@ -75,6 +76,10 @@ export default function DeleteProduct({ visible, close, id }: modalProp) {
             <Pressable
               onPress={() => {
                 deleteItem(stanContext?.stan, id);
+                Toast.show({
+                  type: "success",
+                  text1: "Success to delete Item",
+                });
                 close();
               }}
               style={styles.buttonEnable}

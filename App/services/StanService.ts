@@ -1,7 +1,7 @@
 import { auth, firebaseStorage, firestore } from "@/config/firebase";
 import { Order, User } from "@/constants/Types";
 import { signInWithEmailAndPassword, signOut } from "@firebase/auth"
-import { doc, getDocs, where, updateDoc } from "firebase/firestore";
+import { doc, getDocs, where, updateDoc, deleteDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
 import {
   addDoc,
@@ -81,7 +81,6 @@ export const getUnBookedStan = async ()=>{
       const date = stanEl.data().until
       return {id, until : date, ...stanEl.data()} as Stan 
     })
-    console.log('------------')
     console.log(stans)
     return stans
   }
@@ -133,11 +132,14 @@ export const bookStan = async (stan : Stan, duration : number) => {
           currentDate.setDate(28);
           currentDate.setMonth(currentDate.getMonth()+duration)
         }else{
-          if (currentDate.getDate()>30){
-            currentDate.setDate(30);
           currentDate.setMonth(currentDate.getMonth()+duration)
-          }
         }
+      }else{
+        if (currentDate.getDate()>=30){
+          currentDate.setDate(30);
+
+        }
+        currentDate.setMonth(currentDate.getMonth()+duration)
       }
       const stanDoc = await updateDoc(stanDocRef, {
         availibility : false,
@@ -149,6 +151,57 @@ export const bookStan = async (stan : Stan, duration : number) => {
         until : currentDate,
         owner : stan.owner
       });
+      
+      console.log(stanDoc)
+
+  } catch (error) {
+    console.error("Error moving items:", error);
+    throw new Error("Internal Server Error");
+  }
+};
+
+
+export const editStan = async (stan : Stan, price : number, paymentStatus : boolean, availibility : boolean) => {
+  if (!auth.currentUser) {
+    throw new Error("User is not authenticated");
+  }
+
+  try {
+    // Assuming user.stan is an array
+      console.log("try to update")
+      const stanDocRef = doc(firestore, `stans/${stan.id}`);
+      let currentDate = new Date();
+      const stanDoc = await updateDoc(stanDocRef, {
+        availibility : availibility,
+        blockNumber : stan.blockNumber,
+        paymentStatus : paymentStatus,
+        price : price,
+        size : stan.size,
+        type : stan.type,
+        until : currentDate,
+        owner : stan.owner
+      });
+      console.log("*****")
+      console.log(stanDoc)
+
+  } catch (error) {
+    console.error("Error moving items:", error);
+    throw new Error("Internal Server Error");
+  }
+};
+
+
+export const deleteStan = async (stan : Stan) => {
+  if (!auth.currentUser) {
+    throw new Error("User is not authenticated");
+  }
+
+  try {
+    // Assuming user.stan is an array
+    const stanPath = 'stans/'+stan.id;
+
+      const stanDocRef = doc(firestore, stanPath);
+      const stanDoc = await deleteDoc(stanDocRef);
       
       console.log(stanDoc)
 

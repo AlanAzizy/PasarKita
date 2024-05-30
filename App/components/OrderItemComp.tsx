@@ -6,6 +6,7 @@ import { useContext } from "react";
 import { OrderContext } from "./Context/OrderContext";
 import Product from "./Interface/Product";
 import { Item } from "@/constants/Types";
+import Toast from "react-native-toast-message";
 
 const _height = Dimensions.get("screen").height;
 
@@ -19,8 +20,10 @@ export default function OrderItemComp({
 
   const addNumber = (product: Item) => {
     const newOrder = orderContext?.orders?.map((e) => {
-      if (e.product == product) {
+      if (e.product == product && product.stok > 1 + e.number) {
         e.number += 1;
+      } else {
+        Toast.show({ type: "error", text1: "Failed to add" });
       }
       return e;
     });

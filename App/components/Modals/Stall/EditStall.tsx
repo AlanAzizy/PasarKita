@@ -16,28 +16,41 @@ import Button from "@/components/Button";
 import Product, { products } from "@/components/Interface/Product";
 import OrderItem from "@/components/OrderItemComp";
 import { OrderContext } from "@/components/Context/OrderContext";
-import { Item } from "@/constants/Types";
+import { Item, Stan } from "@/constants/Types";
+import DropdownStall from "@/components/DropDownStall";
+import { editStan, getAllStan } from "@/services/StanService";
+import DropdownBinary from "@/components/DropDownBinary";
+import Toast from "react-native-toast-message";
 
 const stalls = [1, 2, 3, 4, 5, 6, 7, 8];
 
 type modalProp = {
   visible: boolean;
   close: () => void;
+  stan: Stan | null;
 };
 
 const _height = Dimensions.get("screen").height;
 const fix_height = _height;
 
-export default function EditStall({ visible, close }: modalProp) {
+export default function EditStall({ visible, close, stan }: modalProp) {
   const [name, setName] = useState("");
   const [stock, setStock] = useState(0);
   const [price, setPrice] = useState(0);
   const [showListStatus, setShowListStatus] = useState(false);
   const [showListStall, setShowListStall] = useState(false);
-  const [stall, setStall] = useState(0);
-  const [status, setStatus] = useState<"Available" | "Booked">("Available");
+  const [status, setStatus] = useState<string>("Available");
+  const [payment, setPayment] = useState<string>("in progress");
+  const [stalls, setStalls] = useState<Stan[]>([]);
 
-  const isValid = name !== "" && price > 0;
+  const fetchItems = async () => {
+    const stall = await getAllStan();
+    setStalls(stall);
+  };
+
+  useEffect(() => {
+    fetchItems();
+  }, [visible]);
 
   return (
     <Modal visible={visible} transparent={true}>
@@ -56,99 +69,26 @@ export default function EditStall({ visible, close }: modalProp) {
           </View>
           <View style={styles.input_container}>
             <Text style={styles.sub_title}>Stall</Text>
-            <Pressable
-              onPress={() => setShowListStall(!showListStall)}
-              style={styles.show_down}
-            >
-              <Text style={styles.placeholder}>{`Stall ${stall}`}</Text>
-              <SimpleLineIcons
-                name={showListStall ? "arrow-up" : "arrow-down"}
-                size={18}
-                color={"#767676"}
-              />
-            </Pressable>
-            <FlatList
-              style={
-                showListStall
-                  ? styles.show_flatlist_stall
-                  : styles.not_show_flatlist
-              }
-              horizontal={false}
-              data={stalls}
-              scrollEnabled={true}
-              renderItem={({ item }) => {
-                if (showListStall) {
-                  return (
-                    <Pressable
-                      style={styles.list_elemen}
-                      onPress={() => {
-                        setStall(item);
-                        setShowListStall(false);
-                      }}
-                    >
-                      <Text
-                        style={{ color: "#767676", fontSize: 16, padding: 5 }}
-                      >
-                        {`Stall ${item}`}
-                      </Text>
-                    </Pressable>
-                  );
-                } else {
-                  return <View></View>;
-                }
-              }}
+            <TextInput
+              style={styles.input}
+              defaultValue={stan?.id}
+              keyboardType="numeric"
+              editable={false}
             />
             <Text style={styles.sub_title}>Status</Text>
-            <Pressable
-              onPress={() => setShowListStatus(!showListStatus)}
-              style={styles.show_down}
-            >
-              <Text style={styles.placeholder}>{status}</Text>
-              <SimpleLineIcons
-                name={showListStatus ? "arrow-up" : "arrow-down"}
-                size={18}
-                color={"#767676"}
-              />
-            </Pressable>
-            <FlatList
-              style={
-                showListStatus
-                  ? styles.show_flatlist_status
-                  : styles.not_show_flatlist
-              }
-              horizontal={false}
-              data={["Available", "Booked"]}
-              scrollEnabled={true}
-              renderItem={({ item }) => {
-                if (showListStatus) {
-                  return (
-                    <Pressable
-                      style={styles.list_elemen}
-                      onPress={() => {
-                        if (item == "Available") {
-                          setStatus("Available");
-                        } else {
-                          setStatus("Booked");
-                        }
-                        setShowListStatus(false);
-                      }}
-                    >
-                      <Text
-                        style={{ color: "#767676", fontSize: 16, padding: 5 }}
-                      >
-                        {`${item}`}
-                      </Text>
-                    </Pressable>
-                  );
-                } else {
-                  return <View></View>;
-                }
-              }}
+            <DropdownBinary
+              status={["available", "booked"]}
+              setStatus={setStatus}
+            />
+            <Text style={styles.sub_title}>Payment Status</Text>
+            <DropdownBinary
+              status={["completed", "in progress"]}
+              setStatus={setPayment}
             />
             <Text style={styles.sub_title}>Price</Text>
             <TextInput
               style={styles.input}
-              onChangeText={(value) => setPrice(value)}
+              onChangeText={(value) => setPrice(Number(value))}
               placeholder="Price"
               keyboardType="numeric"
             />
@@ -156,18 +96,30 @@ export default function EditStall({ visible, close }: modalProp) {
           <View style={styles.button_container}>
             <Button
               onPress={() => {
+                console.log(payment, status);
+                if (stan !== null) {
+                  editStan(
+                    stan,
+                    price,
+                    payment == "completed",
+                    status == "available"
+                  );
+                  Toast.show({
+                    type: "success",
+                    text1: "Success to edit stall",
+                  });
+                }
                 setPrice(0);
                 setStock(0);
-                setStall(0);
                 close();
               }}
               styles={
-                stall > 0 && price > 0
+                stan !== null && price > 0
                   ? styles.buttonEnable
                   : styles.buttonDisabled
               }
               title="Edit Stall"
-              isLight={stall > 0 && price > 0}
+              isLight={stan !== null && price > 0}
               size={16}
             />
           </View>

@@ -21,7 +21,7 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 
 
-export const getAllItem = async (stan : Stan):Promise<Item>=> {
+export const getAllItem = async (stan : Stan):Promise<Item[]>=> {
     if (!auth.currentUser) {
       throw new Error("User is not authenticated");
     }
