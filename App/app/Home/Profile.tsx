@@ -8,27 +8,29 @@ import {
   Image,
   KeyboardAvoidingView,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigation, router } from "expo-router";
 import useFonts from "@/components/useFonts";
-import {
-  AntDesign,
-  Feather,
-  FontAwesome6,
-  MaterialIcons,
-} from "@expo/vector-icons";
 import Button from "@/components/Button";
+import { UserContext } from "@/components/Context/UserContext";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
 const fix_height = _height;
+
+type image = {
+  name: string;
+};
+
 export default function Profile() {
   const navigation = useNavigation();
 
-  const [name, setName] = useState("******");
-  const [email, setEmail] = useState("******");
+  const userContext = useContext(UserContext);
+  const [name, setName] = useState(userContext?.user.username);
+  const [email, setEmail] = useState(userContext?.user.email);
   const [password, setPassword] = useState("******");
-  const [number, setNumber] = useState("******");
+  const [number, setNumber] = useState(userContext?.user.phoneNumber);
+  const [photoUrl, setPhotoUrl] = useState(userContext?.user.photoUrl);
 
   useEffect(() => {
     useFonts();
@@ -47,6 +49,21 @@ export default function Profile() {
     });
   }, [navigation]);
 
+  // const submitData = () => {
+  //   const storageRef = ref(storage, "Images/" + image.name);
+
+  //   uploadBytes(storageRef, image).then((snapshot)=>{
+  //     getDownloadURL().then((url)=>{
+
+  //     }).catch((error)=>{
+  //       console.log(error.message)
+  //     })
+  //     console.log('upload a file')
+  //   }).catch((error)=>{
+  //     console.log(error.message);
+  //   })
+  // };
+
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView
@@ -61,10 +78,7 @@ export default function Profile() {
             }}
             style={styles.image_clicker}
           >
-            <Image
-              source={require("../../assets/images/pasar.jpg")}
-              style={styles.image}
-            ></Image>
+            <Image src={photoUrl} style={styles.image}></Image>
           </Pressable>
         </View>
         <View style={styles.input_container}>
@@ -85,7 +99,7 @@ export default function Profile() {
             onChangeText={(value) => {
               setEmail(value);
             }}
-            placeholder="Enter Your Password"
+            placeholder="Enter Your Email"
             keyboardType="default"
           />
           <Text style={styles.label}>Number</Text>
@@ -149,6 +163,8 @@ const styles = StyleSheet.create({
     width: _height * 0.15,
     height: _height * 0.15,
     borderRadius: _height * 0.075,
+    borderWidth: 2,
+    borderColor: "#1f1f1f",
   },
   about: {
     width: "90%",

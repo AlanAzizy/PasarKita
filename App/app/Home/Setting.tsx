@@ -8,6 +8,7 @@ import {
   FontAwesome6,
   MaterialIcons,
 } from "@expo/vector-icons";
+import { logout } from "@/services/AuthService";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
@@ -84,7 +85,10 @@ export default function Setting() {
           </Pressable>
           <Pressable
             style={styles.menu}
-            onPress={() => router.navigate("../Login/Welcome")}
+            onPress={() => {
+              logout();
+              router.navigate("../Login/Welcome");
+            }}
           >
             <FontAwesome6 name="arrow-right-to-bracket" size={20} />
             <Text style={styles.menuText}>Logout</Text>

@@ -7,10 +7,11 @@ import {
   Image,
   Pressable,
 } from "react-native";
-import { Stocks } from "./StockCard";
+import { Item } from "@/constants/Types";
+import { defaultPhoto } from "@/app/Login/RegisterScreen";
 
 type addModalType = {
-  stock: Stocks;
+  stock: Item;
   openEdit: () => void;
   openDelete: () => void;
 };
@@ -23,14 +24,13 @@ export default function StockCardEdit({
   openEdit,
   openDelete,
 }: addModalType) {
-  const { name, id, current_number, price } = stock;
-
+  const { id, name, stok, price, image } = stock;
   return (
     <View style={styles.container}>
       <View style={styles.image_container}>
         <Image
-          style={{ resizeMode: "contain", width: "100%" }}
-          source={require("../assets/images/splash-icon.png")}
+          style={{ height: "100%", width: "100%" }}
+          src={image ? image : defaultPhoto}
         />
       </View>
       <View style={styles.non_image}>
@@ -62,9 +62,9 @@ export default function StockCardEdit({
               { fontSize: 16, color: "#53845D", fontWeight: "bold" },
             ]}
           >
-            {id}
+            {id.slice(0, 5)}
           </Text>
-          <Text style={[styles.text_key]}>{current_number}</Text>
+          <Text style={[styles.text_key]}>{stok}</Text>
           <Text style={[styles.text_key, { color: "#63B59A" }]}>{price}</Text>
         </View>
       </View>
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderColor: "#00fff0",
     flex: 1,
-    width: "auto",
+    height: "100%",
     padding: 2,
     alignItems: "center",
     borderRadius: 15,

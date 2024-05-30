@@ -11,7 +11,9 @@ import { useEffect } from "react";
 import "expo-dev-client";
 import { useColorScheme } from "@/components/useColorScheme";
 import OrderProvider, { OrderContext } from "@/components/Context/OrderContext";
-import Welcome from "./Login/Welcome";
+import UserProvider, { UserContext } from "@/components/Context/UserContext";
+import Toast from "react-native-toast-message";
+import StanProvider from "@/components/Context/StanContext";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -56,12 +58,26 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <OrderProvider>
-        <Stack>
-          <Stack.Screen name="Login/Welcome" options={{ headerShown: false }} />
-          {/* <Stack.Screen name="modal" options={{}} /> */}
-          <Stack.Screen name="Stall/(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="Tenant/(tabs)" options={{ headerShown: false }} />
-        </Stack>
+        <UserProvider>
+          <StanProvider>
+            <Stack>
+              <Stack.Screen
+                name="Login/Welcome"
+                options={{ headerShown: false }}
+              />
+              {/* <Stack.Screen name="modal" options={{}} /> */}
+              <Stack.Screen
+                name="Stall/(tabs)"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Tenant/(tabs)"
+                options={{ headerShown: false }}
+              />
+            </Stack>
+            <Toast />
+          </StanProvider>
+        </UserProvider>
       </OrderProvider>
     </ThemeProvider>
   );

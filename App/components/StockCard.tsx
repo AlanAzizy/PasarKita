@@ -1,29 +1,19 @@
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { StyleSheet, View, Dimensions, Text, Image } from "react-native";
+import { Item } from "@/constants/Types";
+import { defaultPhoto } from "@/app/Login/RegisterScreen";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
 
-export type Stocks = {
-  id: number;
-  name: string;
-  prev_number: number;
-  current_number: number;
-  price: number;
-};
-
-export default function StockCard({
-  id,
-  name,
-  prev_number,
-  current_number,
-}: Stocks) {
+export default function StockCard({ id, name, stok, additional, image }: Item) {
+  console.log(image);
   return (
     <View style={styles.container}>
       <View style={styles.image_container}>
         <Image
-          style={{ resizeMode: "contain", width: "100%" }}
-          source={require("../assets/images/splash-icon.png")}
+          style={{ height: "100%", width: "100%" }}
+          src={image ? image : defaultPhoto}
         />
       </View>
       <View style={styles.key}>
@@ -34,12 +24,12 @@ export default function StockCard({
         <Text
           style={[
             styles.number_text,
-            { color: prev_number < current_number ? "#8BC34A" : "#EA5C2F" },
+            { color: additional > 0 ? "#8BC34A" : "#EA5C2F" },
           ]}
         >
-          {Math.abs(prev_number - current_number)}
+          {additional}
         </Text>
-        {prev_number < current_number ? (
+        {additional > 0 ? (
           <Feather name="arrow-up" size={18} color={"#8BC34A"} />
         ) : (
           <Feather name="arrow-down" size={18} color={"#EA5C2F"} />
@@ -80,7 +70,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderColor: "#000000",
     backgroundColor: "#FFFFFF",
-    height: _width * 0.12,
+    height: _width * 0.15,
     width: _width * 0.4,
     padding: 2,
     paddingHorizontal: 8,

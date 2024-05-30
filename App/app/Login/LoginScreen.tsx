@@ -7,16 +7,62 @@ import {
   KeyboardAvoidingView,
   Image,
 } from "react-native";
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, router, useNavigation } from "expo-router";
 import useFonts from "@/components/useFonts";
 import Button from "@/components/Button";
 import { FontAwesome } from "@expo/vector-icons";
+// import Toast from "react-native-toast-message";
+import {
+  GetUserData,
+  GetUserDataOnce,
+  LoginServices,
+} from "@/services/AuthService";
+import Toast from "react-native-toast-message";
+import { UserContext } from "@/components/Context/UserContext";
+import { StanContext } from "@/components/Context/StanContext";
+import { getCurrentStan } from "@/services/StanService";
 
 const _height = Dimensions.get("screen").height;
 const fix_height = _height;
 export default function LoginScreen() {
   const navigation = useNavigation();
+  const [isObscure, setObscure] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const userContext = useContext(UserContext);
+  const stanContext = useContext(StanContext);
+
+  async function login() {
+    setLoading(true);
+    try {
+      console.log(email, password);
+      const response = await LoginServices({ email, password });
+      const user = await GetUserDataOnce();
+      console.log(user);
+      userContext?.setUser(user);
+      const stan = await getCurrentStan(user);
+      stanContext?.setStan(stan);
+      Toast.show({
+        type: "success",
+        text1: "Login Successful",
+        text2: `Welcome back to PasarKita!`,
+      });
+      user?.role == "Market Owner"
+        ? router.replace("../Stall/Home")
+        : router.replace("../Tenant/Home");
+    } catch (error) {
+      console.log("err");
+      Toast.show({
+        type: "error",
+        text1: "Login Failed",
+        text2: error as string,
+      });
+    }
+    setLoading(false);
+  }
 
   useEffect(() => {
     useFonts();
@@ -35,14 +81,18 @@ export default function LoginScreen() {
       </View>
       <View style={styles.input_container}>
         <TextInput
+          value={email}
           style={styles.input_style}
           placeholder="Enter Your Email Address"
-          keyboardType="numeric"
+          keyboardType="default"
+          onChangeText={(value) => setEmail(value)}
         />
         <TextInput
+          value={password}
           style={styles.input_style}
           placeholder="Enter Your Password"
-          keyboardType="numeric"
+          keyboardType="default"
+          onChangeText={(value) => setPassword(value)}
         />
         <Link
           style={[styles.link, { color: "#8391A1" }]}
@@ -63,7 +113,7 @@ export default function LoginScreen() {
       >
         <Button
           onPress={() => {
-            router.navigate("../Stall/(tabs)/Home");
+            login();
           }}
           title="Login"
           styles={styles.buttonLogin}

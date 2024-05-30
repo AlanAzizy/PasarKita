@@ -9,17 +9,19 @@ import { useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
-import { stocks } from "./Home";
 import StockCardEdit from "@/components/StockCardEdit";
 import SearchBar from "@/components/SearchBar";
 import { Feather, Entypo, FontAwesome6, FontAwesome } from "@expo/vector-icons";
+import { LineChart } from "react-native-chart-kit";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
 
 export default function Stocks() {
   const navigation = useNavigation();
-
+  const [statMode, setStatMode] = useState<
+    "Profit" | "Cust" | "Product" | "Order"
+  >("Profit");
   const [phrase, setPhrase] = useState("");
   const [clicked, setClicked] = useState(false);
 
@@ -47,11 +49,62 @@ export default function Stocks() {
     <View style={styles.container}>
       <View style={styles.stat_container}>
         <Text style={styles.sub_title}>Statistic</Text>
-        <Image
-          source={require("../../../assets/images/Stat.png")}
-          resizeMode="contain"
-          style={styles.image}
-        ></Image>
+        <LineChart
+          data={{
+            labels: [
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "Mei",
+              "Jun",
+              "Jul",
+              "Agu",
+              "Sep",
+              "Okt",
+              "Nov",
+              "Des",
+            ],
+            datasets: [
+              {
+                data: [23, 34, 56, 43, 45, 75, 98, 44, 64, 67, 87, 86],
+              },
+            ],
+          }}
+          width={_width * 0.8} // from react-native
+          height={_width * 0.5}
+          chartConfig={{
+            backgroundColor: "#fafafa",
+            backgroundGradientFrom: "#fafafa",
+            backgroundGradientTo: "#fafafa",
+            decimalPlaces: 2, // optional, defaults to 2dp
+            color: (opacity = 1) => {
+              if (statMode == "Order") {
+                return "#F68262";
+              } else if (statMode == "Product") {
+                return "#4BAEE6";
+              } else if (statMode == "Cust") {
+                return "#FFC008";
+              } else {
+                return "#73C724";
+              }
+            },
+            labelColor: (opacity = 1) => `#8C8C8C`,
+            style: {
+              borderRadius: 10,
+              borderWidth: 2,
+              borderColor: "#f0000f",
+            },
+            propsForLabels: {
+              fontFamily: "Poppins-Regular",
+              fontSize: 8,
+            },
+          }}
+          style={{
+            marginVertical: 8,
+            borderRadius: 10,
+          }}
+        />
       </View>
       <View style={styles.stat_menu}>
         <View style={styles.menu_container}>
@@ -194,7 +247,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   stat_menu: {
-    flex: 2,
+    flex: 1.5,
     width: "90%",
     alignItems: "center",
     borderWidth: 0,
@@ -203,7 +256,7 @@ const styles = StyleSheet.create({
   },
   menu_container: {
     flex: 2,
-    width: "90%",
+    width: "95%",
     alignItems: "center",
     borderWidth: 0,
     borderColor: "#f000ff",
@@ -211,7 +264,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     flexDirection: "row",
     justifyContent: "space-between",
-    gap: 10,
+    gap: 5,
   },
   menu_press_1: {
     borderRadius: 10,

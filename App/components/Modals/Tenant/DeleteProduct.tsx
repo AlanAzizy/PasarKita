@@ -16,11 +16,6 @@ import Product, { products } from "@/components/Interface/Product";
 import OrderItem from "@/components/OrderItem";
 import { OrderContext } from "@/components/Context/OrderContext";
 
-export type orderItem = {
-  product: Product;
-  num: number;
-};
-
 type modalProp = {
   visible: boolean;
   close: () => void;

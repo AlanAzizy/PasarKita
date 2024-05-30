@@ -5,13 +5,14 @@ import useFonts from "./useFonts";
 import { useContext } from "react";
 import { OrderContext } from "./Context/OrderContext";
 import Product from "./Interface/Product";
+import { Item } from "@/constants/Types";
 
 const _height = Dimensions.get("screen").height;
 
 export default function OrderItem({ product, num }: orderItem) {
   const orderContext = useContext(OrderContext);
 
-  const addNumber = (product: Product) => {
+  const addNumber = (product: Item) => {
     const newOrder = orderContext?.orders?.map((e) => {
       if (e.product == product) {
         e.num += 1;
@@ -21,7 +22,7 @@ export default function OrderItem({ product, num }: orderItem) {
     orderContext?.setOrders(newOrder);
   };
 
-  const minNumber = (product: Product) => {
+  const minNumber = (product: Item) => {
     const newOrder = orderContext?.orders?.filter((e) => {
       if (e.product == product) {
         e.num -= 1;

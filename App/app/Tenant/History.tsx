@@ -8,7 +8,7 @@ import {
   Image,
   ScrollView,
 } from "react-native";
-import { useEffect } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigation, router } from "expo-router";
 import useFonts from "@/components/useFonts";
 import {
@@ -20,6 +20,9 @@ import {
 import Button from "@/components/Button";
 import { Table, Rows, Row, TableWrapper } from "react-native-table-component";
 import { orderHistory } from "./(tabs)/Home";
+import { Order } from "@/constants/Types";
+import { StanContext } from "@/components/Context/StanContext";
+import { getOrder } from "@/services/OrderService";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
@@ -28,6 +31,16 @@ export default function Histroy() {
   const navigation = useNavigation();
 
   const tableHead = ["Order ID", "Date", "Cashier ID", "Total"];
+  const [orders, setOrders] = useState<Order[] | null>(null);
+  const stanContext = useContext(StanContext);
+
+  const fetchOrder = async () => {
+    const order = await getOrder(stanContext?.stan);
+    setOrders(order);
+  };
+  useEffect(() => {
+    fetchOrder();
+  }, []);
 
   useEffect(() => {
     useFonts();
@@ -48,27 +61,34 @@ export default function Histroy() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.date}>01-05-2024 to 14-05-2024</Text>
+      <Text style={styles.date}>{new Date().toDateString()}</Text>
       <ScrollView style={styles.scroll_view}>
         <Table>
           <Row
+            key={1}
             data={tableHead}
             style={styles.tableHead}
             textStyle={styles.text_head}
           ></Row>
           <TableWrapper>
-            {orderHistory.map((item, index) => (
-              <Row
-                key={item.id}
-                data={[item.id, item.date, item.cashier_id, item.nominal]}
-                style={
-                  index % 2 == 1
-                    ? { backgroundColor: "#F3F9ED", height: _height * 0.04 }
-                    : {}
-                }
-                textStyle={styles.rowStyle}
-              />
-            ))}
+            {orders &&
+              orders.map((item, index) => (
+                <Row
+                  key={item.id}
+                  data={[
+                    item.id.slice(0, 7),
+                    item.date.toDateString(),
+                    item.cashierId.id.slice(0, 7),
+                    item.total,
+                  ]}
+                  style={
+                    index % 2 == 1
+                      ? { backgroundColor: "#F3F9ED", height: _height * 0.04 }
+                      : {}
+                  }
+                  textStyle={styles.rowStyle}
+                />
+              ))}
           </TableWrapper>
         </Table>
       </ScrollView>

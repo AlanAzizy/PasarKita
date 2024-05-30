@@ -8,7 +8,7 @@ import {
   FlatList,
 } from "react-native";
 import { router, useNavigation } from "expo-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import useFonts from "@/components/useFonts";
 import { AntDesign, Feather } from "@expo/vector-icons";
@@ -17,6 +17,11 @@ import AddHistory from "@/components/AddHistory";
 import StockCard from "@/components/StockCard";
 import { PreventRemoveContext } from "@react-navigation/native";
 import CreateOrder from "@/components/Modals/Tenant/CreateOrder";
+import { Item, Order } from "@/constants/Types";
+import { getOrder } from "@/services/OrderService";
+import { StanContext } from "@/components/Context/StanContext";
+import { DocumentReference } from "firebase/firestore";
+import { getAllItem, moveItem } from "@/services/ItemService";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
@@ -153,6 +158,36 @@ export default function Home() {
   const navigation = useNavigation();
 
   const [isCreateOrderModal, setIsCreateOrderModal] = useState(false);
+  const [orders, setOrders] = useState<Order[] | null>(null);
+  const [stok, setStok] = useState<Item[] | null>(null);
+  const stanContext = useContext(StanContext);
+
+  const fetchOrder = async () => {
+    const order = await getOrder(stanContext?.stan);
+    const orderAdd = order.at(0);
+    const id = "string";
+    const name = "string";
+    const date = new Date();
+    const orderItem = orderAdd?.orderItem;
+    const total = 10000;
+    const status = true;
+    const cashierId = orderAdd?.cashierId;
+    setOrders([
+      { id, name, date, orderItem, total, status, cashierId },
+      ...order,
+    ]);
+  };
+
+  const orderRemap = orders?.reverse();
+  const fetchItems = async () => {
+    const stokk = await getAllItem(stanContext?.stan);
+    console.log(stokk);
+    setStok(stokk);
+  };
+  useEffect(() => {
+    fetchOrder();
+    fetchItems();
+  }, []);
 
   useEffect(() => {
     useFonts();
@@ -189,10 +224,7 @@ export default function Home() {
             </Text>
           </View>
         </LinearGradient>
-        <Pressable
-          style={styles.print}
-          onPress={() => console.log("awkowkwowkok")}
-        >
+        <Pressable style={styles.print} onPress={() => {}}>
           <View style={styles.print_icon}>
             <Feather
               name="printer"
@@ -227,7 +259,11 @@ export default function Home() {
         </Pressable>
         <View style={styles.history}>
           <Pressable
-            onPress={() => router.push("/Tenant/History")}
+            onPress={() =>
+              router.push({
+                pathname: "/Tenant/History",
+              })
+            }
             style={{ flex: 1, flexDirection: "row", alignItems: "center" }}
           >
             <Text style={styles.text_orderHistory}>Order History</Text>
@@ -240,16 +276,21 @@ export default function Home() {
           <FlatList
             style={styles.flatlist}
             horizontal={true}
-            data={orderHistory}
-            renderItem={({ item }) => {
-              return item.id == undefined ? (
-                <AddHistory add={() => setIsCreateOrderModal(true)} />
+            data={orderRemap}
+            renderItem={({ item, index }) => {
+              console.log(orderRemap);
+              return index == 0 ? (
+                <AddHistory
+                  key={index}
+                  add={() => setIsCreateOrderModal(true)}
+                />
               ) : (
                 <HistoryItem
-                  id={item.id}
-                  nominal={item.nominal}
-                  number={item.number}
-                  status={item.status}
+                  key={item.id}
+                  id={item.id.slice(0, 3)}
+                  nominal={item.total}
+                  number={item?.orderItem.length}
+                  status={item?.status}
                 />
               );
             }}
@@ -257,19 +298,18 @@ export default function Home() {
         </View>
         <View style={[styles.stocks_container]}>
           <Text style={styles.stocks}>My Stocks</Text>
-          {stocks.map((item) =>
-            item.id ? (
+          {stok &&
+            stok.map((item, index) => (
               <StockCard
-                id={item.id}
+                key={index}
+                id={item.id.slice(0, 10)}
                 name={item.name}
-                current_number={item.current_number}
-                prev_number={item.prev_number}
+                stok={item.stok}
+                additional={item.additional}
                 price={item.price}
+                image={item.image}
               />
-            ) : (
-              ""
-            )
-          )}
+            ))}
         </View>
       </ScrollView>
     </>

@@ -6,10 +6,10 @@ const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
 
 export type history = {
-  id: number;
+  id: string;
   nominal: number;
   number: number;
-  status: string;
+  status: boolean;
 };
 
 export default function HistoryItem({ id, nominal, number, status }: history) {
@@ -20,15 +20,17 @@ export default function HistoryItem({ id, nominal, number, status }: history) {
       <View
         style={[
           styles.status,
-          { backgroundColor: status == "Completed" ? "#E0EBFF" : "#FFEDBD" },
+          { backgroundColor: status ? "#E0EBFF" : "#FFEDBD" },
         ]}
       >
-        {status == "Completed" ? (
+        {status ? (
           <Feather name="check-square" />
         ) : (
           <FontAwesome5 name="clock" size={12} />
         )}
-        <Text style={styles.status_text}>{status}</Text>
+        <Text style={styles.status_text}>
+          {status ? "Completed" : "In Progress"}
+        </Text>
       </View>
       <Text style={styles.id}>{`Order #${id}`}</Text>
     </View>

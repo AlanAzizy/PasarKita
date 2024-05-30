@@ -1,6 +1,6 @@
 import { Pressable, ScrollView, StyleSheet, Dimensions } from "react-native";
 import { useNavigation } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import { stocks } from "./Home";
@@ -10,6 +10,9 @@ import AddProduct from "@/components/Modals/Tenant/AddProduct";
 import { AntDesign } from "@expo/vector-icons";
 import EditProduct from "@/components/Modals/Tenant/EditProduct";
 import DeleteProduct from "@/components/Modals/Tenant/DeleteProduct";
+import { getAllItem } from "@/services/ItemService";
+import { Item } from "@/constants/Types";
+import { StanContext } from "@/components/Context/StanContext";
 
 const _height = Dimensions.get("screen").height;
 
@@ -21,6 +24,36 @@ export default function Stocks() {
   const [modalAddProduct, setModalAddProduct] = useState(false);
   const [modalEditProduct, setModalEditProduct] = useState(false);
   const [modalDeleteProduct, setModalDeleteProduct] = useState(false);
+  const [stok, setStok] = useState<Item[] | null>(null);
+  const [localStok, setLokalStok] = useState<Item[] | null>(null);
+  const stanContext = useContext(StanContext);
+
+  const fetchItems = async () => {
+    const stokk = await getAllItem(stanContext?.stan);
+    setStok(stokk);
+    setLokalStok(stokk);
+  };
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  useEffect(() => {
+    if (phrase !== "") {
+      console.log("konnnn");
+      const newStok = stok?.filter((item) => {
+        if (
+          item.name.toLocaleLowerCase().includes(phrase.toLocaleLowerCase())
+        ) {
+          return item;
+        }
+      });
+      console.log("---------");
+      console.log(newStok);
+      setStok(newStok);
+    } else {
+      setStok(localStok);
+    }
+  }, [phrase]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -66,8 +99,8 @@ export default function Stocks() {
       </View>
       <ScrollView style={styles.container}>
         <View style={{ width: "95%", marginHorizontal: "2.5%" }}>
-          {stocks.map((item) =>
-            item.id ? (
+          {stok &&
+            stok.map((item) => (
               <StockCardEdit
                 key={item.id}
                 stock={item}
@@ -76,10 +109,7 @@ export default function Stocks() {
                   setModalDeleteProduct(true);
                 }}
               />
-            ) : (
-              ""
-            )
-          )}
+            ))}
         </View>
       </ScrollView>
       <Pressable

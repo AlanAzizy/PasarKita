@@ -16,11 +16,7 @@ import Button from "@/components/Button";
 import Product, { products } from "@/components/Interface/Product";
 import OrderItem from "@/components/OrderItem";
 import { OrderContext } from "@/components/Context/OrderContext";
-
-export type orderItem = {
-  product: Product;
-  num: number;
-};
+import { Item } from "@/constants/Types";
 
 type modalProp = {
   visible: boolean;

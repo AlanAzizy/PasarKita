@@ -6,17 +6,25 @@ import {
   Dimensions,
   Image,
 } from "react-native";
-import { useEffect } from "react";
-import { Link, router, useNavigation } from "expo-router";
+import { useContext, useEffect, useState } from "react";
+import { Link, router, useLocalSearchParams, useNavigation } from "expo-router";
 import useFonts from "@/components/useFonts";
 import Button from "@/components/Button";
 import { FontAwesome, AntDesign } from "@expo/vector-icons";
+import { RegisterServices, GetUserDataOnce } from "@/services/AuthService";
+import Toast from "react-native-toast-message";
+import { UserContext } from "@/components/Context/UserContext";
 
 const _height = Dimensions.get("screen").height;
 const fix_height = _height;
+
+export const defaultPhoto =
+  "https://firebasestorage.googleapis.com/v0/b/pasarkita-7542e.appspot.com/o/users%2Fimages.png?alt=media&token=647070a1-a1b0-4c2f-8420-caba3ec4cbe7";
+
 export default function RegisterScreen() {
   const navigation = useNavigation();
 
+  const { role } = useLocalSearchParams();
   useEffect(() => {
     useFonts();
   });
@@ -25,6 +33,48 @@ export default function RegisterScreen() {
     navigation.setOptions({ headerShown: true, title: "" });
   }, [navigation]);
 
+  const [isObscure, setObscure] = useState(true);
+  const [isObscureConf, setObscureConf] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const userContext = useContext(UserContext);
+
+  async function register() {
+    setLoading(true);
+    try {
+      console.log("registering");
+      console.log(role);
+      const result = await RegisterServices({
+        email,
+        password,
+        username: userName,
+        phoneNumber,
+        role: role.toString(),
+        photoUrl: defaultPhoto,
+      });
+      const user = await GetUserDataOnce();
+      userContext?.setUser(user);
+      role == "Stall Owner"
+        ? router.navigate("../Tenant/(tabs)/Home")
+        : router.navigate("../Stall/(tabs)/Home");
+      Toast.show({
+        type: "success",
+        text1: "Register Successful",
+        text2: `Welcome to PasarKita, ${result.user.email}!`,
+      });
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Register Failed",
+        text2: error as string,
+      });
+    }
+    setLoading(false);
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.title}>
@@ -32,30 +82,38 @@ export default function RegisterScreen() {
       </View>
       <View style={styles.input_container}>
         <TextInput
+          value={userName}
           style={styles.input}
           placeholder="Name"
-          keyboardType="numeric"
+          keyboardType="default"
+          onChangeText={(value) => setUserName(value)}
         />
         <TextInput
+          value={email}
           style={styles.input}
           placeholder="Email"
-          keyboardType="numeric"
+          keyboardType="default"
+          onChangeText={(value) => setEmail(value)}
         />
         <TextInput
+          value={phoneNumber}
           style={styles.input}
           placeholder="Phone Number"
           keyboardType="numeric"
+          onChangeText={(value) => setPhoneNumber(value)}
         />
         <TextInput
+          value={password}
           style={styles.input}
           placeholder="Password"
-          keyboardType="numeric"
+          keyboardType="default"
+          onChangeText={(value) => setPassword(value)}
         />
       </View>
       <View style={styles.button_container}>
         <Button
           onPress={() => {
-            router.navigate("../(tabs)/Home");
+            register();
           }}
           title="Register"
           styles={styles.buttonLogin}

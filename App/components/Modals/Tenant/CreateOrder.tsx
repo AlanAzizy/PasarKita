@@ -16,11 +16,7 @@ import Button from "@/components/Button";
 import Product, { products } from "@/components/Interface/Product";
 import OrderItem from "@/components/OrderItem";
 import { OrderContext } from "@/components/Context/OrderContext";
-
-export type orderItem = {
-  product: Product;
-  num: number;
-};
+import Dropdown from "@/components/DropDown";
 
 type modalProp = {
   visible: boolean;
@@ -35,22 +31,6 @@ export default function CreateOrder({ visible, close }: modalProp) {
   const [clicked, setClicked] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const orderContext = useContext(OrderContext);
-
-  const addItem = (item: Product) => {
-    if (orderContext?.orders?.find((e) => e.product == item)) {
-      return;
-    }
-    if (orderContext !== null) {
-      if (orderContext.orders?.length == 0) {
-        orderContext?.setOrders([{ product: item, num: 1 }]);
-      } else if (orderContext?.orders !== null) {
-        orderContext?.setOrders([
-          ...orderContext.orders,
-          { product: item, num: 1 },
-        ]);
-      }
-    }
-  };
 
   const calculate = () => {
     let num = 0;
@@ -83,54 +63,20 @@ export default function CreateOrder({ visible, close }: modalProp) {
               keyboardType="default"
             />
             <Text style={styles.sub_title}>Search Product</Text>
-            <SearchBar
-              clicked={clicked}
-              searchPhrase={phrase}
-              setClicked={setClicked}
-              setSearchPhrase={setPhrase}
-            />
-            <FlatList
-              style={
-                phrase !== ""
-                  ? orderContext?.orders?.length >= 2
-                    ? styles.show_flatlist_2
-                    : orderContext?.orders?.length == 1
-                    ? styles.show_flatlist_1
-                    : styles.show_flatlist_0
-                  : styles.not_show_flatlist
-              }
-              horizontal={false}
-              data={products as Product[]}
-              renderItem={({ item }) => {
-                if (phrase !== "") {
-                  return (
-                    <Pressable
-                      style={{ zIndex: 5 }}
-                      onPress={() => addItem(item)}
-                    >
-                      <Text
-                        style={{ color: "#767676", fontSize: 16, padding: 5 }}
-                      >
-                        {item.name}
-                      </Text>
-                    </Pressable>
-                  );
-                } else {
-                  return <View></View>;
-                }
-              }}
-            />
+            <Dropdown />
             <View style={{ maxHeight: 500 }}>
               <FlatList
-                style={
-                  orderContext?.orders !== null
-                    ? styles.show_order
-                    : { flex: 0, maxHeight: 10, height: 0 }
-                }
+                style={styles.show_order}
                 horizontal={false}
-                data={orderContext?.orders as orderItem[]}
-                renderItem={({ item, index }) => {
-                  return <OrderItem product={item.product} num={item.num} />;
+                data={orderContext?.orders}
+                renderItem={({ item }) => {
+                  return (
+                    <OrderItem
+                      key={item.id}
+                      product={item.product}
+                      num={item.num}
+                    />
+                  );
                 }}
               />
             </View>
@@ -312,6 +258,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderColor: "#1100ff",
     marginTop: 5,
+    height: "auto",
   },
   total: {
     flexDirection: "row",
