@@ -44,4 +44,5 @@ export interface Stan{
     size : number,
     type : string,
     until : Date
+    owner : string
 }

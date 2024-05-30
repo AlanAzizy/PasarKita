@@ -1,6 +1,7 @@
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { StyleSheet, View, Dimensions, Text } from "react-native";
 import useFonts from "./useFonts";
+import { Stan } from "@/constants/Types";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
@@ -15,32 +16,37 @@ export type stall = {
 
 export default function StallBooking({
   id,
-  name,
-  time,
-  number,
-  status,
-}: stall) {
+  paymentStatus,
+  availibility,
+  price,
+  until,
+}: Stan) {
+  const date = new Date(until.seconds * 1000 + 43200000);
+
   return (
     <View style={styles.container}>
-      <Text style={styles.nominal}>{name}</Text>
-      <Text style={styles.number}>{`${time} months left`}</Text>
+      <Text style={styles.nominal}>{price}</Text>
+      <Text style={styles.number}>{`${
+        date.getMonth() - new Date().getMonth() + 1
+      } months left`}</Text>
       <View
         style={[
           styles.status,
           {
-            backgroundColor:
-              status == "Completed" ? "#DBECC7" : "rgba(242,77,71,0.3)",
+            backgroundColor: paymentStatus ? "#DBECC7" : "rgba(242,77,71,0.3)",
           },
         ]}
       >
-        {status == "Completed" ? (
+        {paymentStatus ? (
           <Feather name="check-square" />
         ) : (
           <FontAwesome5 name="clock" size={12} />
         )}
-        <Text style={styles.status_text}>{status}</Text>
+        <Text style={styles.status_text}>
+          {paymentStatus ? "completed" : "in progress"}
+        </Text>
       </View>
-      <Text style={styles.id}>{`Stand #${id}`}</Text>
+      <Text style={styles.id}>{`Stand #${id.slice(0, 3)}`}</Text>
     </View>
   );
 }

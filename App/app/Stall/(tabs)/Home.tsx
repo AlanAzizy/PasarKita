@@ -19,6 +19,8 @@ import AddBooking from "@/components/Modals/Stall/AddBooking";
 import AddMaintenance from "@/components/AddMaintenance";
 import Maintenance from "@/components/Maintenance";
 import AddMaintenanceModals from "@/components/Modals/Stall/AddMaintenanceModals";
+import { getBookedStan } from "@/services/StanService";
+import { Stan } from "@/constants/Types";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
@@ -96,6 +98,41 @@ export default function Home() {
 
   const [isAddBookingModal, setIsAddBookingModal] = useState(false);
   const [isAddMaintenanceModal, setIsAddMaintenanceModal] = useState(false);
+
+  const [stalls, setStalls] = useState<Stan[] | null>(null);
+
+  const fetchItems = async () => {
+    const stall = await getBookedStan();
+    const id = "randomstring";
+    const availibility = true;
+    const paymentStatus = false;
+    const blockNumber = 999;
+    const owner = "none";
+    const price = 0;
+    const size = 0;
+    const type = "bad";
+    const until = new Date();
+    stall?.push({
+      id,
+      availibility,
+      paymentStatus,
+      blockNumber,
+      owner,
+      price,
+      size,
+      type,
+      until,
+    } as Stan);
+    stall?.reverse();
+    setStalls(stall);
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchItems();
+    });
+    return unsubscribe;
+  }, [navigation, isAddBookingModal]);
 
   useEffect(() => {
     useFonts();
@@ -191,17 +228,21 @@ export default function Home() {
           <FlatList
             style={styles.flatlist}
             horizontal={true}
-            data={orderHistory}
-            renderItem={({ item }) => {
-              return item.id == undefined ? (
+            data={stalls}
+            renderItem={({ item, index }) => {
+              return index == 0 ? (
                 <AddBookingMenu add={() => setIsAddBookingModal(true)} />
               ) : (
                 <StallBooking
                   id={item.id}
-                  time={item.number}
-                  number={item.number}
-                  status={item.status}
-                  name={item.status}
+                  paymentStatus={item.paymentStatus}
+                  price={item.price}
+                  availibility={item.availibility}
+                  until={item.until}
+                  blockNumber={item.blockNumber}
+                  size={item.size}
+                  type={item.type}
+                  owner={item.owner}
                 />
               );
             }}

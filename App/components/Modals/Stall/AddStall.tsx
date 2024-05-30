@@ -16,7 +16,8 @@ import Button from "@/components/Button";
 import Product, { products } from "@/components/Interface/Product";
 import OrderItem from "@/components/OrderItemComp";
 import { OrderContext } from "@/components/Context/OrderContext";
-import { Item } from "@/constants/Types";
+import { Item, Stan } from "@/constants/Types";
+import { addStan } from "@/services/StanService";
 
 type modalProp = {
   visible: boolean;
@@ -28,6 +29,7 @@ const fix_height = _height;
 
 export default function AddStall({ visible, close }: modalProp) {
   const [price, setPrice] = useState(0);
+  const [blockNumber, setBlockNumber] = useState(0);
 
   return (
     <Modal visible={visible} transparent={true}>
@@ -55,10 +57,18 @@ export default function AddStall({ visible, close }: modalProp) {
               placeholder="Stall Price"
               keyboardType="numeric"
             />
+            <Text style={styles.sub_title}>Block Number</Text>
+            <TextInput
+              style={styles.input}
+              onChangeText={(value) => setBlockNumber(Number(value))}
+              placeholder="Block Number"
+              keyboardType="numeric"
+            />
           </View>
           <View style={styles.button_container}>
             <Button
               onPress={() => {
+                addStan({ price, blockNumber } as Stan);
                 setPrice(0);
                 close();
               }}

@@ -14,6 +14,8 @@ import Filter from "../../../components/Modals/Stall/Filter";
 import AddStall from "@/components/Modals/Stall/AddStall";
 import EditStall from "@/components/Modals/Stall/EditStall";
 import DeleteStall from "@/components/Modals/Stall/DeleteStall";
+import { getAllStan } from "@/services/StanService";
+import { Stan } from "@/constants/Types";
 
 const _height = Dimensions.get("screen").height;
 
@@ -26,6 +28,20 @@ export default function Stocks() {
   const [modalEditStall, setModalEditStall] = useState(false);
   const [modalDeleteStall, setModalDeleteStall] = useState(false);
   const [filterModal, setFilterModal] = useState(false);
+  const [stalls, setStalls] = useState<Stan[] | null>(null);
+
+  const fetchItems = async () => {
+    const stall = await getAllStan();
+    setStalls(stall);
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchItems();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -81,20 +97,21 @@ export default function Stocks() {
       </View>
       <ScrollView style={styles.container}>
         <View style={{ width: "95%", marginHorizontal: "2.5%" }}>
-          {stocks.map((item) =>
-            item.id ? (
-              <StallCardEdit
-                key={item.id}
-                stock={item}
-                openEdit={() => setModalEditStall(true)}
-                openDelete={() => {
-                  setModalDeleteStall(true);
-                }}
-              />
-            ) : (
-              ""
-            )
-          )}
+          {stalls &&
+            stalls.map((item) =>
+              item.id ? (
+                <StallCardEdit
+                  key={item.id}
+                  stock={item}
+                  openEdit={() => setModalEditStall(true)}
+                  openDelete={() => {
+                    setModalDeleteStall(true);
+                  }}
+                />
+              ) : (
+                ""
+              )
+            )}
         </View>
       </ScrollView>
       <Pressable

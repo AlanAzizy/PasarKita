@@ -8,9 +8,10 @@ import {
   Pressable,
 } from "react-native";
 import { Stocks } from "./StockCard";
+import { Stan } from "@/constants/Types";
 
 type addModalType = {
-  stock: Stocks;
+  stock: Stan;
   openEdit: () => void;
   openDelete: () => void;
 };
@@ -23,22 +24,22 @@ export default function StallCardEdit({
   openEdit,
   openDelete,
 }: addModalType) {
-  const { name, id, current_number, price } = stock;
-
+  const { id, price, paymentStatus, until, availibility } = stock;
+  const date = new Date(until.seconds * 1000 + 43200000);
   return (
     <View style={styles.container}>
       <View
         style={[
           styles.number_container,
-          Number(id) <= 400 ? { backgroundColor: "#DBECC7" } : {},
+          availibility ? {} : { backgroundColor: "#DBECC7" },
         ]}
       >
-        <Text style={[styles.number]}>{id}</Text>
+        <Text style={[styles.number]}>{id.slice(0, 3)}</Text>
       </View>
       <View style={[styles.non_image, { alignItems: "flex-start" }]}>
         <View style={styles.key}>
           <Text style={[styles.text_key, { fontSize: 16, fontWeight: "bold" }]}>
-            {`Stall ${id}`}
+            {`Stall ${id.slice(0, 3)}`}
           </Text>
           <Text style={styles.text_key}>Status</Text>
           <Text style={styles.text_key}>Price</Text>
@@ -53,7 +54,9 @@ export default function StallCardEdit({
           ]}
         >
           <Text style={[styles.text_key, { fontSize: 14 }]}>
-            {`${current_number} Months left `}
+            {availibility
+              ? ""
+              : `${date.getMonth() - new Date().getMonth() + 1} Months left `}
           </Text>
         </View>
         <View style={styles.val}>
@@ -75,7 +78,7 @@ export default function StallCardEdit({
             </Pressable>
           </View>
           <Text style={[styles.text_key, { fontWeight: "bold" }]}>
-            {current_number}
+            {paymentStatus ? "paid" : "unpaid"}
           </Text>
           <Text style={[styles.text_key, { fontWeight: "bold" }]}>{price}</Text>
         </View>
@@ -161,7 +164,7 @@ const styles = StyleSheet.create({
     borderColor: "#ffff00",
     backgroundColor: "#FFFFFF",
     height: "100%",
-    flex: 2,
+    flex: 2.5,
     padding: 0,
     paddingLeft: 8,
     alignItems: "flex-end",

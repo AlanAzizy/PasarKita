@@ -40,7 +40,6 @@ export default function Stocks() {
 
   useEffect(() => {
     if (phrase !== "") {
-      console.log("konnnn");
       const newStok = stok?.filter((item) => {
         if (
           item.name.toLocaleLowerCase().includes(phrase.toLocaleLowerCase())
@@ -48,7 +47,6 @@ export default function Stocks() {
           return item;
         }
       });
-      console.log("---------");
       console.log(newStok);
       setStok(newStok);
     } else {
@@ -119,9 +117,9 @@ export default function Stocks() {
                   console.log(stock);
                   setItemSelected(stock);
                 }}
-                openDelete={(id) => {
+                openDelete={(stock) => {
                   setModalDeleteProduct(true);
-                  setItemSelected({ id } as Item);
+                  setItemSelected(stock as Item);
                 }}
               />
             ))}

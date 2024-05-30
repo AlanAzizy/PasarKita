@@ -16,14 +16,15 @@ import Button from "@/components/Button";
 import Product, { products } from "@/components/Interface/Product";
 import OrderItem from "@/components/OrderItemComp";
 import { OrderContext } from "@/components/Context/OrderContext";
-import { Item } from "@/constants/Types";
+import { Item, Stan } from "@/constants/Types";
+import { bookStan, getUnBookedStan } from "@/services/StanService";
+import { useNavigation } from "expo-router";
+import DropdownComponent from "@/components/DropDownStall";
 
 type modalProp = {
   visible: boolean;
   close: () => void;
 };
-
-const stalls = [1, 2, 3, 4, 5, 6, 7, 8];
 
 const _height = Dimensions.get("screen").height;
 const fix_height = _height;
@@ -32,15 +33,24 @@ export default function AddBooking({ visible, close }: modalProp) {
   const [showList, setShowList] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [isValid, setIsValid] = useState(false);
-  const orderContext = useContext(OrderContext);
-  const [stall, setStall] = useState(0);
+  const [selectedStall, setSelectedStall] = useState<null | Stan>(null);
   const [custName, setCustName] = useState("");
-  const [duration, setDuration] = useState("");
+  const [duration, setDuration] = useState(0);
+  const [stalls, setStalls] = useState<Stan[]>([]);
+
+  const fetchItems = async () => {
+    const stall = await getUnBookedStan();
+    setStalls(stall);
+  };
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
 
   const removeAll = () => {
     setCustName("");
-    setDuration("");
-    setStall("Choose Stalls");
+    setDuration(0);
+    setSelectedStall(null);
     close();
   };
 
@@ -71,26 +81,17 @@ export default function AddBooking({ visible, close }: modalProp) {
               onChangeText={(value) => setCustName(value)}
             />
             <Text style={styles.sub_title}>Stalls</Text>
-            <Pressable
-              onPress={() => setShowList(!showList)}
-              style={styles.show_down}
-            >
-              <Text style={styles.placeholder}>
-                {stall > 0 ? `Stall ${stall}` : "Choose Stall"}
-              </Text>
-              <SimpleLineIcons
-                name={showList ? "arrow-up" : "arrow-down"}
-                size={18}
-                color={"#767676"}
-              />
-            </Pressable>
+            <DropdownComponent
+              stalls={stalls}
+              setSelectedStall={setSelectedStall}
+            />
             <Text style={styles.sub_title}>Duration</Text>
             <TextInput
               style={styles.input}
-              value={duration}
+              value={duration.toString()}
               placeholder="Duration"
               keyboardType="numeric"
-              onChangeText={(value) => setDuration(value)}
+              onChangeText={(value) => setDuration(Number(value))}
             />
             <FlatList
               style={showList ? styles.show_flatlist : styles.not_show_flatlist}
@@ -103,7 +104,7 @@ export default function AddBooking({ visible, close }: modalProp) {
                     <Pressable
                       style={styles.list_elemen}
                       onPress={() => {
-                        setStall(item);
+                        setSelectedStall(item);
                         setShowList(false);
                       }}
                     >
@@ -123,23 +124,22 @@ export default function AddBooking({ visible, close }: modalProp) {
           <View style={styles.button_container}>
             <Button
               onPress={() => {
+                if (selectedStall !== null) {
+                  bookStan(selectedStall);
+                }
                 removeAll();
                 close();
               }}
               styles={
                 custName !== "" &&
                 !isNaN(Number(duration)) &&
-                stall > 0 &&
+                selectedStall !== null &&
                 duration > 0
                   ? styles.buttonEnable
                   : styles.buttonDisabled
               }
               title="Create Order"
-              isLight={
-                orderContext?.orders !== undefined &&
-                orderContext?.orders !== null &&
-                orderContext?.orders.length > 0
-              }
+              isLight={custName !== "" && stalls !== null && duration > 0}
               size={16}
             />
           </View>

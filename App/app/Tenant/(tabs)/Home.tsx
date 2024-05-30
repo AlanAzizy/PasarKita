@@ -172,13 +172,19 @@ export default function Home() {
     const total = 10000;
     const status = true;
     const cashierId = orderAdd?.cashierId;
-    setOrders([
-      { id, name, date, orderItem, total, status, cashierId },
-      ...order,
-    ]);
+    order.push({
+      id,
+      name,
+      date,
+      orderItem,
+      total,
+      status,
+      cashierId,
+    } as Order);
+    order.reverse();
+    setOrders(order);
   };
 
-  const orderRemap = orders?.reverse();
   const fetchItems = async () => {
     const stokk = await getAllItem(stanContext?.stan);
     console.log(stokk);
@@ -288,9 +294,8 @@ export default function Home() {
           <FlatList
             style={styles.flatlist}
             horizontal={true}
-            data={orderRemap}
+            data={orders}
             renderItem={({ item, index }) => {
-              console.log(orderRemap);
               return index == 0 ? (
                 <AddHistory
                   key={index}

@@ -13,7 +13,7 @@ import { defaultPhoto } from "@/app/Login/RegisterScreen";
 type addModalType = {
   stock: Item;
   openEdit: (stok: Item) => void;
-  openDelete: (id: string) => void;
+  openDelete: (stock: Item) => void;
 };
 
 const _width = Dimensions.get("screen").width;
@@ -51,7 +51,7 @@ export default function StockCardEdit({
           <Pressable
             style={{ width: "auto", height: "auto" }}
             onPress={() => {
-              openDelete(id);
+              openDelete(stock);
             }}
           >
             <Feather name="trash-2" size={18} color={"#ff1111"} />

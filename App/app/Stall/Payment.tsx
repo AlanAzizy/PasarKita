@@ -8,7 +8,7 @@ import {
   Image,
   ScrollView,
 } from "react-native";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigation, router } from "expo-router";
 import useFonts from "@/components/useFonts";
 import {
@@ -20,6 +20,7 @@ import {
 import Button from "@/components/Button";
 import { Table, Rows, Row, TableWrapper } from "react-native-table-component";
 import { orderHistory } from "./(tabs)/Home";
+import { getBookedStan } from "@/services/StanService";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
@@ -27,7 +28,22 @@ const _height = Dimensions.get("screen").height;
 export default function Payment() {
   const navigation = useNavigation();
 
-  const tableHead = ["Stalls", "Date", "Total", "Status"];
+  const tableHead = ["Stalls", "Date", "Price", "Status"];
+
+  const [stalls, setStalls] = useState<Stan[] | null>(null);
+
+  const fetchItems = async () => {
+    const stall = await getBookedStan();
+    setStalls(stall);
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchItems();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   useEffect(() => {
     useFonts();
@@ -45,10 +61,10 @@ export default function Payment() {
       title: "Payment Report",
     });
   }, [navigation]);
-
+  const today = new Date();
   return (
     <View style={styles.container}>
-      <Text style={styles.date}>01-05-2024 to 14-05-2024</Text>
+      <Text style={styles.date}>{today.toDateString()}</Text>
       <ScrollView style={styles.scroll_view}>
         <Table>
           <Row
@@ -57,18 +73,26 @@ export default function Payment() {
             textStyle={styles.text_head}
           ></Row>
           <TableWrapper>
-            {orderHistory.map((item, index) => (
-              <Row
-                key={item.id}
-                data={[item.id, item.date, item.cashier_id, item.nominal]}
-                style={
-                  index % 2 == 1
-                    ? { backgroundColor: "#F3F9ED", height: _height * 0.04 }
-                    : {}
-                }
-                textStyle={styles.rowStyle}
-              />
-            ))}
+            {stalls &&
+              stalls.map((item, index) => (
+                <Row
+                  key={item.id}
+                  data={[
+                    item.id.slice(0, 6),
+                    new Date(
+                      item.until.seconds * 1000 + 43200000
+                    ).toLocaleDateString(),
+                    item.price,
+                    item.paymentStatus ? "completed" : "in progress",
+                  ]}
+                  style={
+                    index % 2 == 1
+                      ? { backgroundColor: "#F3F9ED", height: _height * 0.04 }
+                      : {}
+                  }
+                  textStyle={styles.rowStyle}
+                />
+              ))}
           </TableWrapper>
         </Table>
       </ScrollView>
