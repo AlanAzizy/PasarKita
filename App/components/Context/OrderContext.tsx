@@ -6,11 +6,11 @@ import {
   useState,
 } from "react";
 import Product from "../Interface/Product";
-import { orderItem } from "../../constants/Types";
+import { OrderItem } from "../../constants/Types";
 
 type orderContextType = {
-  orders: orderItem[] | null;
-  setOrders: (orders: orderItem[]) => void;
+  orders: OrderItem[] | null;
+  setOrders: (orders: OrderItem[]) => void;
 };
 
 export const OrderContext = createContext<orderContextType | undefined>(
@@ -18,7 +18,7 @@ export const OrderContext = createContext<orderContextType | undefined>(
 );
 
 export default function OrderProvider({ children }: { children: ReactNode }) {
-  const [orders, setOrders] = useState<orderItem[]>([]);
+  const [orders, setOrders] = useState<OrderItem[]>([]);
 
   return (
     <OrderContext.Provider value={{ orders, setOrders }}>
