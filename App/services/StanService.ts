@@ -1,7 +1,7 @@
 import { auth, firebaseStorage, firestore } from "@/config/firebase";
 import { Order, User } from "@/constants/Types";
 import { signInWithEmailAndPassword, signOut } from "@firebase/auth"
-import { doc, getDocs, where, updateDoc, deleteDoc, Timestamp } from "firebase/firestore";
+import { doc, getDocs, where, updateDoc, deleteDoc, Timestamp, DocumentReference } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
 import {
   addDoc,
@@ -114,11 +114,11 @@ export const addStan = async (stan : Stan) => {
   }
 };
 
-export const bookStan = async (stan : Stan, duration : number) => {
+export const bookStan = async (custId : string,stan : Stan, duration : number) => {
   if (!auth.currentUser) {
     throw new Error("User is not authenticated");
   }
-
+  console.log(stan)
   try {
     // Assuming user.stan is an array
       const stanDocRef = doc(firestore, `stans/${stan.id}`);
@@ -148,6 +148,15 @@ export const bookStan = async (stan : Stan, duration : number) => {
         until : currentDate,
         owner : stan.owner
       });
+
+      const stanRef = doc(firestore, 'stans', stan.id)
+      const q = doc(firestore, 'users', custId);
+      await setDoc(q, {
+          stan : stanRef
+          
+      },{ merge: true });
+
+
       
 
   } catch (error) {
@@ -171,6 +180,36 @@ export const editStan = async (stan : Stan, price : number, paymentStatus : bool
         availability : availability,
         blockNumber : stan.blockNumber,
         paymentStatus : paymentStatus,
+        price : price,
+        size : stan.size,
+        type : stan.type,
+        until : currentDate,
+        owner : stan.owner
+      });
+
+  } catch (error) {
+    console.error("Error moving items:", error);
+    throw new Error("Internal Server Error");
+  }
+};
+
+
+export const editStanPaymentStatus = async (stan : Stan, price : number, availability : boolean) => {
+  if (!auth.currentUser) {
+    throw new Error("User is not authenticated");
+  }
+
+  try {
+    // Assuming user.stan is an array
+      console.log("try to update")
+      
+      await updatePayments(stan)
+      const stanDocRef = doc(firestore, `stans/${stan.id}`);
+      let currentDate = new Date();
+      const stanDoc = await updateDoc(stanDocRef, {
+        availability : availability,
+        blockNumber : stan.blockNumber,
+        paymentStatus : true,
         price : price,
         size : stan.size,
         type : stan.type,
@@ -239,4 +278,86 @@ await Promise.all(newStanPromises); // Wait for all updates to complete
     throw new Error("Internal Server Error");
   }
 }
+
+export const updatePayments = async(stan : Stan) =>{
+
+  try{
+    const stanDocRef = collection(firestore, `payments/`);
+      let currentDate = new Date();
+      const stanDoc = await addDoc(stanDocRef,{
+        stanId : stan.id,
+        total : stan.price,
+        date : currentDate
+      })
+
+    console.log(stanDoc.id)
+  }catch(error){
+    console.error("Error moving items:", error);
+    throw new Error("Internal Server Error");
+  }
+}
+
+export const getStanProfitForEveryMonth = async (stan: Stan) => {
+  const year = 2024;
+  const months = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+  const stanPath = 'payments/'
+
+  try {
+    const profits = await Promise.all(months.map(async (month) => {
+      const startDate = new Date(year, month, 1); // Corrected the month parameter
+      const endDate = new Date(year, month + 1, 0, 23, 59, 59, 999); // Corrected the month parameter and date logic
+
+      // Convert to Firestore Timestamps
+      const startTimestamp = Timestamp.fromDate(startDate);
+      const endTimestamp = Timestamp.fromDate(endDate);
+
+      const q = query(
+        collection(firestore, stanPath),
+        where("date", ">=", startTimestamp),
+        where("date", "<=", endTimestamp)
+      );
+      const querySnapshot = await getDocs(q);
+      // Process the results
+      const documents: Order[] = [];
+      querySnapshot.forEach((doc) => {
+        documents.push(doc.data() as Order);
+      });
+      const sum = documents.reduce((accumulator, order) => {
+        return accumulator + order.total;
+      }, 0);
+      return sum/1000000;
+    }));
+
+    return profits;
+
+  } catch (e) {
+    console.error('Error querying documents: ', e);
+  }
+};
+
+
+export const updateStanOwner = async() => {
+
+  try{
+    const unBookedStan = (await getUnBookedStan());
+    if (unBookedStan?.length>0){
+      const q = query(collection(firestore, 'users'), where('stan', 'in', unBookedStan?.map((stan)=>'stans/'+stan.id)));
+      const usersSnapshot = await getDocs(q);
+      const userUpdate = usersSnapshot.docs.map(async (user)=>{
+        const userDocRef = doc(firestore, 'users', user.id);
+        await updateDoc(userDocRef, {
+          stan : "",
+          ...user
+      });
+      })
+  
+    await Promise.all(userUpdate);
+    }
+
+  }catch(e){
+    console.error('Error querying documents: ', e);
+  }
+
+}
+
 

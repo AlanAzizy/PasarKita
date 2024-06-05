@@ -18,7 +18,11 @@ import OrderItem from "@/components/OrderItemComp";
 import { OrderContext } from "@/components/Context/OrderContext";
 import { Item, Stan } from "@/constants/Types";
 import DropdownStall from "@/components/DropDownStall";
-import { editStan, getAllStan } from "@/services/StanService";
+import {
+  editStan,
+  editStanPaymentStatus,
+  getAllStan,
+} from "@/services/StanService";
 import DropdownBinary from "@/components/DropDownBinary";
 import Toast from "react-native-toast-message";
 
@@ -34,12 +38,7 @@ const _height = Dimensions.get("screen").height;
 const fix_height = _height;
 
 export default function EditStall({ visible, close, stan }: modalProp) {
-  const [name, setName] = useState("");
-  const [stock, setStock] = useState(0);
   const [price, setPrice] = useState(0);
-  const [showListStatus, setShowListStatus] = useState(false);
-  const [showListStall, setShowListStall] = useState(false);
-  const [status, setStatus] = useState<string>("Available");
   const [payment, setPayment] = useState<string>("in progress");
   const [stalls, setStalls] = useState<Stan[]>([]);
 
@@ -93,19 +92,30 @@ export default function EditStall({ visible, close, stan }: modalProp) {
             <Button
               onPress={() => {
                 if (stan !== null) {
-                  editStan(
-                    stan,
-                    price,
-                    payment == "completed",
-                    status == "available"
-                  );
+                  console.log(1);
+                  if (
+                    (stan.paymentStatus && payment == "completed") ||
+                    (!stan.paymentStatus && payment != "completed")
+                  ) {
+                    console.log(payment);
+                    editStan(
+                      stan,
+                      price,
+                      payment == "completed",
+                      stan.availability
+                    );
+                  } else {
+                    if (payment == "completed") {
+                      console.log(2);
+                      editStanPaymentStatus(stan, price, stan.availability);
+                    }
+                  }
                   Toast.show({
                     type: "success",
                     text1: "Success to edit stall",
                   });
                 }
                 setPrice(0);
-                setStock(0);
                 close();
               }}
               styles={

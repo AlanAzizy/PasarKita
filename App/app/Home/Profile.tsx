@@ -13,6 +13,7 @@ import { useNavigation, router } from "expo-router";
 import useFonts from "@/components/useFonts";
 import Button from "@/components/Button";
 import { UserContext } from "@/components/Context/UserContext";
+import { auth } from "@/config/firebase";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
@@ -74,6 +75,9 @@ export default function Profile() {
         <View style={styles.image_container}>
           <Pressable onPress={() => {}} style={styles.image_clicker}>
             <Image src={photoUrl} style={styles.image}></Image>
+            <Text style={[{ color: "#444444", fontSize: 16, marginTop: 4 }]}>
+              {auth.currentUser?.uid}
+            </Text>
           </Pressable>
         </View>
         <View style={styles.input_container}>

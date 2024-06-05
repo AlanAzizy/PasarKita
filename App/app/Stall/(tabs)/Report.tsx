@@ -6,13 +6,19 @@ import {
   Dimensions,
 } from "react-native";
 import { useNavigation } from "expo-router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
 import StockCardEdit from "@/components/StockCardEdit";
 import SearchBar from "@/components/SearchBar";
 import { Feather, Entypo, FontAwesome6, FontAwesome } from "@expo/vector-icons";
 import { LineChart } from "react-native-chart-kit";
+import {
+  getOrderProfitForEveryMonth,
+  getProfit,
+} from "@/services/OrderService";
+import { StanContext } from "@/components/Context/StanContext";
+import { getStanProfitForEveryMonth } from "@/services/StanService";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
@@ -22,8 +28,15 @@ export default function Stocks() {
   const [statMode, setStatMode] = useState<
     "Profit" | "Cust" | "Product" | "Order"
   >("Profit");
-  const [phrase, setPhrase] = useState("");
-  const [clicked, setClicked] = useState(false);
+  const stanContext = useContext(StanContext);
+  const [profitYear, setProfitYear] = useState<number[] | null>([
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+  ]);
+
+  const fetchProfit = async () => {
+    const profit = await getStanProfitForEveryMonth(stanContext?.stan);
+    setProfitYear(profit);
+  };
 
   useEffect(() => {
     navigation.setOptions({
@@ -38,8 +51,8 @@ export default function Stocks() {
   }, [navigation]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("blur", () => {
-      setPhrase("");
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchProfit();
     });
 
     return unsubscribe;
@@ -67,13 +80,14 @@ export default function Stocks() {
             ],
             datasets: [
               {
-                data: [23, 34, 56, 43, 45, 75, 98, 44, 64, 67, 87, 86],
+                data: profitYear,
               },
             ],
           }}
           width={_width * 0.8} // from react-native
           height={_width * 0.5}
           chartConfig={{
+            formatYLabel: (value) => `${value} M`,
             backgroundColor: "#fafafa",
             backgroundGradientFrom: "#fafafa",
             backgroundGradientTo: "#fafafa",
@@ -89,6 +103,7 @@ export default function Stocks() {
                 return "#73C724";
               }
             },
+
             labelColor: (opacity = 1) => `#8C8C8C`,
             style: {
               borderRadius: 10,
@@ -100,6 +115,7 @@ export default function Stocks() {
               fontSize: 8,
             },
           }}
+          yAxisSuffix=" M"
           style={{
             marginVertical: 8,
             borderRadius: 10,

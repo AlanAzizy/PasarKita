@@ -18,140 +18,32 @@ import StockCard from "@/components/StockCard";
 import { PreventRemoveContext } from "@react-navigation/native";
 import CreateOrder from "@/components/Modals/Tenant/CreateOrder";
 import { Item, Order } from "@/constants/Types";
-import { getOrder, getProfit } from "@/services/OrderService";
+import {
+  getOrder,
+  getOrderSortedByDate,
+  getProfit,
+} from "@/services/OrderService";
 import { StanContext } from "@/components/Context/StanContext";
 import { DocumentReference } from "firebase/firestore";
 import { getAllItem, moveItem } from "@/services/ItemService";
+import { UserContext } from "@/components/Context/UserContext";
+import { updateStanOwner } from "@/services/StanService";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
-
-export const orderHistory = [
-  {},
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 403,
-    nominal: 45789,
-    number: 8,
-    status: "In Progress",
-  },
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 402,
-    nominal: 48897,
-    number: 3,
-    status: "Completed",
-  },
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 400,
-    nominal: 45789,
-    number: 8,
-    status: "In Progress",
-  },
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 401,
-    nominal: 48897,
-    number: 3,
-    status: "Completed",
-  },
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 399,
-    nominal: 45789,
-    number: 8,
-    status: "In Progress",
-  },
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 405,
-    nominal: 48897,
-    number: 3,
-    status: "Completed",
-  },
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 390,
-    nominal: 45789,
-    number: 8,
-    status: "In Progress",
-  },
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 500,
-    nominal: 48897,
-    number: 3,
-    status: "Completed",
-  },
-];
-
-export const stocks = [
-  {},
-  {
-    price: 150,
-    id: 403,
-    prev_number: 45789,
-    current_number: 8,
-    name: "In Progress",
-  },
-  {
-    price: 150,
-    id: 402,
-    prev_number: 48897,
-    current_number: 3,
-    name: "Completed",
-  },
-  {
-    price: 150,
-    id: 400,
-    prev_number: 45789,
-    current_number: 8,
-    name: "In Progress",
-  },
-  {
-    price: 150,
-    id: 401,
-    prev_number: 48897,
-    current_number: 3,
-    name: "Completed",
-  },
-  {
-    price: 150,
-    id: 399,
-    prev_number: 45789,
-    current_number: 8,
-    name: "In Progress",
-  },
-  {
-    price: 150,
-    id: 405,
-    prev_number: 48897,
-    current_number: 3,
-    name: "Completed",
-  },
-  {
-    price: 150,
-    id: 390,
-    prev_number: 45789,
-    current_number: 8,
-    name: "In Progress",
-  },
-  {
-    price: 150,
-    id: 500,
-    prev_number: 48897,
-    current_number: 3,
-    name: "Completed",
-  },
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 export default function Home() {
@@ -164,7 +56,7 @@ export default function Home() {
   const [profit, setProfit] = useState("");
 
   const fetchOrder = async () => {
-    const order = await getOrder(stanContext?.stan);
+    const order = await getOrderSortedByDate(stanContext?.stan);
     const orderAdd = order.at(0);
     const id = "string";
     const name = "string";
@@ -203,6 +95,8 @@ export default function Home() {
     const unsubscribe = navigation.addListener("focus", () => {
       // The screen is focused
       // Call any action
+      console.log(stanContext?.stan);
+      console.log(stok);
       fetchOrder();
       fetchItems();
     });
@@ -226,8 +120,14 @@ export default function Home() {
     navigation.setOptions({ title: "Home" });
   }, [navigation]);
 
+  useEffect(() => {
+    updateStanOwner();
+  });
+
   const closeModals = () => {
     setIsCreateOrderModal(false);
+    fetchOrder();
+    fetchItems();
   };
 
   return (
@@ -238,7 +138,9 @@ export default function Home() {
         contentContainerStyle={{ alignItems: "center" }}
       >
         <LinearGradient colors={["#7EB143", "#A2CF6E"]} style={styles.banner}>
-          <Text style={styles.banner_1}>January Profit</Text>
+          <Text style={styles.banner_1}>{`${
+            monthNames[new Date().getMonth()]
+          } Profit`}</Text>
           <Text style={styles.banner_2}>{profit}</Text>
           <View style={styles.banner_3}>
             <Text style={[styles.banner_text, styles.banner_text_1]}>
@@ -326,7 +228,7 @@ export default function Home() {
         </View>
         <View style={[styles.stocks_container]}>
           <Text style={styles.stocks}>My Stocks</Text>
-          {stok &&
+          {stok && stok.length > 0 ? (
             stok.map((item, index) => (
               <StockCard
                 key={index}
@@ -337,7 +239,14 @@ export default function Home() {
                 price={item.price}
                 image={item.image}
               />
-            ))}
+            ))
+          ) : (
+            <Text style={styles.attention}>
+              {stanContext?.stan
+                ? "Add Item To Your Stan"
+                : "Contact The Market Manager To Get A Stan"}
+            </Text>
+          )}
         </View>
       </ScrollView>
     </>
@@ -472,5 +381,12 @@ const styles = StyleSheet.create({
     textAlign: "left",
     borderColor: "#ff0000",
     borderWidth: 0,
+  },
+  attention: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#cacaca",
+    textAlign: "center",
   },
 });

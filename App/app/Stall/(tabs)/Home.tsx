@@ -19,7 +19,11 @@ import AddBooking from "@/components/Modals/Stall/AddBooking";
 import AddMaintenance from "@/components/AddMaintenance";
 import Maintenance from "@/components/Maintenance";
 import AddMaintenanceModals from "@/components/Modals/Stall/AddMaintenanceModals";
-import { countBookStanPercentage, getBookedStan } from "@/services/StanService";
+import {
+  countBookStanPercentage,
+  getBookedStan,
+  updateStanOwner,
+} from "@/services/StanService";
 import { Stan, schedule } from "@/constants/Types";
 import { getAllSchedule } from "@/services/ScheduleService";
 

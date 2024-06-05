@@ -36,7 +36,7 @@ export default function Stocks() {
   };
   useEffect(() => {
     fetchItems();
-  }, [navigation, modalEditProduct, modalAddProduct, modalDeleteProduct]);
+  }, [modalEditProduct, modalAddProduct, modalDeleteProduct]);
 
   useEffect(() => {
     if (phrase !== "") {
@@ -66,8 +66,8 @@ export default function Stocks() {
   }, [navigation]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("blur", () => {
-      setPhrase("");
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchItems();
     });
 
     return unsubscribe;
@@ -77,13 +77,17 @@ export default function Stocks() {
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <AddProduct
         visible={modalAddProduct}
-        close={() => setModalAddProduct(false)}
+        close={() => {
+          setModalAddProduct(false);
+          fetchItems();
+        }}
       />
       <EditProduct
         visible={modalEditProduct}
         close={() => {
           setModalEditProduct(false);
           setItemSelected(null);
+          fetchItems();
         }}
         item={itemSelected}
       />
@@ -92,6 +96,7 @@ export default function Stocks() {
         close={() => {
           setModalDeleteProduct(false);
           setItemSelected(null);
+          fetchItems();
         }}
         id={itemSelected?.id}
       />
@@ -105,7 +110,7 @@ export default function Stocks() {
       </View>
       <ScrollView style={styles.container}>
         <View style={{ width: "95%", marginHorizontal: "2.5%" }}>
-          {stok &&
+          {stok && stok.length > 0 ? (
             stok.map((item) => (
               <StockCardEdit
                 key={item.id}
@@ -119,7 +124,14 @@ export default function Stocks() {
                   setItemSelected(stock as Item);
                 }}
               />
-            ))}
+            ))
+          ) : (
+            <Text style={styles.attention}>
+              {stanContext?.stan
+                ? "Add Item To Your Stan"
+                : "Contact The Market Manager To Get A Stan"}
+            </Text>
+          )}
         </View>
       </ScrollView>
       <Pressable
@@ -158,5 +170,12 @@ const styles = StyleSheet.create({
     borderRadius: _height * 0.04,
     justifyContent: "center",
     alignItems: "center",
+  },
+  attention: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#cacaca",
+    textAlign: "center",
   },
 });

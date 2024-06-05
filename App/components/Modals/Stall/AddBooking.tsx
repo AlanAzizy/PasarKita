@@ -35,7 +35,7 @@ export default function AddBooking({ visible, close }: modalProp) {
   const [clicked, setClicked] = useState(false);
   const [isValid, setIsValid] = useState(false);
   const [selectedStall, setSelectedStall] = useState<null | Stan>(null);
-  const [custName, setCustName] = useState("");
+  const [custId, setCustId] = useState("");
   const [duration, setDuration] = useState(0);
   const [stalls, setStalls] = useState<Stan[]>([]);
 
@@ -49,7 +49,7 @@ export default function AddBooking({ visible, close }: modalProp) {
   }, [visible]);
 
   const removeAll = () => {
-    setCustName("");
+    setCustId("");
     setDuration(0);
     setSelectedStall(null);
     close();
@@ -73,13 +73,13 @@ export default function AddBooking({ visible, close }: modalProp) {
             />
           </View>
           <View style={styles.input_container}>
-            <Text style={styles.sub_title}>Customer/Business Name</Text>
+            <Text style={styles.sub_title}>Customer/Business Id</Text>
             <TextInput
               style={styles.input}
-              placeholder="Customer Name"
+              placeholder="Customer Id"
               keyboardType="default"
-              value={custName}
-              onChangeText={(value) => setCustName(value)}
+              value={custId}
+              onChangeText={(value) => setCustId(value)}
             />
             <Text style={styles.sub_title}>Stalls</Text>
             <DropdownComponent
@@ -126,7 +126,7 @@ export default function AddBooking({ visible, close }: modalProp) {
             <Button
               onPress={() => {
                 if (selectedStall !== null && duration > 0) {
-                  bookStan(selectedStall, duration);
+                  bookStan(custId, selectedStall, duration);
                   Toast.show({
                     type: "success",
                     text1: "Success to add booking",
@@ -136,7 +136,7 @@ export default function AddBooking({ visible, close }: modalProp) {
                 close();
               }}
               styles={
-                custName !== "" &&
+                custId !== "" &&
                 !isNaN(Number(duration)) &&
                 selectedStall !== null &&
                 duration > 0
@@ -144,7 +144,7 @@ export default function AddBooking({ visible, close }: modalProp) {
                   : styles.buttonDisabled
               }
               title="Create Order"
-              isLight={custName !== "" && stalls !== null && duration > 0}
+              isLight={custId !== "" && stalls !== null && duration > 0}
               size={16}
             />
           </View>

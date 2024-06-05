@@ -79,7 +79,8 @@ export const RegisterServices = async ({
       username: username,
       phoneNumber : phoneNumber,
       photoUrl : photoUrl,
-      role : role
+      role : role,
+      email : email
     });
     return result;
   } catch (error) {
@@ -185,7 +186,7 @@ export const AddPersonalizeUser = async ({
       data = { ...data, photo_url: downloadURL };
     }
 
-    await setDoc(doc(firestore, `users/${auth.currentUser?.uid}`), data);
+    await addDoc(collection(firestore, `users/${auth.currentUser?.uid}`), data);
   } catch (err) {
     if (err instanceof z.ZodError) {
       throw err.errors.map((e) => e.message).join("\n");

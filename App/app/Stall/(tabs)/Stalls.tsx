@@ -100,9 +100,10 @@ export default function Stocks() {
   }, [navigation]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("blur", () => {
+    const unsubscribe = navigation.addListener("focus", () => {
       setPhrase("");
       fetchItems();
+      setFilter("All");
     });
 
     return unsubscribe;

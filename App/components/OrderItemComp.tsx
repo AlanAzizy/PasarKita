@@ -20,10 +20,12 @@ export default function OrderItemComp({
 
   const addNumber = (product: Item) => {
     const newOrder = orderContext?.orders?.map((e) => {
-      if (e.product == product && product.stok > 1 + e.number) {
-        e.number += 1;
-      } else {
-        Toast.show({ type: "error", text1: "Failed to add" });
+      if (e.product == product) {
+        if (product.stok > 1 + e.number) {
+          e.number += 1;
+        } else {
+          Toast.show({ type: "error", text1: "Failed to add" });
+        }
       }
       return e;
     });

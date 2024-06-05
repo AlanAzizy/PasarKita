@@ -11,18 +11,11 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigation, router } from "expo-router";
 import useFonts from "@/components/useFonts";
-import {
-  AntDesign,
-  Feather,
-  FontAwesome6,
-  MaterialIcons,
-} from "@expo/vector-icons";
-import Button from "@/components/Button";
 import { Table, Rows, Row, TableWrapper } from "react-native-table-component";
-import { orderHistory } from "./(tabs)/Home";
 import { getBookedStan } from "@/services/StanService";
 import { formatToRupiah } from "@/services/OrderService";
 import { Timestamp } from "firebase/firestore";
+import { Stan } from "@/constants/Types";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
