@@ -19,78 +19,25 @@ import AddBooking from "@/components/Modals/Stall/AddBooking";
 import AddMaintenance from "@/components/AddMaintenance";
 import Maintenance from "@/components/Maintenance";
 import AddMaintenanceModals from "@/components/Modals/Stall/AddMaintenanceModals";
-import { getBookedStan } from "@/services/StanService";
-import { Stan } from "@/constants/Types";
+import { countBookStanPercentage, getBookedStan } from "@/services/StanService";
+import { Stan, schedule } from "@/constants/Types";
+import { getAllSchedule } from "@/services/ScheduleService";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
-
-export const orderHistory = [
-  {},
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 403,
-    nominal: 45789,
-    number: 8,
-    status: "In Progress",
-  },
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 402,
-    nominal: 48897,
-    number: 3,
-    status: "Completed",
-  },
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 400,
-    nominal: 45789,
-    number: 8,
-    status: "In Progress",
-  },
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 401,
-    nominal: 48897,
-    number: 3,
-    status: "Completed",
-  },
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 399,
-    nominal: 45789,
-    number: 8,
-    status: "In Progress",
-  },
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 405,
-    nominal: 48897,
-    number: 3,
-    status: "Completed",
-  },
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 390,
-    nominal: 45789,
-    number: 8,
-    status: "In Progress",
-  },
-  {
-    cashier_id: 112,
-    date: "22-05-2024",
-    id: 500,
-    nominal: 48897,
-    number: 3,
-    status: "Completed",
-  },
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 export default function Home() {
@@ -98,13 +45,38 @@ export default function Home() {
 
   const [isAddBookingModal, setIsAddBookingModal] = useState(false);
   const [isAddMaintenanceModal, setIsAddMaintenanceModal] = useState(false);
-
+  const [workSchedule, setWorkSchedule] = useState<schedule[] | null>();
   const [stalls, setStalls] = useState<Stan[] | null>(null);
+  const [bookedStanPercentage, setBookStanPercentage] = useState<number>();
+
+  const fetchSchedule = async () => {
+    const id = "randomstring";
+    const status = false;
+    const blockNumber = 999;
+    const type = "bad";
+    const worker = "none";
+    const startTime = new Date(9999999);
+    const cleaning = await getAllSchedule();
+    cleaning?.push({
+      id,
+      status,
+      blockNumber,
+      type,
+      worker,
+      startTime,
+    } as schedule);
+    cleaning?.reverse();
+    setWorkSchedule(cleaning);
+  };
+
+  useEffect(() => {
+    fetchSchedule();
+  }, []);
 
   const fetchItems = async () => {
     const stall = await getBookedStan();
     const id = "randomstring";
-    const availibility = true;
+    const availability = true;
     const paymentStatus = false;
     const blockNumber = 999;
     const owner = "none";
@@ -114,7 +86,7 @@ export default function Home() {
     const until = new Date();
     stall?.push({
       id,
-      availibility,
+      availability,
       paymentStatus,
       blockNumber,
       owner,
@@ -125,6 +97,8 @@ export default function Home() {
     } as Stan);
     stall?.reverse();
     setStalls(stall);
+    const numberOfStan = await countBookStanPercentage();
+    setBookStanPercentage(numberOfStan);
   };
 
   useEffect(() => {
@@ -163,9 +137,13 @@ export default function Home() {
       />
       <View style={styles.container}>
         <LinearGradient colors={["#7EB143", "#A2CF6E"]} style={styles.banner}>
-          <Text style={styles.banner_1}>January</Text>
+          <Text style={styles.banner_1}>
+            {monthNames[new Date().getMonth()]}
+          </Text>
           <View style={styles.banner_container}>
-            <Text style={styles.banner_big}>80%</Text>
+            <Text style={styles.banner_big}>{`${(bookedStanPercentage * 100)
+              .toString()
+              .slice(0, 2)}%`}</Text>
             <Text style={styles.banner_2}>Stalls Booked</Text>
           </View>
           <View style={styles.banner_3}>
@@ -241,7 +219,7 @@ export default function Home() {
                   id={item.id}
                   paymentStatus={item.paymentStatus}
                   price={item.price}
-                  availibility={item.availibility}
+                  availability={item.availability}
                   until={item.until}
                   blockNumber={item.blockNumber}
                   size={item.size}
@@ -267,17 +245,17 @@ export default function Home() {
           <FlatList
             style={styles.flatlist}
             horizontal={true}
-            data={orderHistory}
-            renderItem={({ item }) => {
-              return item.id == undefined ? (
+            data={workSchedule}
+            renderItem={({ item, index }) => {
+              return item.type == "bad" ? (
                 <AddMaintenance add={() => setIsAddMaintenanceModal(true)} />
               ) : (
                 <Maintenance
                   id={item.id}
-                  time={item.number}
-                  number={item.number}
+                  time={item.startTime}
+                  number={item.blockNumber}
                   status={item.status}
-                  name={item.status}
+                  name={item.type}
                 />
               );
             }}

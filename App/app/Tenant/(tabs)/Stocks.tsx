@@ -40,14 +40,13 @@ export default function Stocks() {
 
   useEffect(() => {
     if (phrase !== "") {
-      const newStok = stok?.filter((item) => {
+      const newStok = localStok?.filter((item) => {
         if (
           item.name.toLocaleLowerCase().includes(phrase.toLocaleLowerCase())
         ) {
           return item;
         }
       });
-      console.log(newStok);
       setStok(newStok);
     } else {
       setStok(localStok);
@@ -113,8 +112,6 @@ export default function Stocks() {
                 stock={item}
                 openEdit={(stock) => {
                   setModalEditProduct(true);
-                  console.log("---------");
-                  console.log(stock);
                   setItemSelected(stock);
                 }}
                 openDelete={(stock) => {

@@ -18,7 +18,11 @@ import Product, { products } from "@/components/Interface/Product";
 import OrderItem from "@/components/OrderItemComp";
 import { OrderContext } from "@/components/Context/OrderContext";
 import Dropdown from "@/components/DropDown";
-import { createOrder, createOrderItem } from "@/services/OrderService";
+import {
+  createOrder,
+  createOrderItem,
+  formatToRupiah,
+} from "@/services/OrderService";
 import { StanContext } from "@/components/Context/StanContext";
 import { UserContext } from "@/components/Context/UserContext";
 import OrderItemComp from "@/components/OrderItemComp";
@@ -107,7 +111,9 @@ export default function CreateOrder({ visible, close }: modalProp) {
             {orderContext?.orders && orderContext.orders.length > 0 && (
               <View style={styles.total}>
                 <Text style={styles.total_text}>Total</Text>
-                <Text style={styles.total_text}>Rp{calculate()}</Text>
+                <Text style={styles.total_text}>
+                  {formatToRupiah(calculate())}
+                </Text>
               </View>
             )}
             <Button

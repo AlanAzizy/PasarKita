@@ -1,7 +1,7 @@
 import { auth, firebaseStorage, firestore } from "@/config/firebase";
 import { Order, User } from "@/constants/Types";
 import { signInWithEmailAndPassword, signOut } from "@firebase/auth"
-import { doc, getDocs, where, updateDoc, deleteDoc } from "firebase/firestore";
+import { doc, getDocs, where, updateDoc, deleteDoc, Timestamp } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
 import {
   addDoc,
@@ -41,11 +41,10 @@ export const getAllStan = async ()=>{
     const stanDoc = await getDocs(q); 
     const stans = stanDoc.docs.map((stanEl)=>{
       const id = stanEl.id
-      const date = stanEl.data().until
+      const date = (stanEl.data().until as Timestamp).toDate()
       return {id, until : date, ...stanEl.data()} as Stan 
     })
-    console.log('------------')
-    console.log(stans)
+
     return stans
   }
   catch(err){
@@ -55,15 +54,14 @@ export const getAllStan = async ()=>{
 
 export const getBookedStan = async ()=>{
   try{
-    const q = query(collection(firestore, 'stans'),where('owner','==',auth.currentUser?.uid,), where("availibility", "==", false))
+    const q = query(collection(firestore, 'stans'),where('owner','==',auth.currentUser?.uid,), where("availability", "==", false))
     const stanDoc = await getDocs(q); 
     const stans = stanDoc.docs.map((stanEl)=>{
       const id = stanEl.id
-      const date = stanEl.data().until
+      const date = (stanEl.data().until as Timestamp).toDate()
       return {id, until : date, ...stanEl.data()} as Stan 
     })
-    console.log('------------')
-    console.log(stans)
+
     return stans
   }
   catch(err){
@@ -74,14 +72,14 @@ export const getBookedStan = async ()=>{
 
 export const getUnBookedStan = async ()=>{
   try{
-    const q = query(collection(firestore, 'stans'),where('owner','==',auth.currentUser?.uid,), where("availibility", "==", true))
+    const q = query(collection(firestore, 'stans'),where('owner','==',auth.currentUser?.uid,), where("availability", "==", true))
     const stanDoc = await getDocs(q); 
     const stans = stanDoc.docs.map((stanEl)=>{
       const id = stanEl.id
-      const date = stanEl.data().until
+      const date = (stanEl.data().until as Timestamp).toDate()
       return {id, until : date, ...stanEl.data()} as Stan 
     })
-    console.log(stans)
+
     return stans
   }
   catch(err){
@@ -99,7 +97,7 @@ export const addStan = async (stan : Stan) => {
     // Assuming user.stan is an array
       const stanDocRef = collection(firestore, 'stans');
       const stanDoc = await addDoc(stanDocRef, {
-        availibility : true,
+        availability : true,
         blockNumber : stan.blockNumber,
         paymentStatus : false,
         price : stan.price,
@@ -109,7 +107,6 @@ export const addStan = async (stan : Stan) => {
         owner : auth.currentUser.uid
       });
       
-      console.log(stanDoc.id)
 
   } catch (error) {
     console.error("Error moving items:", error);
@@ -142,7 +139,7 @@ export const bookStan = async (stan : Stan, duration : number) => {
         currentDate.setMonth(currentDate.getMonth()+duration)
       }
       const stanDoc = await updateDoc(stanDocRef, {
-        availibility : false,
+        availability : false,
         blockNumber : stan.blockNumber,
         paymentStatus : stan.paymentStatus,
         price : stan.price,
@@ -152,7 +149,6 @@ export const bookStan = async (stan : Stan, duration : number) => {
         owner : stan.owner
       });
       
-      console.log(stanDoc)
 
   } catch (error) {
     console.error("Error moving items:", error);
@@ -161,7 +157,7 @@ export const bookStan = async (stan : Stan, duration : number) => {
 };
 
 
-export const editStan = async (stan : Stan, price : number, paymentStatus : boolean, availibility : boolean) => {
+export const editStan = async (stan : Stan, price : number, paymentStatus : boolean, availability : boolean) => {
   if (!auth.currentUser) {
     throw new Error("User is not authenticated");
   }
@@ -172,7 +168,7 @@ export const editStan = async (stan : Stan, price : number, paymentStatus : bool
       const stanDocRef = doc(firestore, `stans/${stan.id}`);
       let currentDate = new Date();
       const stanDoc = await updateDoc(stanDocRef, {
-        availibility : availibility,
+        availability : availability,
         blockNumber : stan.blockNumber,
         paymentStatus : paymentStatus,
         price : price,
@@ -181,8 +177,6 @@ export const editStan = async (stan : Stan, price : number, paymentStatus : bool
         until : currentDate,
         owner : stan.owner
       });
-      console.log("*****")
-      console.log(stanDoc)
 
   } catch (error) {
     console.error("Error moving items:", error);
@@ -203,11 +197,46 @@ export const deleteStan = async (stan : Stan) => {
       const stanDocRef = doc(firestore, stanPath);
       const stanDoc = await deleteDoc(stanDocRef);
       
-      console.log(stanDoc)
 
   } catch (error) {
     console.error("Error moving items:", error);
     throw new Error("Internal Server Error");
   }
 };
+
+export const countBookStanPercentage= async()=>{
+
+  try{
+    const numberOfBookedStan = (await getBookedStan())?.length
+    const numberOfAllStan = (await getAllStan())?.length
+    if (numberOfAllStan && numberOfBookedStan){
+      return numberOfBookedStan/numberOfAllStan
+    }
+  }catch (error) {
+    console.error("Error moving items:", error);
+    throw new Error("Internal Server Error");
+  }
+}
+
+export const updateStanStatus = async()=>{
+  const today = new Date()
+  try{
+    const q = query(collection(firestore, 'stans'), where('until', '<=', Timestamp.fromDate(today)));
+const stansSnapshot = await getDocs(q);
+const newStanPromises = stansSnapshot.docs.map(async (stan) => {
+    const stanDocRef = doc(firestore, 'stans', stan.id);
+    await updateDoc(stanDocRef, {
+        availability: true,
+        paymentStatus: false,
+        until: today,
+    });
+});
+await Promise.all(newStanPromises); // Wait for all updates to complete
+
+  }
+  catch (error) {
+    console.error("Error moving items:", error);
+    throw new Error("Internal Server Error");
+  }
+}
 

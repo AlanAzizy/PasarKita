@@ -7,8 +7,9 @@ import {
   Image,
   Pressable,
 } from "react-native";
-import { Stocks } from "./StockCard";
 import { Stan } from "@/constants/Types";
+import { Timestamp } from "firebase/firestore";
+import { formatToRupiah } from "@/services/OrderService";
 
 type addModalType = {
   stock: Stan;
@@ -24,14 +25,15 @@ export default function StallCardEdit({
   openEdit,
   openDelete,
 }: addModalType) {
-  const { id, price, paymentStatus, until, availibility } = stock;
-  const date = new Date(until.seconds * 1000 + 36000000);
+  const { id, price, paymentStatus, until, availability } = stock;
+  const date = (until as Timestamp).toDate();
+
   return (
     <View style={styles.container}>
       <View
         style={[
           styles.number_container,
-          availibility ? {} : { backgroundColor: "#DBECC7" },
+          availability ? {} : { backgroundColor: "#DBECC7" },
         ]}
       >
         <Text style={[styles.number]}>{id.slice(0, 3)}</Text>
@@ -54,7 +56,7 @@ export default function StallCardEdit({
           ]}
         >
           <Text style={[styles.text_key, { fontSize: 14 }]}>
-            {availibility
+            {availability
               ? ""
               : `${date.getMonth() - new Date().getMonth()} Months left `}
           </Text>
@@ -80,7 +82,9 @@ export default function StallCardEdit({
           <Text style={[styles.text_key, { fontWeight: "bold" }]}>
             {paymentStatus ? "paid" : "unpaid"}
           </Text>
-          <Text style={[styles.text_key, { fontWeight: "bold" }]}>{price}</Text>
+          <Text style={[styles.text_key, { fontWeight: "bold" }]}>
+            {formatToRupiah(price)}
+          </Text>
         </View>
       </View>
     </View>
@@ -164,7 +168,7 @@ const styles = StyleSheet.create({
     borderColor: "#ffff00",
     backgroundColor: "#FFFFFF",
     height: "100%",
-    flex: 2.5,
+    flex: 3.5,
     padding: 0,
     paddingLeft: 8,
     alignItems: "flex-end",

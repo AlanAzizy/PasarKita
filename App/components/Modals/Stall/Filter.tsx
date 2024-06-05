@@ -24,6 +24,8 @@ import { Item } from "@/constants/Types";
 type modalProp = {
   visible: boolean;
   close: () => void;
+  filter: "All" | "Booked" | "Available";
+  setFilter: (filter: "All" | "Booked" | "Available") => void;
 };
 
 const stalls = [1, 2, 3, 4, 5, 6, 7, 8];
@@ -31,9 +33,12 @@ const stalls = [1, 2, 3, 4, 5, 6, 7, 8];
 const _height = Dimensions.get("screen").height;
 const fix_height = _height;
 
-export default function AddBooking({ visible, close }: modalProp) {
-  const [filter, setFilter] = useState("All Stalls");
-
+export default function AddBooking({
+  visible,
+  close,
+  filter,
+  setFilter,
+}: modalProp) {
   return (
     <Modal
       visible={visible}
@@ -59,28 +64,22 @@ export default function AddBooking({ visible, close }: modalProp) {
           </View>
           <View style={styles.input_container}>
             <Pressable
-              style={
-                filter == "All Stalls" ? styles.input_clicked : styles.input
-              }
-              onPress={() => setFilter("All Stalls")}
+              style={filter == "All" ? styles.input_clicked : styles.input}
+              onPress={() => setFilter("All")}
             >
               <Text style={styles.button}>All Stalls</Text>
             </Pressable>
             <Pressable
-              style={
-                filter == "Booked Stalls" ? styles.input_clicked : styles.input
-              }
-              onPress={() => setFilter("Booked Stalls")}
+              style={filter == "Booked" ? styles.input_clicked : styles.input}
+              onPress={() => setFilter("Booked")}
             >
               <Text style={styles.button}>Booked Stalls</Text>
             </Pressable>
             <Pressable
               style={
-                filter == "Available Stalls"
-                  ? styles.input_clicked
-                  : styles.input
+                filter == "Available" ? styles.input_clicked : styles.input
               }
-              onPress={() => setFilter("Available Stalls")}
+              onPress={() => setFilter("Available")}
             >
               <Text style={styles.button}>Available Stalls</Text>
             </Pressable>

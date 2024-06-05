@@ -30,7 +30,6 @@ export const getAllItem = async (stan : Stan):Promise<Item[]>=> {
       // Assuming user.stan is an array
       const stanPath = 'stans/'+stan.id;
   
-      console.log(stanPath)
       
         // Get the stan document
         // Query a reference to a subcollection
@@ -58,7 +57,6 @@ export const getAllItem = async (stan : Stan):Promise<Item[]>=> {
       // Assuming user.stan is an array
       const stanPath = 'stans/'+stan.id;
   
-      console.log(stanPath)
       
         // Get the stan document
           const itemPromises = items.map(async (item) => {
@@ -73,7 +71,6 @@ export const getAllItem = async (stan : Stan):Promise<Item[]>=> {
           });
           
         const result = await Promise.all(itemPromises);
-        console.log(result)
   
     } catch (error) {
       console.error("Error moving items:", error);
@@ -101,7 +98,6 @@ export const getAllItem = async (stan : Stan):Promise<Item[]>=> {
           image : defaultImage
         });
         
-        console.log(itemDoc.id)
   
     } catch (error) {
       console.error("Error moving items:", error);
@@ -119,11 +115,9 @@ export const getAllItem = async (stan : Stan):Promise<Item[]>=> {
       // Assuming user.stan is an array
       const stanPath = 'stans/'+stan.id;
   
-      console.log(id)
         const itemDocRef = doc(firestore, stanPath+'/items/'+id);
         const itemDoc = await deleteDoc(itemDocRef);
         
-        console.log(itemDoc)
   
     } catch (error) {
       console.error("Error moving items:", error);
@@ -140,8 +134,6 @@ export const getAllItem = async (stan : Stan):Promise<Item[]>=> {
     try {
       // Assuming user.stan is an array
       const stanPath = 'stans/'+stan.id;
-      console.log('----------+++++++')
-      console.log(item);
   
         const itemDocRef = doc(firestore, stanPath+'/items/'+item.id);
         const itemDoc = await updateDoc(itemDocRef, {
@@ -151,7 +143,6 @@ export const getAllItem = async (stan : Stan):Promise<Item[]>=> {
           additional : item.additional,
         });
         
-        console.log(itemDoc)
   
     } catch (error) {
       console.error("Error moving items:", error);

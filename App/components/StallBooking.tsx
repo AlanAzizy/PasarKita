@@ -2,6 +2,7 @@ import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { StyleSheet, View, Dimensions, Text } from "react-native";
 import useFonts from "./useFonts";
 import { Stan } from "@/constants/Types";
+import { formatToRupiah } from "@/services/OrderService";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
@@ -17,15 +18,15 @@ export type stall = {
 export default function StallBooking({
   id,
   paymentStatus,
-  availibility,
+  availability,
   price,
   until,
 }: Stan) {
-  const date = new Date(until.seconds * 1000 + 3600000);
+  const date = new Date(until);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.nominal}>{price}</Text>
+      <Text style={styles.nominal}>{formatToRupiah(price)}</Text>
       <Text style={styles.number}>{`${
         date.getMonth() - new Date().getMonth()
       } months left`}</Text>

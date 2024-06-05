@@ -72,12 +72,7 @@ export default function Profile() {
         style={styles.avoid_keyboard}
       >
         <View style={styles.image_container}>
-          <Pressable
-            onPress={() => {
-              console.log("awkowkwowkok");
-            }}
-            style={styles.image_clicker}
-          >
+          <Pressable onPress={() => {}} style={styles.image_clicker}>
             <Image src={photoUrl} style={styles.image}></Image>
           </Pressable>
         </View>
@@ -126,10 +121,7 @@ export default function Profile() {
       </KeyboardAvoidingView>
       <View style={styles.save_container}>
         <Button
-          onPress={() => {
-            console.log("jaran");
-            console.log(password);
-          }}
+          onPress={() => {}}
           title="Save Changes"
           styles={styles.save}
           isLight={true}

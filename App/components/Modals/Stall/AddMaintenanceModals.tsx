@@ -10,14 +10,16 @@ import {
   FlatList,
   Pressable,
   ScrollView,
+  Platform,
 } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import Button from "@/components/Button";
 import Product, { products } from "@/components/Interface/Product";
 import OrderItem from "@/components/OrderItemComp";
 import { OrderContext } from "@/components/Context/OrderContext";
-import DatePicker from "@react-native-community/datetimepicker";
-import { Item } from "@/constants/Types";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { Item, schedule } from "@/constants/Types";
+import { addSchedule } from "@/services/ScheduleService";
 
 type modalProp = {
   visible: boolean;
@@ -32,24 +34,41 @@ const fix_height = _height;
 export default function AddBooking({ visible, close }: modalProp) {
   const orderContext = useContext(OrderContext);
   const [pic, setPIC] = useState("");
-  const [area, setArea] = useState("");
+  const [area, setArea] = useState(0);
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
+  const [show, setShow] = useState(false);
+  const [mode, setMode] = useState("date");
 
   const removeAll = () => {
     setPIC("");
-    setArea("");
+    setArea(0);
     setDate(new Date());
   };
 
+  const [time, setTime] = useState(new Date());
+  //...
   const onChange = (event: Event, selectedValue: Date) => {
-    const currentDate = selectedValue || new Date();
-    if (date !== undefined) {
-      setDate(selectedValue);
+    setShow(Platform.OS === "ios");
+    if (mode == "date") {
+      const currentDate = selectedValue || new Date();
+      setDate(currentDate);
+      setMode("time");
+      setShow(Platform.OS !== "ios"); // to show the picker again in time mode
     } else {
-      return; // setDate(selectedDate);
+      const selectedTime = selectedValue || new Date();
+      setTime(selectedTime);
+      const newdate = date;
+      newdate.setHours(
+        selectedTime.getHours(),
+        selectedTime.getMinutes(),
+        selectedTime.getSeconds(),
+        selectedTime.getMilliseconds()
+      );
+      setDate(newdate);
+      setShow(Platform.OS === "ios");
+      setMode("date");
     }
-    setOpen(false);
   };
 
   return (
@@ -73,7 +92,7 @@ export default function AddBooking({ visible, close }: modalProp) {
             <Text style={styles.sub_title}>PIC</Text>
             <TextInput
               style={styles.input}
-              placeholder="Customer Name"
+              placeholder="Officer Name"
               keyboardType="default"
               value={pic}
               onChangeText={(value) => setPIC(value)}
@@ -81,15 +100,15 @@ export default function AddBooking({ visible, close }: modalProp) {
             <Text style={styles.sub_title}>Cleaning Area</Text>
             <TextInput
               style={styles.input}
-              value={area}
+              value={area.toString()}
               placeholder="Cleaning Area"
               keyboardType="default"
-              onChangeText={(value) => setArea(value)}
+              onChangeText={(value) => setArea(Number(value))}
             />
             <Text style={styles.sub_title}>Schedule</Text>
             <Pressable
               onPress={() => {
-                setOpen(true);
+                setShow(true);
               }}
               style={[
                 styles.input,
@@ -97,14 +116,15 @@ export default function AddBooking({ visible, close }: modalProp) {
               ]}
             >
               <Text style={styles.placeholder}>{date.toDateString()}</Text>
-              {open && (
-                <DatePicker
-                  mode="date"
+              {show && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  timeZoneOffsetInMinutes={0}
                   value={date}
-                  display="calendar"
+                  mode={mode}
+                  is24Hour={true}
+                  display="default"
                   onChange={onChange}
-                  onTouchCancel={() => setOpen(false)}
-                  onPointerEnter={() => setOpen(false)}
                 />
               )}
             </Pressable>
@@ -112,20 +132,22 @@ export default function AddBooking({ visible, close }: modalProp) {
           <View style={styles.button_container}>
             <Button
               onPress={() => {
+                addSchedule({
+                  worker: pic,
+                  blockNumber: area,
+                  startTime: date,
+                  type: "cleaning",
+                } as schedule);
                 removeAll();
                 close();
               }}
               styles={
-                pic !== "" && area !== "" && date !== undefined
+                pic !== "" && area !== 0 && date !== undefined
                   ? styles.buttonEnable
                   : styles.buttonDisabled
               }
               title="Create Order"
-              isLight={
-                orderContext?.orders !== undefined &&
-                orderContext?.orders !== null &&
-                orderContext?.orders.length > 0
-              }
+              isLight={pic !== "" && area !== 0 && date !== undefined}
               size={16}
             />
           </View>

@@ -1,39 +1,43 @@
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { StyleSheet, View, Dimensions, Text } from "react-native";
 import useFonts from "./useFonts";
+import { Timestamp } from "firebase/firestore";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
 
 export type stall = {
-  id: number;
+  id: string;
   name: string;
-  time: number;
+  time: Date;
   number: number;
-  status: string;
+  status: boolean;
 };
 
 export default function Maintenance({ id, name, time, number, status }: stall) {
+  const date = (time as Timestamp).toDate();
   return (
     <View style={styles.container}>
       <Text style={styles.nominal}>{name}</Text>
-      <Text style={styles.number}>{`Lantai ${time}`}</Text>
+      <Text style={styles.number}>{date.toDateString()}</Text>
       <View
         style={[
           styles.status,
           {
-            backgroundColor: status == "Completed" ? "#E0EBFF" : "#FFEDBD",
+            backgroundColor: status ? "#E0EBFF" : "#FFBABA",
           },
         ]}
       >
-        {status == "Completed" ? (
+        {status ? (
           <Feather name="check-square" />
         ) : (
           <FontAwesome5 name="clock" size={12} />
         )}
-        <Text style={styles.status_text}>{status}</Text>
+        <Text style={styles.status_text}>
+          {status ? "Completed" : "Not Completed"}
+        </Text>
       </View>
-      <Text style={styles.id}>{`Shift ${id}`}</Text>
+      <Text style={styles.id}>{`Block ${number}`}</Text>
     </View>
   );
 }
@@ -71,7 +75,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderColor: "#00fff0",
     height: "24%",
-    width: "80%",
+    width: "auto",
     padding: 2,
     alignItems: "center",
     borderRadius: 5,
@@ -82,6 +86,7 @@ const styles = StyleSheet.create({
     color: "#8C8C8C",
     marginLeft: 3,
     textAlignVertical: "center",
+    width: "auto",
   },
   id: {
     color: "#FDFDFD",

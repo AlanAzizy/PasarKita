@@ -46,3 +46,12 @@ export interface Stan{
     until : Date
     owner : string
 }
+
+export interface schedule{
+    id : string
+    worker : string,
+    startTime: Date,
+    blockNumber : number,
+    status : boolean,
+    type : string
+}

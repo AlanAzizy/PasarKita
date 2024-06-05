@@ -105,7 +105,6 @@ export async function GetUserData() {
           setUser(data as User);
         }
         setLoading(false);
-        console.log(data)
       },
       (error) => {
         setError(error);
@@ -127,7 +126,6 @@ export async function GetUserDataOnce() {
     }
 
     const docRef = doc(firestore, `users/${auth.currentUser.uid}`);
-    console.log(auth.currentUser.uid);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       return {email : auth.currentUser.email,...docSnap.data()} as User;

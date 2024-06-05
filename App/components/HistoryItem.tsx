@@ -1,6 +1,7 @@
 import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { StyleSheet, View, Dimensions, Text } from "react-native";
 import useFonts from "./useFonts";
+import { formatToRupiah } from "@/services/OrderService";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
@@ -15,7 +16,7 @@ export type history = {
 export default function HistoryItem({ id, nominal, number, status }: history) {
   return (
     <View style={styles.container}>
-      <Text style={styles.nominal}>{nominal}</Text>
+      <Text style={styles.nominal}>{formatToRupiah(nominal)}</Text>
       <Text style={styles.number}>{`${number} items`}</Text>
       <View
         style={[

@@ -41,8 +41,6 @@ const DropdownStall = ({ stalls, setSelectedStall }: aState) => {
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
         data={stalls.map((item) => {
-          console.log("#####");
-          console.log(item);
           return { label: `Stall ${item.id.slice(0, 7)}`, value: item };
         })}
         search

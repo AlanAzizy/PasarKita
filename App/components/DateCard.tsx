@@ -2,34 +2,23 @@ import { Entypo } from "@expo/vector-icons";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 
 type date = {
-  date: number;
+  date: Date;
   day: string;
-  selected: number;
+  selected: Date;
   isToday: boolean;
-  setSelected: (date: number) => void;
+  setSelected: (date: Date) => void;
 };
 
 type selected = {
   selected: number;
 };
 
-export default function Date({
-  date,
-  day,
-  selected,
-  isToday,
-  setSelected,
-}: date) {
-  const today = 21;
+export default function DateCard({ date, day, isToday }: date) {
   return (
     <Pressable
-      style={[
-        styles.container,
-        selected == date ? { backgroundColor: "#DBECC7" } : {},
-      ]}
-      onPress={() => setSelected(date)}
+      style={[styles.container, isToday ? { backgroundColor: "#DBECC7" } : {}]}
     >
-      <Text style={styles.date}>{date}</Text>
+      <Text style={styles.date}>{date.getDate()}</Text>
       <Text style={styles.day}>{day}</Text>
       {isToday && <Entypo name="dot-single" size={20} />}
     </Pressable>

@@ -7,7 +7,7 @@ import {
   Image,
   ScrollView,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { router, useNavigation } from "expo-router";
 import useFonts from "@/components/useFonts";
 import {
@@ -16,24 +16,15 @@ import {
   FontAwesome6,
   MaterialIcons,
 } from "@expo/vector-icons";
-import Date from "@/components/Date";
+import DateCard from "@/components/DateCard";
 import ReminderCard from "@/components/ReminderCard";
+import { schedule } from "@/constants/Types";
+import { getScheduleByDate, getAllSchedule } from "@/services/ScheduleService";
+import { Timestamp } from "firebase/firestore";
+import { UserContext } from "@/components/Context/UserContext";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
-
-const schedule = [
-  {
-    user: "Mentuk",
-    start: 10,
-    end: 11,
-  },
-  {
-    user: "Mentul",
-    start: 13,
-    end: 15,
-  },
-];
 
 const dates = [
   {
@@ -70,9 +61,57 @@ const waktu = [8, 9, 11, 15];
 
 const time = ["08.00", "10.00", "12.00", "14.00", "16.00"];
 export default function Schedule() {
+  const userContext = useContext(UserContext);
+  const today = new Date();
   const navigation = useNavigation();
+  const [workSchedule, setWorkSchedule] = useState<schedule[] | null>();
+  const [workScheduleNext, setWorkScheduleNext] = useState<schedule[] | null>();
+  const [workHour, setWorkHour] = useState<number[] | undefined>();
+  const [selectedDate, setSelectedDate] = useState<Date | null>(today);
+  const [photoUrl, setPhotoUrl] = useState(userContext?.user.photoUrl);
 
-  const [selected, setSelected] = useState(21);
+  const h_3 = new Date(today);
+  const h_2 = new Date(today);
+  const h_1 = new Date(today);
+  const h3 = new Date(today);
+  const h2 = new Date(today);
+  const h1 = new Date(today);
+
+  h_3.setDate(h_3.getDate() - 3);
+  h_2.setDate(h_2.getDate() - 2);
+  h_1.setDate(h_1.getDate() - 1);
+  h3.setDate(h3.getDate() + 3);
+  h2.setDate(h2.getDate() + 2);
+  h1.setDate(h1.getDate() + 1);
+
+  const dateOption = [h_3, h_2, h_1, today, h1, h2, h3];
+  const days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  const fetchSchedule = async () => {
+    const cleaning = await getScheduleByDate(today);
+    setWorkSchedule(cleaning);
+    const nextDay = today;
+    nextDay.setDate(nextDay.getDate() + 1);
+    const cleaningNext = await getScheduleByDate(nextDay);
+    setWorkScheduleNext(cleaningNext);
+    const work = cleaning?.map((e) => {
+      return (e.startTime as Timestamp).toDate().getHours() - 7;
+    });
+    setWorkHour(work);
+  };
+
+  useEffect(() => {
+    fetchSchedule();
+  }, []);
+
   useEffect(() => {
     useFonts();
   });
@@ -102,20 +141,15 @@ export default function Schedule() {
     <View style={styles.container}>
       <View style={styles.top}>
         <Text style={styles.greet}>Hello, Good Morning</Text>
-        <Image
-          source={require("../../assets/images/pasar.jpg")}
-          style={styles.image}
-        ></Image>
+        <Image src={photoUrl} style={styles.image}></Image>
       </View>
       <View style={[styles.top_2, { justifyContent: "space-between" }]}>
-        {dates.map((item, index) => (
-          <Date
+        {dateOption.map((item, index) => (
+          <DateCard
             key={index}
-            date={item.date}
-            day={item.day}
-            selected={selected}
-            isToday={item.date == 21}
-            setSelected={setSelected}
+            date={item}
+            day={days.at(item.getDay())?.toString().slice(0, 3)}
+            isToday={today.getDate() == item.getDate()}
           />
         ))}
       </View>
@@ -133,42 +167,42 @@ export default function Schedule() {
               ))}
             </View>
             <View style={styles.blok_container}>
-              {waktu.find((e) => e == 8) ? (
+              {workHour && workHour.find((e) => e == 8) ? (
                 <View style={[styles.blok]}></View>
               ) : (
                 <View style={[styles.blok_none, ,]}></View>
               )}
-              {waktu.find((e) => e == 9) ? (
+              {workHour && workHour.find((e) => e == 9) ? (
                 <View style={[styles.blok]}></View>
               ) : (
                 <View style={[styles.blok_none]}></View>
               )}
-              {waktu.find((e) => e == 10) ? (
+              {workHour && workHour.find((e) => e == 10) ? (
                 <View style={[styles.blok]}></View>
               ) : (
                 <View style={[styles.blok_none]}></View>
               )}
-              {waktu.find((e) => e == 11) ? (
+              {workHour && workHour.find((e) => e == 11) ? (
                 <View style={[styles.blok]}></View>
               ) : (
                 <View style={[styles.blok_none]}></View>
               )}
-              {waktu.find((e) => e == 12) ? (
+              {workHour && workHour.find((e) => e == 12) ? (
                 <View style={[styles.blok]}></View>
               ) : (
                 <View style={[styles.blok_none]}></View>
               )}
-              {waktu.find((e) => e == 13) ? (
+              {workHour && workHour.find((e) => e == 13) ? (
                 <View style={[styles.blok]}></View>
               ) : (
                 <View style={[styles.blok_none]}></View>
               )}
-              {waktu.find((e) => e == 14) ? (
+              {workHour && workHour.find((e) => e == 14) ? (
                 <View style={[styles.blok]}></View>
               ) : (
                 <View style={[styles.blok_none]}></View>
               )}
-              {waktu.find((e) => e == 15) ? (
+              {workHour && workHour.find((e) => e == 15) ? (
                 <View style={[styles.blok]}></View>
               ) : (
                 <View style={[styles.blok_none]}></View>
@@ -181,9 +215,15 @@ export default function Schedule() {
           <Text style={[styles.reminder]}>
             Don't Forget Schedule for Tomorrow
           </Text>
-          {waktu.map((item, index) => (
-            <ReminderCard key={index} />
-          ))}
+          {workScheduleNext &&
+            workScheduleNext.map((item, index) => (
+              <ReminderCard
+                key={index}
+                startTime={item.startTime}
+                blockNumber={item.blockNumber}
+                type={item.type}
+              />
+            ))}
         </View>
       </ScrollView>
     </View>

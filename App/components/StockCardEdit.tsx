@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Item } from "@/constants/Types";
 import { defaultPhoto } from "@/app/Login/RegisterScreen";
+import { formatToRupiah } from "@/services/OrderService";
 
 type addModalType = {
   stock: Item;
@@ -67,7 +68,9 @@ export default function StockCardEdit({
             {id.slice(0, 5)}
           </Text>
           <Text style={[styles.text_key]}>{stok}</Text>
-          <Text style={[styles.text_key, { color: "#63B59A" }]}>{price}</Text>
+          <Text style={[styles.text_key, { color: "#63B59A" }]}>
+            {formatToRupiah(price)}
+          </Text>
         </View>
       </View>
     </View>

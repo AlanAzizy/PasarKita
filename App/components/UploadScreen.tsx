@@ -23,7 +23,6 @@ const UploadScreen = () => {
       quality: 1,
     });
     const source = { uri: result.assets[0].uri };
-    console.log(source);
     setImage(source);
   };
 

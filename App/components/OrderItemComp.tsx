@@ -46,7 +46,6 @@ export default function OrderItemComp({
       orderContext?.setOrders([]);
     }
   };
-  console.log(number);
   return (
     <View style={styles.container}>
       <Text style={styles.name}>{product.name.slice(0, 12)}</Text>

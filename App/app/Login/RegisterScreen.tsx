@@ -45,8 +45,6 @@ export default function RegisterScreen() {
   async function register() {
     setLoading(true);
     try {
-      console.log("registering");
-      console.log(role);
       const result = await RegisterServices({
         email,
         password,
@@ -58,8 +56,8 @@ export default function RegisterScreen() {
       const user = await GetUserDataOnce();
       userContext?.setUser(user);
       role == "Stall Owner"
-        ? router.navigate("../Tenant/(tabs)/Home")
-        : router.navigate("../Stall/(tabs)/Home");
+        ? router.replace("../Tenant/(tabs)/Home")
+        : router.replace("../Stall/(tabs)/Home");
       Toast.show({
         type: "success",
         text1: "Register Successful",

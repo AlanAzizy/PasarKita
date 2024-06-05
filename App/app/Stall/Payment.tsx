@@ -21,6 +21,8 @@ import Button from "@/components/Button";
 import { Table, Rows, Row, TableWrapper } from "react-native-table-component";
 import { orderHistory } from "./(tabs)/Home";
 import { getBookedStan } from "@/services/StanService";
+import { formatToRupiah } from "@/services/OrderService";
+import { Timestamp } from "firebase/firestore";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
@@ -28,7 +30,7 @@ const _height = Dimensions.get("screen").height;
 export default function Payment() {
   const navigation = useNavigation();
 
-  const tableHead = ["Stalls", "Date", "Price", "Status"];
+  const tableHead = ["Stalls", "End Date", "Price", "Status"];
 
   const [stalls, setStalls] = useState<Stan[] | null>(null);
 
@@ -79,16 +81,14 @@ export default function Payment() {
                   key={item.id}
                   data={[
                     item.id.slice(0, 6),
-                    new Date(
-                      item.until.seconds * 1000 + 43200000
-                    ).toLocaleDateString(),
-                    item.price,
+                    (item.until as Timestamp).toDate().toDateString(),
+                    formatToRupiah(item.price),
                     item.paymentStatus ? "completed" : "in progress",
                   ]}
                   style={
-                    index % 2 == 1
-                      ? { backgroundColor: "#F3F9ED", height: _height * 0.04 }
-                      : {}
+                    index % 2 === 1
+                      ? { backgroundColor: "#F3F9ED", height: _height * 0.05 }
+                      : { height: _height * 0.05 }
                   }
                   textStyle={styles.rowStyle}
                 />

@@ -75,11 +75,6 @@ export default function EditStall({ visible, close, stan }: modalProp) {
               keyboardType="numeric"
               editable={false}
             />
-            <Text style={styles.sub_title}>Status</Text>
-            <DropdownBinary
-              status={["available", "booked"]}
-              setStatus={setStatus}
-            />
             <Text style={styles.sub_title}>Payment Status</Text>
             <DropdownBinary
               status={["completed", "in progress"]}
@@ -88,6 +83,7 @@ export default function EditStall({ visible, close, stan }: modalProp) {
             <Text style={styles.sub_title}>Price</Text>
             <TextInput
               style={styles.input}
+              defaultValue={stan?.price.toString()}
               onChangeText={(value) => setPrice(Number(value))}
               placeholder="Price"
               keyboardType="numeric"
@@ -96,7 +92,6 @@ export default function EditStall({ visible, close, stan }: modalProp) {
           <View style={styles.button_container}>
             <Button
               onPress={() => {
-                console.log(payment, status);
                 if (stan !== null) {
                   editStan(
                     stan,

@@ -32,6 +32,7 @@ export default function Stocks() {
   const [selectedStall, setSelectedStall] = useState<Stan | null>(null);
   const [stok, setStok] = useState<Stan[] | null>(null);
   const [localStok, setLokalStok] = useState<Stan[] | null>(null);
+  const [filter, setFilter] = useState<"All" | "Booked" | "Available">("All");
 
   const fetchItems = async () => {
     const stokk = await getAllStan();
@@ -40,36 +41,51 @@ export default function Stocks() {
   };
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      fetchItems();
-    });
-
-    return unsubscribe;
-  }, [navigation]);
-
-  useEffect(() => {
-    if (phrase !== "") {
-      const newStok = stok?.filter((item) => {
-        if (item.id.toLocaleLowerCase().includes(phrase.toLocaleLowerCase())) {
-          return item;
-        }
-      });
-      console.log(newStok);
-      setStalls(newStok);
-    } else {
-      setStalls(localStok);
-    }
-  }, [phrase]);
-
-  useEffect(() => {
     fetchItems();
-  }, [
-    modalAddStall,
-    modalDeleteStall,
-    modalEditStall,
-    filterModal,
-    selectedStall,
-  ]);
+  }, [modalAddStall, modalEditStall, modalDeleteStall, filter]);
+
+  useEffect(() => {
+    console.log(localStok);
+    if (stalls) {
+      if (phrase !== "") {
+        const newStok = localStok?.filter((item) => {
+          if (
+            item.id.toLocaleLowerCase().includes(phrase.toLocaleLowerCase())
+          ) {
+            return item;
+          }
+        });
+        const newerStok = newStok.filter((item) => {
+          if (filter !== "All") {
+            if (filter == "Available" && item.availability) {
+              return item;
+            }
+            if (filter == "Booked" && !item.availability) {
+              return item;
+            }
+          } else {
+            return item;
+          }
+        });
+        setStalls(newerStok);
+      } else {
+        const newerStok = localStok.filter((item) => {
+          if (filter !== "All") {
+            if (filter == "Available" && item.availability) {
+              return item;
+            }
+            if (filter == "Booked" && !item.availability) {
+              return item;
+            }
+          } else {
+            return item;
+          }
+        });
+        console.log(newerStok);
+        setStalls(newerStok);
+      }
+    }
+  }, [phrase, filter]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -86,6 +102,7 @@ export default function Stocks() {
   useEffect(() => {
     const unsubscribe = navigation.addListener("blur", () => {
       setPhrase("");
+      fetchItems();
     });
 
     return unsubscribe;
@@ -93,7 +110,12 @@ export default function Stocks() {
 
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Filter visible={filterModal} close={() => setFilterModal(false)} />
+      <Filter
+        visible={filterModal}
+        close={() => setFilterModal(false)}
+        filter={filter}
+        setFilter={setFilter}
+      />
       <AddStall visible={modalAddStall} close={() => setModalAddStall(false)} />
       <EditStall
         visible={modalEditStall}

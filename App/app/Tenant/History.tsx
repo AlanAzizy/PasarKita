@@ -22,7 +22,7 @@ import { Table, Rows, Row, TableWrapper } from "react-native-table-component";
 import { orderHistory } from "./(tabs)/Home";
 import { Order } from "@/constants/Types";
 import { StanContext } from "@/components/Context/StanContext";
-import { getOrder } from "@/services/OrderService";
+import { formatToRupiah, getOrder } from "@/services/OrderService";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
@@ -79,7 +79,7 @@ export default function Histroy() {
                     item.id.slice(0, 6),
                     item.date.toDateString(),
                     item.cashierId.path.toString().slice(6, 12),
-                    item.total,
+                    formatToRupiah(item.total),
                   ]}
                   style={
                     index % 2 == 1

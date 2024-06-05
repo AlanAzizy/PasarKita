@@ -21,7 +21,7 @@ import {
 import Toast from "react-native-toast-message";
 import { UserContext } from "@/components/Context/UserContext";
 import { StanContext } from "@/components/Context/StanContext";
-import { getCurrentStan } from "@/services/StanService";
+import { getCurrentStan, updateStanStatus } from "@/services/StanService";
 
 const _height = Dimensions.get("screen").height;
 const fix_height = _height;
@@ -38,13 +38,12 @@ export default function LoginScreen() {
   async function login() {
     setLoading(true);
     try {
-      console.log(email, password);
       const response = await LoginServices({ email, password });
       const user = await GetUserDataOnce();
-      console.log(user);
       userContext?.setUser(user);
       const stan = await getCurrentStan(user);
       stanContext?.setStan(stan);
+      await updateStanStatus();
       Toast.show({
         type: "success",
         text1: "Login Successful",

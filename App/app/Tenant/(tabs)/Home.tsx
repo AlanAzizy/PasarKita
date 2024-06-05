@@ -18,7 +18,7 @@ import StockCard from "@/components/StockCard";
 import { PreventRemoveContext } from "@react-navigation/native";
 import CreateOrder from "@/components/Modals/Tenant/CreateOrder";
 import { Item, Order } from "@/constants/Types";
-import { getOrder } from "@/services/OrderService";
+import { getOrder, getProfit } from "@/services/OrderService";
 import { StanContext } from "@/components/Context/StanContext";
 import { DocumentReference } from "firebase/firestore";
 import { getAllItem, moveItem } from "@/services/ItemService";
@@ -161,6 +161,7 @@ export default function Home() {
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [stok, setStok] = useState<Item[] | null>(null);
   const stanContext = useContext(StanContext);
+  const [profit, setProfit] = useState("");
 
   const fetchOrder = async () => {
     const order = await getOrder(stanContext?.stan);
@@ -183,11 +184,18 @@ export default function Home() {
     } as Order);
     order.reverse();
     setOrders(order);
+    const nominal = await getProfit(stanContext?.stan);
+    const inRupiah = Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(nominal);
+    setProfit(inRupiah);
   };
 
   const fetchItems = async () => {
     const stokk = await getAllItem(stanContext?.stan);
-    console.log(stokk);
     setStok(stokk);
   };
 
@@ -231,7 +239,7 @@ export default function Home() {
       >
         <LinearGradient colors={["#7EB143", "#A2CF6E"]} style={styles.banner}>
           <Text style={styles.banner_1}>January Profit</Text>
-          <Text style={styles.banner_2}>Rp21.300.000</Text>
+          <Text style={styles.banner_2}>{profit}</Text>
           <View style={styles.banner_3}>
             <Text style={[styles.banner_text, styles.banner_text_1]}>
               Today

@@ -1,9 +1,16 @@
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import { FontAwesome6, Feather } from "@expo/vector-icons";
+import { schedule } from "@/constants/Types";
+import { Timestamp } from "firebase/firestore";
 
 const _height = Dimensions.get("screen").height;
 
-export default function ReminderCard() {
+export default function ReminderCard({
+  blockNumber,
+  type,
+  startTime,
+}: schedule) {
+  const time = (startTime as Timestamp).toDate();
   return (
     <View style={[styles.time_schedule, { height: "auto" }]}>
       <View style={styles.reminder_card}>
@@ -11,7 +18,7 @@ export default function ReminderCard() {
           <FontAwesome6 name="calendar" size={40} color={"#ffffff"} />
         </View>
         <View style={styles.text_container}>
-          <Text style={styles.text}>2nd floor cleaning</Text>
+          <Text style={styles.text}>{`block ${blockNumber} ${type}`}</Text>
           <View style={styles.ket}>
             <Feather
               name="clock"
@@ -20,7 +27,7 @@ export default function ReminderCard() {
               style={{ marginHorizontal: 2 }}
             />
             <Text style={[styles.text, { marginHorizontal: 10 }]}>
-              10.00 - 11.00
+              {`${time.getHours() - 7}.00 - ${time.getHours() - 6}.00`}
             </Text>
           </View>
         </View>
