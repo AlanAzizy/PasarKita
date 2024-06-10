@@ -53,7 +53,7 @@ export default function Stocks() {
 
   return (
     <View style={styles.container}>
-      {/* <View style={styles.stat_container}>
+      <View style={styles.stat_container}>
         <Text style={styles.sub_title}>Statistic</Text>
         {profitYear && (
           <LineChart
@@ -116,7 +116,7 @@ export default function Stocks() {
             }}
           />
         )}
-      </View>
+        {/*</View>
       <View style={styles.stat_menu}>
         <View style={styles.menu_container}>
           <Pressable style={styles.menu_press_1}>
@@ -211,8 +211,8 @@ export default function Stocks() {
             </View>
             <Text style={[styles.text_menu, { textAlign: "center" }]}>Pdf</Text>
           </Pressable>
-        </View>
-      </View> */}
+        </View>*/}
+      </View>
     </View>
   );
 }
