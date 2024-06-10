@@ -116,7 +116,7 @@ export default function Stocks() {
             }}
           />
         )}
-        {/*</View>
+      </View>
       <View style={styles.stat_menu}>
         <View style={styles.menu_container}>
           <Pressable style={styles.menu_press_1}>
@@ -165,7 +165,7 @@ export default function Stocks() {
           </Pressable>
         </View>
       </View>
-      <View style={styles.export_container}>
+      {/*<View style={styles.export_container}>
         <Text style={styles.sub_title}>Export</Text>
         <View style={styles.menu_container_2}>
           <Pressable style={styles.menu_press_2}>
@@ -211,8 +211,8 @@ export default function Stocks() {
             </View>
             <Text style={[styles.text_menu, { textAlign: "center" }]}>Pdf</Text>
           </Pressable>
-        </View>*/}
-      </View>
+        </View>
+          </View>*/}
     </View>
   );
 }
