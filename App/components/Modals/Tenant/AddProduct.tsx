@@ -1,4 +1,3 @@
-import SearchBar from "@/components/SearchBar";
 import { AntDesign } from "@expo/vector-icons";
 import {
   Modal,
@@ -13,8 +12,6 @@ import {
 } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import Button from "@/components/Button";
-import Product, { products } from "@/components/Interface/Product";
-import OrderItem from "@/components/OrderItemComp";
 import { Item } from "@/constants/Types";
 import { addItem } from "@/services/ItemService";
 import { StanContext } from "@/components/Context/StanContext";

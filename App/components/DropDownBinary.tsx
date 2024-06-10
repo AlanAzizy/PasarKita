@@ -2,15 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { Item, Stan } from "@/constants/Types";
-import { getAllItem } from "@/services/ItemService";
-import { UserContext } from "./Context/UserContext";
-import { auth } from "firebase-admin";
-import { OrderContext } from "./Context/OrderContext";
-import { StanContext } from "./Context/StanContext";
-import { useNavigation } from "expo-router";
-import { getUnBookedStan } from "@/services/StanService";
-import { string } from "zod";
 
 type aState = {
   status: string[];

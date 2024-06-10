@@ -1,4 +1,3 @@
-import SearchBar from "@/components/SearchBar";
 import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 import {
   Modal,
@@ -13,12 +12,8 @@ import {
 } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import Button from "@/components/Button";
-import Product, { products } from "@/components/Interface/Product";
-import OrderItem from "@/components/OrderItemComp";
-import { OrderContext } from "@/components/Context/OrderContext";
 import { Item, Stan } from "@/constants/Types";
 import { bookStan, getUnBookedStan } from "@/services/StanService";
-import { useNavigation } from "expo-router";
 import DropdownComponent from "@/components/DropDownStall";
 import Toast from "react-native-toast-message";
 

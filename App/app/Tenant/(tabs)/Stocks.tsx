@@ -1,9 +1,7 @@
 import { Pressable, ScrollView, StyleSheet, Dimensions } from "react-native";
 import { useNavigation } from "expo-router";
 import { useEffect, useState, useContext } from "react";
-import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
-import { stocks } from "./Home";
 import StockCardEdit from "@/components/StockCardEdit";
 import SearchBar from "@/components/SearchBar";
 import AddProduct from "@/components/Modals/Tenant/AddProduct";

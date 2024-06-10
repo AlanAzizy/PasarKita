@@ -14,12 +14,6 @@ import {
   TouchableOpacity,
   TouchableHighlight,
 } from "react-native";
-import { useContext, useEffect, useState } from "react";
-import Button from "@/components/Button";
-import Product, { products } from "@/components/Interface/Product";
-import OrderItem from "@/components/OrderItemComp";
-import { OrderContext } from "@/components/Context/OrderContext";
-import { Item } from "@/constants/Types";
 
 type modalProp = {
   visible: boolean;

@@ -87,7 +87,7 @@ export default function Setting() {
             style={styles.menu}
             onPress={() => {
               logout();
-              router.navigate("../Login/Welcome");
+              router.replace("../Login/Welcome");
             }}
           >
             <FontAwesome6 name="arrow-right-to-bracket" size={20} />

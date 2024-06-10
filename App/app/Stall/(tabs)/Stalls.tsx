@@ -1,15 +1,10 @@
 import { Pressable, ScrollView, StyleSheet, Dimensions } from "react-native";
 import { useNavigation } from "expo-router";
 import { useEffect, useState } from "react";
-import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
-import { stocks } from "../../Tenant/(tabs)/Home";
 import StallCardEdit from "@/components/StallCardEdit";
 import SearchBar from "@/components/SearchBar";
-import AddProduct from "@/components/Modals/Tenant/AddProduct";
 import { AntDesign } from "@expo/vector-icons";
-import EditProduct from "@/components/Modals/Tenant/EditProduct";
-import DeleteProduct from "@/components/Modals/Tenant/DeleteProduct";
 import Filter from "../../../components/Modals/Stall/Filter";
 import AddStall from "@/components/Modals/Stall/AddStall";
 import EditStall from "@/components/Modals/Stall/EditStall";

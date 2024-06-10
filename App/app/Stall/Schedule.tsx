@@ -10,12 +10,6 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { router, useNavigation } from "expo-router";
 import useFonts from "@/components/useFonts";
-import {
-  AntDesign,
-  Feather,
-  FontAwesome6,
-  MaterialIcons,
-} from "@expo/vector-icons";
 import DateCard from "@/components/DateCard";
 import ReminderCard from "@/components/ReminderCard";
 import { schedule } from "@/constants/Types";

@@ -48,7 +48,6 @@ export default function LoginScreen() {
       const stan = await getCurrentStan(user);
       stanContext?.setStan(stan);
       await updateStanStatus();
-      await updateStanOwner();
       Toast.show({
         type: "success",
         text1: "Login Successful",

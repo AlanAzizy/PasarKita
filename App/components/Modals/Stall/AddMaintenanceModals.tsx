@@ -1,4 +1,3 @@
-import SearchBar from "@/components/SearchBar";
 import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 import {
   Modal,
@@ -14,8 +13,6 @@ import {
 } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import Button from "@/components/Button";
-import Product, { products } from "@/components/Interface/Product";
-import OrderItem from "@/components/OrderItemComp";
 import { OrderContext } from "@/components/Context/OrderContext";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Item, schedule } from "@/constants/Types";

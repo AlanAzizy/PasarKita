@@ -1,4 +1,3 @@
-import SearchBar from "@/components/SearchBar";
 import { AntDesign } from "@expo/vector-icons";
 import Toast from "react-native-toast-message";
 import {
@@ -14,9 +13,6 @@ import {
 } from "react-native";
 import { useContext, useEffect, useState } from "react";
 import Button from "@/components/Button";
-import Product, { products } from "@/components/Interface/Product";
-import OrderItem from "@/components/OrderItemComp";
-import { OrderContext } from "@/components/Context/OrderContext";
 import { Item, Stan } from "@/constants/Types";
 import { addStan } from "@/services/StanService";
 

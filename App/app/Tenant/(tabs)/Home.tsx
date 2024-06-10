@@ -15,7 +15,6 @@ import { AntDesign, Feather } from "@expo/vector-icons";
 import HistoryItem, { history } from "@/components/HistoryItem";
 import AddHistory from "@/components/AddHistory";
 import StockCard from "@/components/StockCard";
-import { PreventRemoveContext } from "@react-navigation/native";
 import CreateOrder from "@/components/Modals/Tenant/CreateOrder";
 import { Item, Order } from "@/constants/Types";
 import {
@@ -24,9 +23,7 @@ import {
   getProfit,
 } from "@/services/OrderService";
 import { StanContext } from "@/components/Context/StanContext";
-import { DocumentReference } from "firebase/firestore";
 import { getAllItem, moveItem } from "@/services/ItemService";
-import { UserContext } from "@/components/Context/UserContext";
 import { updateStanOwner } from "@/services/StanService";
 
 const _width = Dimensions.get("screen").width;

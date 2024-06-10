@@ -7,11 +7,7 @@ import {
 } from "react-native";
 import { useNavigation } from "expo-router";
 import { useContext, useEffect, useState } from "react";
-import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
-import { stocks } from "./Home";
-import StockCardEdit from "@/components/StockCardEdit";
-import SearchBar from "@/components/SearchBar";
 import { Feather, Entypo, FontAwesome6, FontAwesome } from "@expo/vector-icons";
 import { getOrderProfitForEveryMonth } from "@/services/OrderService";
 import { StanContext } from "@/components/Context/StanContext";
@@ -56,65 +52,67 @@ export default function Stocks() {
     <View style={styles.container}>
       <View style={styles.stat_container}>
         <Text style={styles.sub_title}>Statistic</Text>
-        <LineChart
-          data={{
-            labels: [
-              "Jan",
-              "Feb",
-              "Mar",
-              "Apr",
-              "Mei",
-              "Jun",
-              "Jul",
-              "Agu",
-              "Sep",
-              "Okt",
-              "Nov",
-              "Des",
-            ],
-            datasets: [
-              {
-                data: profitYear,
+        {profitYear && (
+          <LineChart
+            data={{
+              labels: [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "Mei",
+                "Jun",
+                "Jul",
+                "Agu",
+                "Sep",
+                "Okt",
+                "Nov",
+                "Des",
+              ],
+              datasets: [
+                {
+                  data: profitYear,
+                },
+              ],
+            }}
+            width={_width * 0.8} // from react-native
+            height={_width * 0.5}
+            chartConfig={{
+              formatYLabel: (value) => `${value} M`,
+              backgroundColor: "#fafafa",
+              backgroundGradientFrom: "#fafafa",
+              backgroundGradientTo: "#fafafa",
+              decimalPlaces: 4, // optional, defaults to 2dp
+              color: (opacity = 1) => {
+                if (statMode == "Order") {
+                  return "#F68262";
+                } else if (statMode == "Product") {
+                  return "#4BAEE6";
+                } else if (statMode == "Cust") {
+                  return "#FFC008";
+                } else {
+                  return "#73C724";
+                }
               },
-            ],
-          }}
-          width={_width * 0.8} // from react-native
-          height={_width * 0.5}
-          chartConfig={{
-            formatYLabel: (value) => `${value} M`,
-            backgroundColor: "#fafafa",
-            backgroundGradientFrom: "#fafafa",
-            backgroundGradientTo: "#fafafa",
-            decimalPlaces: 4, // optional, defaults to 2dp
-            color: (opacity = 1) => {
-              if (statMode == "Order") {
-                return "#F68262";
-              } else if (statMode == "Product") {
-                return "#4BAEE6";
-              } else if (statMode == "Cust") {
-                return "#FFC008";
-              } else {
-                return "#73C724";
-              }
-            },
 
-            labelColor: (opacity = 1) => `#8C8C8C`,
-            style: {
+              labelColor: (opacity = 1) => `#8C8C8C`,
+              style: {
+                borderRadius: 10,
+                borderWidth: 2,
+                borderColor: "#f0000f",
+              },
+              propsForLabels: {
+                fontFamily: "Poppins-Regular",
+                fontSize: 8,
+              },
+            }}
+            yAxisSuffix=" M"
+            style={{
+              marginVertical: 8,
               borderRadius: 10,
-              borderWidth: 2,
-              borderColor: "#f0000f",
-            },
-            propsForLabels: {
-              fontFamily: "Poppins-Regular",
-              fontSize: 8,
-            },
-          }}
-          yAxisSuffix=" M"
-          style={{
-            marginVertical: 8,
-            borderRadius: 10,
-          }}
-        />
+            }}
+          />
+        )}
       </View>
       <View style={styles.stat_menu}>
         <View style={styles.menu_container}>

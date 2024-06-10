@@ -37,7 +37,7 @@ export interface Item{
 
 export interface Stan{
     id : string,
-    availibility : boolean,
+    availability : boolean,
     blockNumber : number,
     paymentStatus : boolean,
     price : number,

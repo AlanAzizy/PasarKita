@@ -1,25 +1,8 @@
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  Text,
-  Pressable,
-  TextInput,
-  Image,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, Dimensions, Text, ScrollView } from "react-native";
 import { useEffect, useState, useContext } from "react";
 import { useNavigation, router } from "expo-router";
 import useFonts from "@/components/useFonts";
-import {
-  AntDesign,
-  Feather,
-  FontAwesome6,
-  MaterialIcons,
-} from "@expo/vector-icons";
-import Button from "@/components/Button";
 import { Table, Rows, Row, TableWrapper } from "react-native-table-component";
-import { orderHistory } from "./(tabs)/Home";
 import { Order } from "@/constants/Types";
 import { StanContext } from "@/components/Context/StanContext";
 import { formatToRupiah, getOrder } from "@/services/OrderService";
