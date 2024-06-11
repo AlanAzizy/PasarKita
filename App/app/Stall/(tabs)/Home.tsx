@@ -75,7 +75,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchSchedule();
-  }, []);
+  }, [isAddMaintenanceModal, navigation]);
 
   const fetchItems = async () => {
     const stall = await getBookedStan();

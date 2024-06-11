@@ -143,7 +143,7 @@ export default function AddBooking({ visible, close }: modalProp) {
                   ? styles.buttonEnable
                   : styles.buttonDisabled
               }
-              title="Create Order"
+              title="Create Maintenance"
               isLight={pic !== "" && area !== 0 && date !== undefined}
               size={16}
             />
