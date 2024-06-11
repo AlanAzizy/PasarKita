@@ -99,7 +99,7 @@ export default function AddBooking({ visible, close }: modalProp) {
               style={styles.input}
               value={area.toString()}
               placeholder="Cleaning Area"
-              keyboardType="default"
+              keyboardType="numeric"
               onChangeText={(value) => setArea(Number(value))}
             />
             <Text style={styles.sub_title}>Schedule</Text>

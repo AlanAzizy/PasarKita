@@ -106,7 +106,9 @@ export default function Profile() {
             style={styles.input_text}
             value={number}
             onChangeText={(value) => {
-              setNumber(value);
+              if (typeof value == "number") {
+                setNumber(value);
+              }
             }}
             placeholder="Enter Your Email Address"
             keyboardType="numeric"

@@ -98,7 +98,11 @@ export default function RegisterScreen() {
           style={styles.input}
           placeholder="Phone Number"
           keyboardType="numeric"
-          onChangeText={(value) => setPhoneNumber(value)}
+          onChangeText={(value) => {
+            if (typeof value == "number") {
+              setPhoneNumber(value);
+            }
+          }}
         />
         <TextInput
           value={password}
