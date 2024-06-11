@@ -183,7 +183,7 @@ export default function Stocks() {
               Print
             </Text>
           </Pressable>
-          {/*
+
           <Pressable style={styles.menu_press_2}>
             <View
               style={[styles.icon_container, { backgroundColor: "#A2CF6E" }]}
@@ -211,7 +211,7 @@ export default function Stocks() {
               ></FontAwesome6>
             </View>
             <Text style={[styles.text_menu, { textAlign: "center" }]}>Pdf</Text>
-          </Pressable>*/}
+          </Pressable>
         </View>
       </View>
     </View>
