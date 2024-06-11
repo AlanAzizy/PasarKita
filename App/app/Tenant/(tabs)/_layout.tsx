@@ -94,7 +94,7 @@ export default function TabLayout() {
           ),
         }}
       />
-      {/* <Tabs.Screen
+      <Tabs.Screen
         name="Report"
         options={{
           title: "Report",
@@ -102,7 +102,7 @@ export default function TabLayout() {
             <Entypo name="text-document" color={color} size={25} />
           ),
         }}
-      /> */}
+      />
     </Tabs>
   );
 }
