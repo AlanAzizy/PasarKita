@@ -1,8 +1,6 @@
 import { auth, firebaseStorage, firestore } from "@/config/firebase";
 import { Order, schedule, User } from "@/constants/Types";
-import { signInWithEmailAndPassword, signOut } from "@firebase/auth"
 import { doc, getDocs, where, updateDoc, deleteDoc, Timestamp, orderBy } from "firebase/firestore";
-import { createUserWithEmailAndPassword } from "@firebase/auth";
 import {
   addDoc,
   collection,
@@ -11,15 +9,6 @@ import {
   query,
   setDoc,
 } from "firebase/firestore";
-import {
-  getDownloadURL,
-  ref,
-  uploadBytes,
-  uploadString,
-} from "firebase/storage";
-import { useEffect, useState } from "react";
-import { z } from "zod";
-import { Stan } from "@/constants/Types";
 
 export const getAllSchedule = async ()=>{
   
@@ -67,7 +56,7 @@ export const getScheduleByDate = async (date : Date)=>{
       throw new Error("User is not authenticated");
     }
     console.log(schedule)
-    const time = (schedule.startTime as Timestamp).toDate()
+    const time = (schedule.startTime)
     time.setHours(time.getHours())
     try {
         const scheduleDocRef = collection(firestore, 'users/'+auth.currentUser.uid+'/schedule');
@@ -96,7 +85,6 @@ export const getScheduleByDate = async (date : Date)=>{
       })
 
       const result = await Promise.all(schedulePromise);
-      co
 
     }catch (error) {
       console.error("Error moving items:", error);
