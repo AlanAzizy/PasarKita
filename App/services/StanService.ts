@@ -285,7 +285,7 @@ export const updatePayments = async(stan : Stan) =>{
     const stanDocRef = collection(firestore, `payments/`);
       let currentDate = new Date();
       const stanDoc = await addDoc(stanDocRef,{
-        stanId : stan.id,
+        stanId : 'stans/'+stan.id,
         total : stan.price,
         date : currentDate
       })

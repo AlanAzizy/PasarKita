@@ -24,7 +24,7 @@ import { Stan } from "@/constants/Types";
 export const getAllSchedule = async ()=>{
   
   try{
-    const q = query(collection(firestore, 'schedule'))
+    const q = query(collection(firestore, 'users/'+auth.currentUser?.uid+'/schedule'))
     const scheduleDoc = await getDocs(q); 
     const schedules = scheduleDoc.docs.map((schedule)=>{
       const id = schedule.id
@@ -47,7 +47,7 @@ export const getScheduleByDate = async (date : Date)=>{
   const startTimestamp = Timestamp.fromDate(startOfDay);
   const endTimestamp = Timestamp.fromDate(endOfDay);
     try{
-      const q = query(collection(firestore, 'schedule'), where("startTime",">=",startTimestamp), where("startTime", "<=", endTimestamp), orderBy("startTime"))
+      const q = query(collection(firestore, 'users/'+auth.currentUser?.uid+'/schedule'), where("startTime",">=",startTimestamp), where("startTime", "<=", endTimestamp), orderBy("startTime"))
       const scheduleDoc = await getDocs(q); 
       const schedules = scheduleDoc.docs.map((schedule)=>{
         console.log(schedule.id)
@@ -67,11 +67,10 @@ export const getScheduleByDate = async (date : Date)=>{
       throw new Error("User is not authenticated");
     }
     console.log(schedule)
-    const time = schedule.startTime
+    const time = (schedule.startTime as Timestamp).toDate()
     time.setHours(time.getHours())
-    console.log("#######-------")
     try {
-        const scheduleDocRef = collection(firestore, 'schedule');
+        const scheduleDocRef = collection(firestore, 'users/'+auth.currentUser.uid+'/schedule');
         const scheduleDoc = await addDoc(scheduleDocRef, {
           blockNumber : schedule.blockNumber,
           status : false,
@@ -87,4 +86,22 @@ export const getScheduleByDate = async (date : Date)=>{
       throw new Error("Internal Server Error");
     }
   };
+
+
+  export const moveSchedule = async() => {
+    try{
+      const schedule = await getAllSchedule();
+      const schedulePromise = schedule?.map(async (e)=>{
+        await addSchedule(e)
+      })
+
+      const result = await Promise.all(schedulePromise);
+      co
+
+    }catch (error) {
+      console.error("Error moving items:", error);
+      throw new Error("Internal Server Error");
+    }
+
+  }
 

@@ -25,7 +25,7 @@ import {
   updateStanOwner,
 } from "@/services/StanService";
 import { Stan, schedule } from "@/constants/Types";
-import { getAllSchedule } from "@/services/ScheduleService";
+import { getAllSchedule, moveSchedule } from "@/services/ScheduleService";
 
 const _width = Dimensions.get("screen").width;
 const _height = Dimensions.get("screen").height;
@@ -163,10 +163,7 @@ export default function Home() {
             </Text>
           </View>
         </LinearGradient>
-        <Pressable
-          style={styles.print}
-          onPress={() => console.log("awkowkwowkok")}
-        >
+        <Pressable style={styles.print}>
           <View style={styles.print_icon}>
             <Feather
               name="printer"
