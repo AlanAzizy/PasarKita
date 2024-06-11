@@ -37,7 +37,7 @@ export default function Stocks() {
 
   useEffect(() => {
     fetchItems();
-  }, [modalAddStall, modalEditStall, modalDeleteStall, filter]);
+  }, [modalAddStall, modalEditStall, modalDeleteStall]);
 
   useEffect(() => {
     console.log(localStok);
