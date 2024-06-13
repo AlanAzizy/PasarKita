@@ -4,7 +4,7 @@ PasarKita is a mobile application to manage both of traditional and modern marke
 ## How to run
 - Make sure you Have installed expo in your device. if haven't follow [this](https://docs.expo.dev/) tutorial
 - Clone this project
-- Go to directory App/app
+- Go to directory App
 - run `npx expo start`
 - Connect your mobile device with wi-fi or usb
 
