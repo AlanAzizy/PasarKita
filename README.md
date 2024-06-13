@@ -20,3 +20,6 @@ PasarKita is a mobile application to manage both of traditional and modern marke
 ### Stan owner
   username : songgos@gmail.com\
   password : ipipipiw
+
+## APK Download
+[PasarKita.apk](https://drive.google.com/file/d/1jidL7PKAn9lBkPCKKsrPrct8aTTl4iJw/view?usp=sharing)
